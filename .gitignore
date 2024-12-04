@@ -47,3 +47,55 @@ app.*.map.json
 
 # iOS
 /ios/UnityLibrary/*
+
+# Android
+/android/unityLibrary/*
+
+# Unity
+/unity/EcoBiz/Builds/*
+/unity/EcoBiz/Library/*
+/Builds/
+*.apk
+*.ipa
+
+# Unity related
+*.meta
+
+# Library related
+/[Ll]ibrary/
+
+# Temp related
+/[Tt]emp/
+
+# Obj related
+/[Oo]bj/
+
+# Build related
+/[Bb]uild/
+
+# Builds related
+/[Bb]uilds/
+
+# Logs related
+/[Ll]ogs/
+
+# User Settings related
+/[Uu]ser[Ss]ettings/
+
+# VS related
+.vs/
+.vscode/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
