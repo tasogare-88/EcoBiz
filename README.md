@@ -1,16 +1,25 @@
-# ecobiz
+# EcoBiz
+HACK U 2024のプロジェクト。
 
-A new Flutter project.
+無駄だと思っていること：『歩いている時間』
+ユーザーが歩くことでゲーム内通貨を貯めることができ、その通貨を利用して自分の仮想の会社を経営していくアプリケーション。
 
-## Getting Started
+## 技術スタック
+- Flutter
+- Unity
 
-This project is a starting point for a Flutter application.
+## セットアップ
+- https://pub.dev/packages/flutter_unity_widget
+- `android/gradle.properties`を新規作成し、以下の内容を記述。
 
-A few resources to get you started if this is your first Flutter project:
+```
+android.useAndroidX=true
+android.enableJetifier=true
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+# 各個人のJavaのパスを指定↓
+org.gradle.java.home=/opt/homebrew/Cellar/openjdk@17/17.0.13/libexec/openjdk.jdk/Contents/Home
+org.gradle.jvmargs=-Xmx4G -XX:MaxMetaspaceSize=2G -XX:+HeapDumpOnOutOfMemoryError
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 参考リンク
+- [Figma](https://www.figma.com/design/7bmruFMTucvrdtZbTUK9uk/UI%E8%A8%AD%E8%A8%88?node-id=0-1&t=ip9rzQ75xjwzcnW6-1)
