@@ -51,6 +51,7 @@ app.*.map.json
 # Android
 /android/unityLibrary/*
 /android/gradle.properties
+/android/unityLibrary/src/main/Il2CppOutputProject/*
 
 # Unity
 /unity/EcoBiz/Builds/*
@@ -103,3 +104,19 @@ app.*.map.json
 
 # Java Heap Profiling related
 *.hprof
+
+# Build directories
+/build/
+/src/main/Il2CppOutputProject/
+
+# Generated libraries and debug files
+*.so
+*.sym.so
+*.dbg.so
+
+# IL2CPP cache
+il2cpp_cache/
+
+# Unity generated
+/symbols/
+/src/main/jniLibs/

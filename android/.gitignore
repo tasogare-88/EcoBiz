@@ -12,3 +12,19 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
+
+# Build directories
+/build/
+/src/main/Il2CppOutputProject/
+
+# Generated libraries and debug files
+*.so
+*.sym.so
+*.dbg.so
+
+# IL2CPP cache
+il2cpp_cache/
+
+# Unity generated
+/symbols/
+/src/main/jniLibs/
