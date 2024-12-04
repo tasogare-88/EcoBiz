@@ -50,7 +50,6 @@ app.*.map.json
 
 # Android
 /android/unityLibrary/*
-/android/gradle-local.properties
 /android/gradle.properties
 
 # Unity
