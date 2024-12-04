@@ -50,6 +50,8 @@ app.*.map.json
 
 # Android
 /android/unityLibrary/*
+/android/gradle-local.properties
+/android/gradle.properties
 
 # Unity
 /unity/EcoBiz/Builds/*
@@ -99,3 +101,6 @@ app.*.map.json
 *.mdb
 *.opendb
 *.VC.db
+
+# Java Heap Profiling related
+*.hprof
