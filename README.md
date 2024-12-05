@@ -34,9 +34,12 @@ org.gradle.jvmargs=-Xmx4G -XX:MaxMetaspaceSize=2G -XX:+HeapDumpOnOutOfMemoryErro
 ```UnityFramework.podspec
 Pod::Spec.new do |s|
   s.name = 'UnityFramework'
+  s.version = '0.0.1' # any version
   s.summary = 'Unity Framework for iOS'
   s.description = 'Unity Framework for iOS integration'
+  s.homepage = 'https://unity.com'
   s.license = { :type => 'Copyright', :text => 'Copyright © 2024' }
+  s.author = { 'Unity' => 'unity@unity3d.com' }
   s.source = { :git => '.', :tag => "#{s.version}" }
   s.platform = :ios, '13.0'   # your minimum supported version
   s.vendored_frameworks = 'UnityFramework.framework'

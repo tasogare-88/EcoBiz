@@ -46,12 +46,12 @@ app.*.map.json
 .fvm/
 
 # iOS
-/ios/UnityLibrary/*
+/ios/UnityLibrary/
 
 # Android
-/android/unityLibrary/*
+/android/unityLibrary/
 /android/gradle.properties
-/android/unityLibrary/src/main/Il2CppOutputProject/*
+/android/unityLibrary/src/main/Il2CppOutputProject/
 
 # Unity
 /unity/EcoBiz/Builds/
