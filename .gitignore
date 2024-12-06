@@ -46,17 +46,18 @@ app.*.map.json
 .fvm/
 
 # iOS
-/ios/UnityLibrary/*
+/ios/UnityLibrary/
 
 # Android
-/android/unityLibrary/*
+/android/unityLibrary/
 /android/gradle.properties
-/android/unityLibrary/src/main/Il2CppOutputProject/*
+/android/unityLibrary/src/main/Il2CppOutputProject/
 
 # Unity
-/unity/EcoBiz/Builds/*
-/unity/EcoBiz/Library/*
-/Builds/
+/unity/EcoBiz/Builds/
+/unity/EcoBiz/Library/
+/unity/EcoBiz/Temp/
+/unity/EcoBiz/UserSettings/
 *.apk
 *.ipa
 
@@ -120,3 +121,110 @@ il2cpp_cache/
 # Unity generated
 /symbols/
 /src/main/jniLibs/
+
+# Unity関連
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+
+# Unity関連のメタファイル
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Unity クラッシュレポート
+sysinfo.txt
+
+# Unity生成ファイル
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# Unity VSCode設定
+.vscode/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity Crashlytics
+crashlytics-build.properties
+
+# FVM (Flutter Version Management)
+.fvm/
+
+# Unity IL2CPP関連
+/[Ii]l2[Cc]pp[Oo]utput/
+
+# Unity Symbols
+/[Ss]ymbols/
+
+# Unity JNI Libs
+*.so
+*.sym.so
+*.dbg.so
+
+# Temp related
+/[Tt]emp/
+
+# User Settings related
+/[Uu]ser[Ss]ettings/
+
+# Firebase設定ファイル
+google-services.json
+GoogleService-Info.plist
+lib/firebase_options.dart
+
+# その他Firebase関連
+.firebase/
+firebase-debug.log
+
+# Keystores
+*.keystore
+*.jks
+key.properties
+
+# Build configs
+ios/Flutter/flutter_export_environment.sh
+ios/Flutter/Generated.xcconfig
+ios/Flutter/ephemeral/
+
+# Local configs
+.env
+.env.local
+*.local.json
+local.properties
+
+# Debug files
+*.log.*
+debug.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Cache
+.gradle/
+.dart_tool/
+.pub/
+.pub-cache/
+.flutter-plugins-dependencies
+
+# Unity Sensitive Data
+**/ProjectSettings/AndroidKeystorePass.txt
+**/ProjectSettings/KeystorePass.txt
+**/ProjectSettings/iOSCertificatePass.txt
