@@ -5,13 +5,15 @@ HACK U 2024のプロジェクト。
 ユーザーが歩くことでゲーム内通貨を貯めることができ、その通貨を利用して自分の仮想の会社を経営していくアプリケーション。
 
 ## versions
-- Flutter: 3.22.3
-- Dart: 3.4.4
-- Unity: 2022.3.40
-- Gradle: 8.1.1
-- JDK: 17.0.13
-- CocoaPods: 1.15.2
-- iOS Minimum version: 13.0
+| tool | version |
+| -- | -- |
+| Flutter | 3.22.3 |
+| Dart | 3.4.4 |
+| Unity | 2022.3.40 |
+| Gradle | 8.1.1 |
+| JDK | 17.0.13 |
+| CocoaPods | 1.15.2 |
+| iOS Minimum version | 13.0 |
 
 ## 技術スタック
 - Flutter
@@ -20,8 +22,8 @@ HACK U 2024のプロジェクト。
 - Cloud Firestore
 
 ## セットアップ
-- https://pub.dev/packages/flutter_unity_widget
-- `android/gradle.properties`を新規作成し、以下の内容を記述。
+1. https://pub.dev/packages/flutter_unity_widget の公式docsの手順に従って環境構築する。
+2. `android/gradle.properties`を新規作成し、以下の内容を記述。
 ```gradle.properties
 android.useAndroidX=true
 android.enableJetifier=true
@@ -30,7 +32,7 @@ android.enableJetifier=true
 org.gradle.java.home=/opt/homebrew/Cellar/openjdk@17/17.0.13/libexec/openjdk.jdk/Contents/Home
 org.gradle.jvmargs=-Xmx4G -XX:MaxMetaspaceSize=2G -XX:+HeapDumpOnOutOfMemoryError
 ```
-- `ios/UnityLibrary/UnityFramework.podspec`を新規作成し、以下の内容を記述。
+3. `ios/UnityLibrary/UnityFramework.podspec`を新規作成し、以下の内容を記述。
 ```UnityFramework.podspec
 Pod::Spec.new do |s|
   s.name = 'UnityFramework'
@@ -50,20 +52,7 @@ Pod::Spec.new do |s|
   }
 end
 ```
-
-- その後, pod installを実行
-```bash
-cd ios
-pod install
-```
-
-- `lib/firebase_options.dart`を新規作成し、Notionの[#環境変数](https://www.notion.so/14a15180284f802fb3b5c5e16d5eb783?pvs=4)から参照。
-- `ios/Runner/GoogleService-Info.plist`を新規作成し、Notionの[#環境変数](https://www.notion.so/14a15180284f802fb3b5c5e16d5eb783?pvs=4)から参照。
-- `android/app/google-services.json`を新規作成し、Notionの[#環境変数](https://www.notion.so/14a15180284f802fb3b5c5e16d5eb783?pvs=4)から参照。
-
-## 注意: Androidでbuildする前に変更が必要です。
-- `.flutter_plugins`の中にある`flutter_unity_widget/android/build.gradle`を開き,必要に応じて以下の変更を行う。
-  
+4. `.flutter_plugins`配下にある`flutter_unity_widget/android/build.gradle`を開き、以下の変更を行う。
 ```build.gradle
 compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -73,6 +62,28 @@ compileOptions {
 kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
     }
+```
+5. `lib/firebase_options.dart`を新規作成し、Notionの[#環境変数](https://www.notion.so/14a15180284f802fb3b5c5e16d5eb783?pvs=4)から参照。
+6. `ios/Runner/GoogleService-Info.plist`を新規作成し、Notionの[#環境変数](https://www.notion.so/14a15180284f802fb3b5c5e16d5eb783?pvs=4)から参照。
+7. `android/app/google-services.json`を新規作成し、Notionの[#環境変数](https://www.notion.so/14a15180284f802fb3b5c5e16d5eb783?pvs=4)から参照。
+
+## デバッグ手順
+### iOS
+```bash
+cd ios
+pod install
+cd ..
+(fvm) flutter clean
+(fvm) flutter pub get
+(fvm) flutter build ios
+(fvm) flutter run
+```
+### Android
+```bash
+(fvm) flutter clean
+(fvm) flutter pub get
+(fvm) flutter build apk
+(fvm) flutter run
 ```
 
 ## 参考リンク
