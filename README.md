@@ -50,9 +50,30 @@ Pod::Spec.new do |s|
   }
 end
 ```
+
+- その後, pod installを実行
+```bash
+cd ios
+pod install
+```
+
 - `lib/firebase_options.dart`を新規作成し、Notionの[#環境変数](https://www.notion.so/14a15180284f802fb3b5c5e16d5eb783?pvs=4)から参照。
 - `ios/Runner/GoogleService-Info.plist`を新規作成し、Notionの[#環境変数](https://www.notion.so/14a15180284f802fb3b5c5e16d5eb783?pvs=4)から参照。
 - `android/app/google-services.json`を新規作成し、Notionの[#環境変数](https://www.notion.so/14a15180284f802fb3b5c5e16d5eb783?pvs=4)から参照。
+
+## 注意: Androidでbuildする前に変更が必要です。
+- `.flutter_plugins`の中にある`flutter_unity_widget/android/build.gradle`を開き,必要に応じて以下の変更を行う。
+  
+```build.gradle
+compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+```
 
 ## 参考リンク
 - [Figma](https://www.figma.com/design/7bmruFMTucvrdtZbTUK9uk/UI%E8%A8%AD%E8%A8%88?node-id=0-1&t=ip9rzQ75xjwzcnW6-1)
