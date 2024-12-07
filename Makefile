@@ -1,4 +1,4 @@
-.PHONY: clean get analyze format build-runner watch test build-ios build-android dev-setup rebuild check create-podspec help
+.PHONY: clean get analyze format build-runner watch test build-ios build-android run dev-setup rebuild check create-podspec help
 
 # Clean build files
 clean:
@@ -51,6 +51,11 @@ build-android:
 	@echo "Building Android..."
 	@fvm flutter build apk
 
+# Run app
+run:
+	@echo "Running app..."
+	@fvm flutter run
+
 # All-in-one development setup
 dev-setup: clean get build-runner
 
@@ -84,6 +89,7 @@ help:
 	@echo "  make test        - テストの実行"
 	@echo "  make build-ios   - iOSアプリのビルド"
 	@echo "  make build-android - Androidアプリのビルド"
+	@echo "  make run         - アプリの実行"
 	@echo "  make rebuild     - すべてのビルド"
 	@echo "  make clean       - ビルドファイルのクリーンアップ"
 	@echo "  make create-podspec - UnityFramework.podspecの作成"
