@@ -1,4 +1,4 @@
-.PHONY: clean get analyze format build-runner test build-ios build-android
+.PHONY: clean get analyze format build-runner watch test build-ios build-android dev-setup rebuild check create-podspec help
 
 # Clean build files
 clean:
@@ -56,41 +56,19 @@ dev-setup: clean get build-runner
 
 # Run all checks
 check: format analyze test
-
 # Rebuild everything
 rebuild: clean get build-runner build-ios build-android
 
 # Unity関連の変数
 UNITY_LIBRARY_PATH = ios/UnityLibrary
 PODSPEC_PATH = $(UNITY_LIBRARY_PATH)/UnityFramework.podspec
+TEMPLATE_PATH = scripts/templates/UnityFramework.podspec.template
 
 # Podspecファイルの作成
 create-podspec:
 	@echo "Creating UnityFramework.podspec..."
 	@mkdir -p $(UNITY_LIBRARY_PATH)
-	@cat > $(PODSPEC_PATH) << 'EOF'
-Pod::Spec.new do |s|
-  s.name = 'UnityFramework'
-  s.version = '0.0.1'
-  s.summary = 'Unity Framework for iOS'
-  s.description = 'Unity Framework for iOS integration'
-  s.homepage = 'https://unity.com'
-  s.license = { :type => 'Copyright', :text => 'Copyright © 2024' }
-  s.author = { 'Unity' => 'unity@unity3d.com' }
-  s.source = { :git => '.', :tag => "#{s.version}" }
-  s.platform = :ios, '13.0'
-  s.vendored_frameworks = 'UnityFramework.framework'
-  s.framework = 'UnityFramework'
-  s.xcconfig = {
-    'FRAMEWORK_SEARCH_PATHS' => '"$(PODS_ROOT)/UnityFramework"',
-    'OTHER_LDFLAGS' => '$(inherited) -framework UnityFramework'
-  }
-end
-EOF
-	@if [ ! -f "$(PODSPEC_PATH)" ]; then \
-		echo "Error: Podspec file was not created"; \
-		exit 1; \
-	fi
+	@cp $(TEMPLATE_PATH) $(PODSPEC_PATH)
 	@echo "UnityFramework.podspec created successfully"
 
 # Help
