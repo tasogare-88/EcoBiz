@@ -4,7 +4,7 @@ HACK U 2024のプロジェクト。
 無駄だと思っていること：『歩いている時間』
 ユーザーが歩くことでゲーム内通貨を貯めることができ、その通貨を利用して自分の仮想の会社を経営していくアプリケーション。
 
-## versions
+## Versions
 | tool | version |
 | -- | -- |
 | Flutter | 3.22.3 |
@@ -85,6 +85,9 @@ cd ..
 (fvm) flutter build apk
 (fvm) flutter run
 ```
+
+## Tips
+- Makefileを使うと便利。
 
 ## 参考リンク
 - [Figma](https://www.figma.com/design/7bmruFMTucvrdtZbTUK9uk/UI%E8%A8%AD%E8%A8%88?node-id=0-1&t=ip9rzQ75xjwzcnW6-1)
