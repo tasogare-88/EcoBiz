@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'auth_view_model.dart';
+import 'sign_up_screen.dart';
 
 class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
@@ -74,6 +75,16 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                       }
                     },
                     child: const Text('ログイン'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => const SignUpScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text('アカウントをお持ちでない方はこちら'),
                   ),
                   if (authState.error != null)
                     Padding(
