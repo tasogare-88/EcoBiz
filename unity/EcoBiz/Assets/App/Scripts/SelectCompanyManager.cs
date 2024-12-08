@@ -7,17 +7,19 @@ using DG.Tweening;
 
 public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
 {
-    [SerializeField] private RectTransform _placeArea_1;
-    [SerializeField] private RectTransform _placeArea_2;
-    [SerializeField] private RectTransform _placeArea_3;
+    [SerializeField] private RectTransform _placeArea_1; // デフォルトの画面
+    [SerializeField] private RectTransform _placeArea_2; // 右にスライドした画面
+    [SerializeField] private RectTransform _placeArea_3; // 左にスライドした画面
 
-    private Vector2 _initialTopBottom;
-    private Vector2 _offset;
+    private Vector2 _initialTopBottom; // 初期の画面のTop,Bottomの値
+    private float _initialBubblePositionY; // 初期の吹き出しのY座標 
+    private Vector2 _offset; // ドラッグ中のオブジェクトの位置を調整するためのオフセット
     private RectTransform[] rectTransforms = new RectTransform[3]; // 移動したいオブジェクトのRectTransform
     private RectTransform[] parentRectTransforms = new RectTransform[3]; // 移動したいオブジェクトの親のRectTransform
-    private Tweener _clickTween;
-    private RectTransform _objRectTransform;
-    private float _initialBubblePositionY;
+    private RectTransform _bubbleRectTransform; // 吹き出しのRectTransform
+    private Tweener _clickTween; // 吹き出しクリック時のTweenアニメーション
+    
+    
     
     private void Start() 
     {
@@ -34,22 +36,33 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        // クリックしたオブジェクトの名前を取得
+        // クリックしたオブジェクトのタグを確認
         var clickObj = eventData.pointerCurrentRaycast.gameObject;
         if(clickObj.CompareTag("BuildArea") && _clickTween == null)
         {
-            _objRectTransform = clickObj.GetComponent<RectTransform>();
-            _initialBubblePositionY = _objRectTransform.anchoredPosition.y;
-            _clickTween = _objRectTransform.DOAnchorPosY(_initialBubblePositionY + 50f, 0.75f)
-            .OnComplete(() => _objRectTransform.DOAnchorPosY(_initialBubblePositionY, 0.75f))
+            // クリックしたオブジェクトがBuildAreaの場合
+            _bubbleRectTransform = clickObj.GetComponent<RectTransform>();
+            _initialBubblePositionY = _bubbleRectTransform.anchoredPosition.y;
+            // 吹き出しのアニメーションを再生
+            _clickTween = _bubbleRectTransform.DOAnchorPosY(_initialBubblePositionY + 50f, 0.75f)
+            .OnComplete(() => _bubbleRectTransform.DOAnchorPosY(_initialBubblePositionY, 0.75f))
             .SetEase(Ease.OutQuad).SetLoops(-1, LoopType.Yoyo);
+            // 建設場所を確定するか確認する
+            ConfirmationConstractionLocation();
         }
         else if(_clickTween != null)
         {
             _clickTween.Kill();
-            _objRectTransform.anchoredPosition = new Vector2(_objRectTransform.anchoredPosition.x, _initialBubblePositionY);
+            _bubbleRectTransform.anchoredPosition = new Vector2(_bubbleRectTransform.anchoredPosition.x, _initialBubblePositionY);
             _clickTween = null;
         }
+    }
+
+    private void ConfirmationConstractionLocation()
+    {
+        // 建設場所の確認
+        Debug.Log("建設場所を確認");
+        // ここに処理を記述
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -61,16 +74,13 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
     public void OnDrag(PointerEventData eventData)
     {
         Vector2 localPointerPosition = GetLocalPosition(eventData.position);
-        rectTransforms[0].anchoredPosition = localPointerPosition + _offset;
-        rectTransforms[1].anchoredPosition = localPointerPosition + _offset;
-        rectTransforms[2].anchoredPosition = localPointerPosition + _offset;
-
-        rectTransforms[0].offsetMax = new Vector2(rectTransforms[0].offsetMax.x, _initialTopBottom.x);
-        rectTransforms[0].offsetMin = new Vector2(rectTransforms[0].offsetMin.x, _initialTopBottom.y);
-        rectTransforms[1].offsetMax = new Vector2(rectTransforms[1].offsetMax.x, _initialTopBottom.x);
-        rectTransforms[1].offsetMin = new Vector2(rectTransforms[1].offsetMin.x, _initialTopBottom.y);
-        rectTransforms[2].offsetMax = new Vector2(rectTransforms[2].offsetMax.x, _initialTopBottom.x);
-        rectTransforms[2].offsetMin = new Vector2(rectTransforms[2].offsetMin.x, _initialTopBottom.y);
+        foreach(var rectTransform in rectTransforms)
+        {
+            rectTransform.anchoredPosition = localPointerPosition + _offset;
+            rectTransform.offsetMax = new Vector2(rectTransform.offsetMax.x, _initialTopBottom.x);
+            rectTransform.offsetMin = new Vector2(rectTransform.offsetMin.x, _initialTopBottom.y);
+        }
+        
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -91,14 +101,17 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
 
     public void SetFixedPositions(float pointX)
     {
+        // 左右へのスワイプのUIアニメーション
         float pos = GetNearestPositionNumber(pointX);
-        rectTransforms[0].DOAnchorPosX(pos, 0.5f).SetEase(Ease.OutQuart);
-        rectTransforms[1].DOAnchorPosX(pos, 0.5f).SetEase(Ease.OutQuart);
-        rectTransforms[2].DOAnchorPosX(pos, 0.5f).SetEase(Ease.OutQuart);
+        foreach (var rectTransform in rectTransforms)
+        {
+            rectTransform.DOAnchorPosX(pos, 0.5f).SetEase(Ease.OutQuart);
+        }
     }
 
     private float GetNearestPositionNumber(float pointX)
     {
+        // どの画面に遷移するかを判断する
         float nearestPositionNumber = 0f;
         float min = float.MaxValue;
         float[] comparisonPositionNumbers = new float[] {0f, 1080f, -1080f};
