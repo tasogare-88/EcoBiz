@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '17'
+          java-version: '17.0.13'
           cache: 'gradle'
 
       - name: Flutter のセットアップ
@@ -83,9 +83,8 @@ jobs:
 
       - name: Android ビルド準備
         run: |
-          # AndroidXの設定
-          echo "android.useAndroidX=true" >> android/gradle.properties
-          echo "android.enableJetifier=true" >> android/gradle.properties
+          # Gradle設定
+          make setup-gradle-properties
 
           # Unity関連の設定ファイル作成
           make setup-unity
@@ -96,7 +95,7 @@ jobs:
       - name: Gradleのクリーン
         run: |
           cd android
-          ./gradlew clean
+          ./gradlew clean --stacktrace
           cd ..
 
       - name: Android ビルド

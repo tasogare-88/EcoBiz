@@ -1,4 +1,4 @@
-.PHONY: clean get analyze format build-runner watch test build-ios build-android run dev-setup rebuild check create-podspec help setup-unity setup-gradle
+.PHONY: clean get analyze format build-runner watch test build-ios build-android run dev-setup rebuild check create-podspec help setup-unity setup-gradle setup-gradle-properties
 
 # Clean build files
 clean:
@@ -97,10 +97,18 @@ setup-gradle:
 	@echo "Setting up Gradle Wrapper..."
 	@cd android && \
 	if [ ! -f "./gradlew" ]; then \
-		gradle wrapper && \
+		gradle wrapper --gradle-version 8.1.1 && \
 		chmod +x gradlew; \
 	fi && \
 	cd ..
+
+# Gradle設定の追加
+setup-gradle-properties:
+	@echo "Setting up Gradle properties..."
+	@echo "android.useAndroidX=true" >> android/gradle.properties
+	@echo "android.enableJetifier=true" >> android/gradle.properties
+	@echo "org.gradle.jvmargs=-Xmx2048m -XX:MaxMetaspaceSize=512m" >> android/gradle.properties
+	@echo "org.gradle.parallel=true" >> android/gradle.properties
 
 # Help
 help:
@@ -121,3 +129,4 @@ help:
 	@echo "  make create-podspec - UnityFramework.podspecの作成"
 	@echo "  make setup-unity  - Unityの設定ファイルを作成"
 	@echo "  make setup-gradle - Gradle Wrapperの設定"
+	@echo "  make setup-gradle-properties - Gradle propertiesの設定"
