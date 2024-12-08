@@ -8,7 +8,7 @@ on:
 
 jobs:
   flutter-test:
-    name: Flutter テストとビルド
+    name: Flutter test and build
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -49,7 +49,7 @@ jobs:
         run: flutter pub get
 
       - name: フォーマットチェック
-        run: dart format --set-exit-if-changed lib test
+        run: make format
 
       - name: 静的解析
         run: flutter analyze

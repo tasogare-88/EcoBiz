@@ -20,6 +20,7 @@ analyze:
 # Format code
 format:
 	@echo "Formatting..."
+	@dart fix --apply
 	@dart format lib
 	@dart format test
 

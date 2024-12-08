@@ -91,7 +91,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                         padding: const EdgeInsets.all(16),
                         child: Text(
                           authState.error!,
-                          style: TextStyle(color: Colors.red),
+                          style: const TextStyle(color: Colors.red),
                         ))
                 ],
               ),

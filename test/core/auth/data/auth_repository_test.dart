@@ -56,8 +56,8 @@ void main() {
     });
 
     test('signIn - failure', () async {
-      final email = 'test@example.com';
-      final password = 'wrongPassword';
+      const email = 'test@example.com';
+      const password = 'wrongPassword';
 
       when(mockFirebaseAuth.signInWithEmailAndPassword(
         email: email,
