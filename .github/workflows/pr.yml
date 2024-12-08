@@ -1,0 +1,82 @@
+name: PR Check
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  flutter-test:
+    name: Flutter テストとビルド
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Java のセットアップ
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Flutter のセットアップ
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.22.3'
+          channel: 'stable'
+          cache: true
+
+      - name: Gradle キャッシュ
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: CocoaPods キャッシュ
+        uses: actions/cache@v3
+        with:
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: 依存関係のインストール
+        run: flutter pub get
+
+      - name: フォーマットチェック
+        run: dart format --set-exit-if-changed lib test
+
+      - name: 静的解析
+        run: flutter analyze
+
+      - name: テスト実行
+        run: flutter test
+
+      - name: Android ビルド
+        run: flutter build apk --debug
+
+      - name: UnityFramework.podspec 作成
+        run: make create-podspec
+
+      - name: iOS ビルド準備
+        run: |
+          cd ios
+          pod install --repo-update
+
+      - name: iOS ビルド
+        run: flutter build ios --debug --no-codesign
+
+      - name: pub キャッシュの保存
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ env.PUB_CACHE }}
+            **/.dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
