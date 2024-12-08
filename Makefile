@@ -89,8 +89,9 @@ setup-unity:
 		cp $(UNITY_GRADLE_TEMPLATE_PATH) "$$UNITY_GRADLE_FILE"; \
 		echo "Flutter Unity Widget Gradle file updated successfully"; \
 	else \
-		mkdir -p .flutter-plugins/flutter_unity_widget/android; \
-		cp $(UNITY_GRADLE_TEMPLATE_PATH) .flutter-plugins/flutter_unity_widget/android/build.gradle; \
+		FLUTTER_PLUGINS_DIR=".flutter-plugins-dependencies"; \
+		mkdir -p "$$FLUTTER_PLUGINS_DIR/flutter_unity_widget/android"; \
+		cp $(UNITY_GRADLE_TEMPLATE_PATH) "$$FLUTTER_PLUGINS_DIR/flutter_unity_widget/android/build.gradle"; \
 		echo "Flutter Unity Widget Gradle file created successfully"; \
 	fi
 
