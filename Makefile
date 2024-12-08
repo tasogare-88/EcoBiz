@@ -1,4 +1,4 @@
-.PHONY: clean get analyze format build-runner watch test build-ios build-android run dev-setup rebuild check create-podspec help setup-unity
+.PHONY: clean get analyze format build-runner watch test build-ios build-android run dev-setup rebuild check create-podspec help setup-unity setup-gradle
 
 # Clean build files
 clean:
@@ -92,6 +92,16 @@ setup-unity:
 		echo "Warning: flutter_unity_widget build.gradle not found"; \
 	fi
 
+# Gradle Wrapperの設定
+setup-gradle:
+	@echo "Setting up Gradle Wrapper..."
+	@cd android && \
+	if [ ! -f "./gradlew" ]; then \
+		gradle wrapper && \
+		chmod +x gradlew; \
+	fi && \
+	cd ..
+
 # Help
 help:
 	@echo "Available commands:"
@@ -110,3 +120,4 @@ help:
 	@echo "  make clean       - ビルドファイルのクリーンアップ"
 	@echo "  make create-podspec - UnityFramework.podspecの作成"
 	@echo "  make setup-unity  - Unityの設定ファイルを作成"
+	@echo "  make setup-gradle - Gradle Wrapperの設定"

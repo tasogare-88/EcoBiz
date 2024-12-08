@@ -90,6 +90,9 @@ jobs:
           # Unity関連の設定ファイル作成
           make setup-unity
 
+          # Gradle Wrapperのセットアップ
+          make setup-gradle
+
       - name: Gradleのクリーン
         run: |
           cd android
