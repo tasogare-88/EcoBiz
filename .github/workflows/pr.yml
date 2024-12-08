@@ -45,6 +45,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pods-
 
+      - name: Firebase設定ファイルの作成
+        env:
+          FIREBASE_OPTIONS: ${{ secrets.FIREBASE_OPTIONS }}
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+          GOOGLE_SERVICES_PLIST: ${{ secrets.GOOGLE_SERVICES_PLIST }}
+        run: |
+          echo "$FIREBASE_OPTIONS" > lib/firebase_options.dart
+          echo "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
+          echo "$GOOGLE_SERVICES_PLIST" > ios/Runner/GoogleService-Info.plist
+
       - name: 依存関係のインストール
         run: flutter pub get
 
