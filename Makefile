@@ -1,4 +1,4 @@
-.PHONY: clean get analyze format build-runner watch test build-ios build-android run dev-setup rebuild check create-podspec help
+.PHONY: clean get analyze format build-runner watch test build-ios build-android run dev-setup rebuild check create-podspec help setup-unity
 
 # Clean build files
 clean:
@@ -68,14 +68,29 @@ rebuild: clean get build-runner build-ios build-android
 # Unity関連の変数
 UNITY_LIBRARY_PATH = ios/UnityLibrary
 PODSPEC_PATH = $(UNITY_LIBRARY_PATH)/UnityFramework.podspec
-TEMPLATE_PATH = scripts/templates/UnityFramework.podspec.template
+PODSPEC_TEMPLATE_PATH = scripts/templates/UnityFramework.podspec.template
+UNITY_GRADLE_TEMPLATE_PATH = scripts/templates/flutter_unity_widget.gradle.template
 
 # Podspecファイルの作成
 create-podspec:
 	@echo "Creating UnityFramework.podspec..."
 	@mkdir -p $(UNITY_LIBRARY_PATH)
-	@cp $(TEMPLATE_PATH) $(PODSPEC_PATH)
+	@cp $(PODSPEC_TEMPLATE_PATH) $(PODSPEC_PATH)
 	@echo "UnityFramework.podspec created successfully"
+
+# Unityの設定ファイル作成
+setup-unity:
+	@echo "Setting up Unity files..."
+	@mkdir -p $(UNITY_LIBRARY_PATH)
+	@cp $(PODSPEC_TEMPLATE_PATH) $(PODSPEC_PATH)
+	@echo "UnityFramework.podspec created successfully"
+	@UNITY_GRADLE_FILE=$$(find . -name "build.gradle" | grep "flutter_unity_widget"); \
+	if [ -n "$$UNITY_GRADLE_FILE" ]; then \
+		cp $(UNITY_GRADLE_TEMPLATE_PATH) "$$UNITY_GRADLE_FILE"; \
+		echo "Flutter Unity Widget Gradle file updated successfully"; \
+	else \
+		echo "Warning: flutter_unity_widget build.gradle not found"; \
+	fi
 
 # Help
 help:
@@ -94,3 +109,4 @@ help:
 	@echo "  make rebuild     - すべてのビルド"
 	@echo "  make clean       - ビルドファイルのクリーンアップ"
 	@echo "  make create-podspec - UnityFramework.podspecの作成"
+	@echo "  make setup-unity  - Unityの設定ファイルを作成"

@@ -1,0 +1,13 @@
+android {
+    namespace 'com.xraph.plugin.flutter_unity_widget'
+    compileSdkVersion 33
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 33
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core:1.7.0'
+}

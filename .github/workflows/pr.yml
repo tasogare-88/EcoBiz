@@ -87,12 +87,14 @@ jobs:
           echo "android.useAndroidX=true" >> android/gradle.properties
           echo "android.enableJetifier=true" >> android/gradle.properties
 
-          # flutter_unity_widgetのnamespace設定
-          UNITY_GRADLE_FILE="$(find . -name "flutter_unity_widget.gradle")"
-          if [ -f "$UNITY_GRADLE_FILE" ]; then
-            sed -i '' '/android {/a\
-            namespace "com.xraph.plugin.flutter_unity_widget"' "$UNITY_GRADLE_FILE"
-          fi
+          # Unity関連の設定ファイル作成
+          make setup-unity
+
+      - name: Gradleのクリーン
+        run: |
+          cd android
+          ./gradlew clean
+          cd ..
 
       - name: Android ビルド
         run: flutter build apk --debug
