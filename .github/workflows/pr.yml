@@ -81,6 +81,19 @@ jobs:
       - name: テスト実行
         run: flutter test
 
+      - name: Android ビルド準備
+        run: |
+          # AndroidXの設定
+          echo "android.useAndroidX=true" >> android/gradle.properties
+          echo "android.enableJetifier=true" >> android/gradle.properties
+
+          # flutter_unity_widgetのnamespace設定
+          UNITY_GRADLE_FILE="$(find . -name "flutter_unity_widget.gradle")"
+          if [ -f "$UNITY_GRADLE_FILE" ]; then
+            sed -i '' '/android {/a\
+            namespace "com.xraph.plugin.flutter_unity_widget"' "$UNITY_GRADLE_FILE"
+          fi
+
       - name: Android ビルド
         run: flutter build apk --debug
 
