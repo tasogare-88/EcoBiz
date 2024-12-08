@@ -70,6 +70,7 @@ UNITY_LIBRARY_PATH = ios/UnityLibrary
 PODSPEC_PATH = $(UNITY_LIBRARY_PATH)/UnityFramework.podspec
 PODSPEC_TEMPLATE_PATH = scripts/templates/UnityFramework.podspec.template
 UNITY_GRADLE_TEMPLATE_PATH = scripts/templates/flutter_unity_widget.gradle.template
+FLUTTER_UNITY_WIDGET_PATH = build/host/outputs/repo/com/xraph/plugin/flutter_unity_widget
 
 # Podspecファイルの作成
 create-podspec:
@@ -84,16 +85,10 @@ setup-unity:
 	@mkdir -p $(UNITY_LIBRARY_PATH)
 	@cp $(PODSPEC_TEMPLATE_PATH) $(PODSPEC_PATH)
 	@echo "UnityFramework.podspec created successfully"
-	@UNITY_GRADLE_FILE=$$(find . -name "build.gradle" | grep "flutter_unity_widget"); \
-	if [ -n "$$UNITY_GRADLE_FILE" ]; then \
-		cp $(UNITY_GRADLE_TEMPLATE_PATH) "$$UNITY_GRADLE_FILE"; \
-		echo "Flutter Unity Widget Gradle file updated successfully"; \
-	else \
-		FLUTTER_PLUGINS_DIR=".flutter-plugins-dependencies"; \
-		mkdir -p "$$FLUTTER_PLUGINS_DIR/flutter_unity_widget/android"; \
-		cp $(UNITY_GRADLE_TEMPLATE_PATH) "$$FLUTTER_PLUGINS_DIR/flutter_unity_widget/android/build.gradle"; \
-		echo "Flutter Unity Widget Gradle file created successfully"; \
-	fi
+	@mkdir -p $(FLUTTER_UNITY_WIDGET_PATH)/src/main
+	@cp $(UNITY_GRADLE_TEMPLATE_PATH) $(FLUTTER_UNITY_WIDGET_PATH)/build.gradle
+	@echo "<?xml version=\"1.0\" encoding=\"utf-8\"?><manifest package=\"com.xraph.plugin.flutter_unity_widget\" xmlns:android=\"http://schemas.android.com/apk/res/android\"/>" > $(FLUTTER_UNITY_WIDGET_PATH)/src/main/AndroidManifest.xml
+	@echo "Flutter Unity Widget files created successfully"
 
 # Gradle Wrapperの設定
 setup-gradle:
