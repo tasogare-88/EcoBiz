@@ -4,7 +4,7 @@ HACK U 2024のプロジェクト。
 無駄だと思っていること：『歩いている時間』
 ユーザーが歩くことでゲーム内通貨を貯めることができ、その通貨を利用して自分の仮想の会社を経営していくアプリケーション。
 
-## versions
+## Versions
 | tool | version |
 | -- | -- |
 | Flutter | 3.22.3 |
@@ -14,6 +14,57 @@ HACK U 2024のプロジェクト。
 | JDK | 17.0.13 |
 | CocoaPods | 1.15.2 |
 | iOS Minimum version | 13.0 |
+
+## ディレクトリ構造
+```
+lib/
+├── core/              # アプリケーション共通機能
+│   ├── auth/          # 認証基盤
+│   │   ├── data/      # リポジトリ層
+│   │   ├── domain/    # ドメインモデル
+│   │   └── presentation/ # UI層
+│   └── providers/     # アプリ全体のプロバイダー
+│
+├── features/          # 機能モジュール
+│   ├── home/         # HOME画面機能
+│   ├── gacha/        # ガチャ機能
+│   ├── company/      # 経営機能
+│   ├── communication/# 通信機能
+│   └── item/         # アイテム機能
+│
+└── shared/           # 共有コンポーネント
+    ├── constants/    # 定数など
+    ├── utils/        # ユーティリティ関数
+    ├── widgets/      # 共通Widget
+    └── navigation/   # 画面遷移
+```
+
+各featureディレクトリは、presentation/domain/dataの3層構造を採用している。
+
+## デザインパターン
+MVVMパターンを採用している。
+
+### レイヤー構造
+- **Presentation Layer** (`presentation/`)
+  - View: UIの表示
+  - ViewModel: UIのロジックと状態管理
+
+- **Domain Layer** (`domain/`)
+  - ドメインモデル
+  - ビジネスロジック
+
+- **Data Layer** (`data/`)
+  - リポジトリ
+  - データソースとの通信
+
+### 状態管理
+- Riverpodを使用
+- 各機能モジュールごとにViewModelで状態を管理
+
+### ディレクトリ命名規則
+- スネークケース（例：`auth_repository.dart`）
+- 機能モジュールは単数形
+- レイヤーごとにディレクトリを分割
 
 ## 技術スタック
 - Flutter
@@ -85,6 +136,9 @@ cd ..
 (fvm) flutter build apk
 (fvm) flutter run
 ```
+
+## Tips
+- Makefileを使うと便利。
 
 ## 参考リンク
 - [Figma](https://www.figma.com/design/7bmruFMTucvrdtZbTUK9uk/UI%E8%A8%AD%E8%A8%88?node-id=0-1&t=ip9rzQ75xjwzcnW6-1)
