@@ -51,7 +51,13 @@ jobs:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
           GOOGLE_SERVICES_PLIST: ${{ secrets.GOOGLE_SERVICES_PLIST }}
         run: |
-          echo "$FIREBASE_OPTIONS" > lib/firebase_options.dart
+          # 一時ファイルを作成して内容を確認
+          echo "$FIREBASE_OPTIONS" > firebase_options_temp.dart
+          cat firebase_options_temp.dart
+
+          # 問題なければ移動
+          mv firebase_options_temp.dart lib/firebase_options.dart
+
           echo "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
           echo "$GOOGLE_SERVICES_PLIST" > ios/Runner/GoogleService-Info.plist
 
