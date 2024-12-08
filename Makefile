@@ -89,7 +89,9 @@ setup-unity:
 		cp $(UNITY_GRADLE_TEMPLATE_PATH) "$$UNITY_GRADLE_FILE"; \
 		echo "Flutter Unity Widget Gradle file updated successfully"; \
 	else \
-		echo "Warning: flutter_unity_widget build.gradle not found"; \
+		mkdir -p .flutter-plugins/flutter_unity_widget/android; \
+		cp $(UNITY_GRADLE_TEMPLATE_PATH) .flutter-plugins/flutter_unity_widget/android/build.gradle; \
+		echo "Flutter Unity Widget Gradle file created successfully"; \
 	fi
 
 # Gradle Wrapperの設定

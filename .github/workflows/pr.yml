@@ -83,11 +83,11 @@ jobs:
 
       - name: Android ビルド準備
         run: |
-          # Gradle設定
-          make setup-gradle-properties
-
           # Unity関連の設定ファイル作成
           make setup-unity
+
+          # Gradle設定
+          make setup-gradle-properties
 
           # Gradle Wrapperのセットアップ
           make setup-gradle
