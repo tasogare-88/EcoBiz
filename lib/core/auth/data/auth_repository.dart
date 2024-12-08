@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../providers/firebase_providers.dart';
 import '../domain/auth_user.dart';
 
 part 'auth_repository.g.dart';
@@ -15,8 +16,11 @@ class AuthRepository extends _$AuthRepository {
     required String password,
   }) async {
     try {
-      final credential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+      final auth = ref.read(firebaseAuthProvider);
+      final credential = await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
       if (credential.user == null) {
         throw Exception('ユーザー登録に失敗しました');
@@ -38,7 +42,8 @@ class AuthRepository extends _$AuthRepository {
     required String password,
   }) async {
     try {
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final auth = ref.read(firebaseAuthProvider);
+      final credential = await auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -59,7 +64,8 @@ class AuthRepository extends _$AuthRepository {
   }
 
   Future<void> signOut() async {
-    await FirebaseAuth.instance.signOut();
+    final auth = ref.read(firebaseAuthProvider);
+    await auth.signOut();
   }
 
   String _handleFirebaseAuthError(FirebaseAuthException e) {

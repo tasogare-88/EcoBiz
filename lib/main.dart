@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'features/auth/presentation/auth_wrapper.dart';
+import 'core/auth/presentation/auth_wrapper.dart';
 import 'firebase_options.dart';
 
 void main() async {
