@@ -51,21 +51,14 @@ jobs:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
           GOOGLE_SERVICES_PLIST: ${{ secrets.GOOGLE_SERVICES_PLIST }}
         run: |
-          # ディレクトリの確認
-          ls -la lib/
+          echo "$FIREBASE_OPTIONS" | base64 --decode > lib/firebase_options.dart
+          echo "$GOOGLE_SERVICES_JSON" | base64 --decode > android/app/google-services.json
+          echo "$GOOGLE_SERVICES_PLIST" | base64 --decode > ios/Runner/GoogleService-Info.plist
 
-          # firebase_options.dartの作成
-          echo "$FIREBASE_OPTIONS" > lib/firebase_options.dart
+          chmod 600 lib/firebase_options.dart
+          chmod 600 android/app/google-services.json
+          chmod 600 ios/Runner/GoogleService-Info.plist
 
-          # 作成されたファイルの内容確認（機密情報は適宜マスク）
-          echo "=== firebase_options.dart の内容 ==="
-          cat lib/firebase_options.dart | sed 's/apiKey: "[^"]*"/apiKey: "***"/g'
-
-          echo "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
-          echo "$GOOGLE_SERVICES_PLIST" > ios/Runner/GoogleService-Info.plist
-
-          # ファイルが作成されたか確認
-          echo "=== ファイル確認 ==="
           ls -la lib/firebase_options.dart
           ls -la android/app/google-services.json
           ls -la ios/Runner/GoogleService-Info.plist
