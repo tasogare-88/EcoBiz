@@ -22,6 +22,28 @@ jobs:
           channel: 'stable'
           cache: true
 
+      - name: Firebase設定ファイルの作成
+        env:
+          FIREBASE_OPTIONS: ${{ secrets.FIREBASE_OPTIONS }}
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+          GOOGLE_SERVICES_PLIST: ${{ secrets.GOOGLE_SERVICES_PLIST }}
+        run: |
+          # デコードする前に環境変数の存在確認
+          if [ -z "$FIREBASE_OPTIONS" ]; then
+            echo "Error: FIREBASE_OPTIONS is not set in environment"
+            exit 1
+          fi
+
+          # ファイルの作成
+          echo "$FIREBASE_OPTIONS" | base64 --decode > lib/firebase_options.dart
+          echo "$GOOGLE_SERVICES_JSON" | base64 --decode > android/app/google-services.json
+          echo "$GOOGLE_SERVICES_PLIST" | base64 --decode > ios/Runner/GoogleService-Info.plist
+
+          # パーミッションの設定
+          chmod 600 lib/firebase_options.dart
+          chmod 600 android/app/google-services.json
+          chmod 600 ios/Runner/GoogleService-Info.plist
+
       - name: 依存関係のインストール
         run: flutter pub get
 
