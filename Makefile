@@ -22,6 +22,7 @@ format:
 	@echo "Formatting..."
 	@dart format lib
 	@dart format test
+	@dart fix --apply
 
 # Generate files
 build-runner:
