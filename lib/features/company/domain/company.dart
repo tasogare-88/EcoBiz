@@ -29,8 +29,9 @@ class Company with _$Company {
     required CompanyGenre genre,
     required CompanyRank rank,
     @Default(0) int totalAssets,
-    @Default(0) int todaySteps,
-    @Default(0) int stepsToYenRate,
+    @Default(50) int stepsToYenRate,
+    required DateTime createdAt,
+    required DateTime updatedAt,
   }) = _Company;
 
   factory Company.fromJson(Map<String, dynamic> json) =>

@@ -25,8 +25,9 @@ mixin _$Company {
   CompanyGenre get genre => throw _privateConstructorUsedError;
   CompanyRank get rank => throw _privateConstructorUsedError;
   int get totalAssets => throw _privateConstructorUsedError;
-  int get todaySteps => throw _privateConstructorUsedError;
   int get stepsToYenRate => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get updatedAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -44,8 +45,9 @@ abstract class $CompanyCopyWith<$Res> {
       CompanyGenre genre,
       CompanyRank rank,
       int totalAssets,
-      int todaySteps,
-      int stepsToYenRate});
+      int stepsToYenRate,
+      DateTime createdAt,
+      DateTime updatedAt});
 }
 
 /// @nodoc
@@ -66,8 +68,9 @@ class _$CompanyCopyWithImpl<$Res, $Val extends Company>
     Object? genre = null,
     Object? rank = null,
     Object? totalAssets = null,
-    Object? todaySteps = null,
     Object? stepsToYenRate = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -90,14 +93,18 @@ class _$CompanyCopyWithImpl<$Res, $Val extends Company>
           ? _value.totalAssets
           : totalAssets // ignore: cast_nullable_to_non_nullable
               as int,
-      todaySteps: null == todaySteps
-          ? _value.todaySteps
-          : todaySteps // ignore: cast_nullable_to_non_nullable
-              as int,
       stepsToYenRate: null == stepsToYenRate
           ? _value.stepsToYenRate
           : stepsToYenRate // ignore: cast_nullable_to_non_nullable
               as int,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ) as $Val);
   }
 }
@@ -115,8 +122,9 @@ abstract class _$$CompanyImplCopyWith<$Res> implements $CompanyCopyWith<$Res> {
       CompanyGenre genre,
       CompanyRank rank,
       int totalAssets,
-      int todaySteps,
-      int stepsToYenRate});
+      int stepsToYenRate,
+      DateTime createdAt,
+      DateTime updatedAt});
 }
 
 /// @nodoc
@@ -135,8 +143,9 @@ class __$$CompanyImplCopyWithImpl<$Res>
     Object? genre = null,
     Object? rank = null,
     Object? totalAssets = null,
-    Object? todaySteps = null,
     Object? stepsToYenRate = null,
+    Object? createdAt = null,
+    Object? updatedAt = null,
   }) {
     return _then(_$CompanyImpl(
       id: null == id
@@ -159,14 +168,18 @@ class __$$CompanyImplCopyWithImpl<$Res>
           ? _value.totalAssets
           : totalAssets // ignore: cast_nullable_to_non_nullable
               as int,
-      todaySteps: null == todaySteps
-          ? _value.todaySteps
-          : todaySteps // ignore: cast_nullable_to_non_nullable
-              as int,
       stepsToYenRate: null == stepsToYenRate
           ? _value.stepsToYenRate
           : stepsToYenRate // ignore: cast_nullable_to_non_nullable
               as int,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
@@ -180,8 +193,9 @@ class _$CompanyImpl implements _Company {
       required this.genre,
       required this.rank,
       this.totalAssets = 0,
-      this.todaySteps = 0,
-      this.stepsToYenRate = 0});
+      this.stepsToYenRate = 50,
+      required this.createdAt,
+      required this.updatedAt});
 
   factory _$CompanyImpl.fromJson(Map<String, dynamic> json) =>
       _$$CompanyImplFromJson(json);
@@ -199,14 +213,15 @@ class _$CompanyImpl implements _Company {
   final int totalAssets;
   @override
   @JsonKey()
-  final int todaySteps;
-  @override
-  @JsonKey()
   final int stepsToYenRate;
+  @override
+  final DateTime createdAt;
+  @override
+  final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'Company(id: $id, name: $name, genre: $genre, rank: $rank, totalAssets: $totalAssets, todaySteps: $todaySteps, stepsToYenRate: $stepsToYenRate)';
+    return 'Company(id: $id, name: $name, genre: $genre, rank: $rank, totalAssets: $totalAssets, stepsToYenRate: $stepsToYenRate, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -220,16 +235,18 @@ class _$CompanyImpl implements _Company {
             (identical(other.rank, rank) || other.rank == rank) &&
             (identical(other.totalAssets, totalAssets) ||
                 other.totalAssets == totalAssets) &&
-            (identical(other.todaySteps, todaySteps) ||
-                other.todaySteps == todaySteps) &&
             (identical(other.stepsToYenRate, stepsToYenRate) ||
-                other.stepsToYenRate == stepsToYenRate));
+                other.stepsToYenRate == stepsToYenRate) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, name, genre, rank,
-      totalAssets, todaySteps, stepsToYenRate);
+      totalAssets, stepsToYenRate, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -252,8 +269,9 @@ abstract class _Company implements Company {
       required final CompanyGenre genre,
       required final CompanyRank rank,
       final int totalAssets,
-      final int todaySteps,
-      final int stepsToYenRate}) = _$CompanyImpl;
+      final int stepsToYenRate,
+      required final DateTime createdAt,
+      required final DateTime updatedAt}) = _$CompanyImpl;
 
   factory _Company.fromJson(Map<String, dynamic> json) = _$CompanyImpl.fromJson;
 
@@ -268,9 +286,11 @@ abstract class _Company implements Company {
   @override
   int get totalAssets;
   @override
-  int get todaySteps;
-  @override
   int get stepsToYenRate;
+  @override
+  DateTime get createdAt;
+  @override
+  DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
   _$$CompanyImplCopyWith<_$CompanyImpl> get copyWith =>

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/providers/firebase_providers.dart';
@@ -19,12 +18,17 @@ class CompanyRepository extends _$CompanyRepository {
     try {
       final firestore = ref.read(firestoreProvider);
       final companyDoc = firestore.collection('companies').doc(userId);
+      final now = DateTime.now();
 
       final company = Company(
         id: userId,
         name: name,
         genre: genre,
         rank: CompanyRank.startup,
+        totalAssets: 0,
+        stepsToYenRate: 50,
+        createdAt: now,
+        updatedAt: now,
       );
 
       await companyDoc.set(company.toJson());
