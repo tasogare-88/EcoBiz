@@ -45,5 +45,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSHealthShareUsageDescription</key>
+	<string>歩数データを取得してアプリ内で使用するために使用します</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>歩数データを取得してアプリ内で使用するために使用します</string>
 </dict>
 </plist>
