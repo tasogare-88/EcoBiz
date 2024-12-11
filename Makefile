@@ -28,11 +28,16 @@ format:
 build-runner:
 	@echo "Generating files..."
 	@fvm flutter pub run build_runner build --delete-conflicting-outputs
+	@find . -name "*.g.dart" -type f -exec sed -i '' 's/AutoDisposeProviderRef/Ref/g; s/AutoDisposeStreamProviderRef/Ref/g' {} +
 
 # Watch files and generate
 watch:
 	@echo "Watching files..."
-	@fvm flutter pub run build_runner watch --delete-conflicting-outputs
+	@fvm flutter pub run build_runner watch --delete-conflicting-outputs & \
+	while true; do \
+		sleep 2; \
+		find . -name "*.g.dart" -type f -exec sed -i '' 's/AutoDisposeProviderRef/Ref/g; s/AutoDisposeStreamProviderRef/Ref/g' {} +; \
+	done
 
 # Run tests
 test:
