@@ -45,4 +45,33 @@ class CompanyViewModel extends _$CompanyViewModel {
       state = state.copyWith(error: e.toString(), isLoading: false);
     }
   }
+
+  Future<void> updateCompanyAssets(String userId, int newTotalAssets) async {
+    state = state.copyWith(isLoading: true, error: null);
+
+    try {
+      final updatedCompany = await ref
+          .read(companyRepositoryProvider.notifier)
+          .updateCompanyRankAndRate(userId, newTotalAssets);
+
+      state = state.copyWith(company: updatedCompany, isLoading: false);
+    } catch (e) {
+      state = state.copyWith(error: e.toString(), isLoading: false);
+    }
+  }
+
+  // 現在の総資産を取得
+  int getCurrentTotalAssets() {
+    return state.company?.totalAssets ?? 0;
+  }
+
+  // 現在の歩数換算レートを取得
+  int getCurrentStepsToYenRate() {
+    return state.company?.stepsToYenRate ?? 50;
+  }
+
+  // 会社のランクを取得
+  CompanyRank? getCurrentRank() {
+    return state.company?.rank;
+  }
 }

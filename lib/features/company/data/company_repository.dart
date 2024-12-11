@@ -49,4 +49,44 @@ class CompanyRepository extends _$CompanyRepository {
       throw Exception('会社情報の取得に失敗しました: $e');
     }
   }
+
+  Future<Company> updateCompanyRankAndRate(
+      String userId, int newTotalAssets) async {
+    try {
+      final firestore = ref.read(firestoreProvider);
+      final companyDoc = firestore.collection('companies').doc(userId);
+      final now = DateTime.now();
+
+      // 新しいランクと換算レートを計算
+      final (newRank, newRate) = _calculateRankAndRate(newTotalAssets);
+
+      await companyDoc.update({
+        'rank': newRank.name,
+        'totalAssets': newTotalAssets,
+        'stepsToYenRate': newRate,
+        'updatedAt': now,
+      });
+
+      final updatedDoc = await companyDoc.get();
+      return Company.fromJson(updatedDoc.data()!);
+    } catch (e) {
+      throw Exception('会社情報の更新に失敗しました: $e');
+    }
+  }
+
+  (CompanyRank, int) _calculateRankAndRate(int totalAssets) {
+    if (totalAssets <= 50000) {
+      return (CompanyRank.startup, 50);
+    } else if (totalAssets <= 325000) {
+      return (CompanyRank.localBusiness, 75);
+    } else if (totalAssets <= 1000000) {
+      return (CompanyRank.regionalBusiness, 100);
+    } else if (totalAssets <= 5000000) {
+      return (CompanyRank.sme, 150);
+    } else if (totalAssets <= 100000000) {
+      return (CompanyRank.corporation, 300);
+    } else {
+      return (CompanyRank.globalCompany, 500);
+    }
+  }
 }
