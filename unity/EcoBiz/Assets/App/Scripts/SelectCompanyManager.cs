@@ -4,12 +4,15 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
 {
     [SerializeField] private RectTransform _placeArea_1; // デフォルトの画面
     [SerializeField] private RectTransform _placeArea_2; // 右にスライドした画面
     [SerializeField] private RectTransform _placeArea_3; // 左にスライドした画面
+    [SerializeField] private GameObject _companyPrefab; // 会社のPrefab
+    public int CompanyId;
 
     private Vector2 _initialTopBottom; // 初期の画面のTop,Bottomの値
     private float _initialBubblePositionY; // 初期の吹き出しのY座標 
@@ -62,6 +65,25 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
     {
         // 建設場所の確認
         Debug.Log("建設場所を確認");
+        BuildCompany(CompanyId);
+        // ここに処理を記述
+    }
+
+    private void BuildCompany(int companyId)
+    {
+        // 会社を建設
+        Debug.Log("会社を建設");
+        RenderTexture newRenderTexture = new RenderTexture(256, 256, 24);
+        GameObject company = Instantiate(_companyPrefab, _bubbleRectTransform.position, Quaternion.identity, _bubbleRectTransform.parent);
+        company.GetComponent<RectTransform>().rotation = new Quaternion(0, 0, 0, 0);
+        company.transform.GetChild(0).GetComponent<Camera>().targetTexture = newRenderTexture;
+        var rawImage = company.transform.GetChild(1).GetComponent<RawImage>();
+        rawImage.texture = newRenderTexture;
+
+        _bubbleRectTransform.gameObject.SetActive(false);
+        _bubbleRectTransform.parent.GetComponent<Image>().enabled = false;
+
+        
         // ここに処理を記述
     }
 
