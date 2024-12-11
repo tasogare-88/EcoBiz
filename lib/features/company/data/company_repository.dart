@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/providers/firebase_providers.dart';
@@ -55,7 +56,7 @@ class CompanyRepository extends _$CompanyRepository {
     try {
       final firestore = ref.read(firestoreProvider);
       final companyDoc = firestore.collection('companies').doc(userId);
-      final now = DateTime.now();
+      final now = Timestamp.fromDate(DateTime.now());
 
       // 新しいランクと換算レートを計算
       final (newRank, newRate) = _calculateRankAndRate(newTotalAssets);

@@ -26,7 +26,9 @@ mixin _$Company {
   CompanyRank get rank => throw _privateConstructorUsedError;
   int get totalAssets => throw _privateConstructorUsedError;
   int get stepsToYenRate => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
   DateTime get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -46,7 +48,9 @@ abstract class $CompanyCopyWith<$Res> {
       CompanyRank rank,
       int totalAssets,
       int stepsToYenRate,
+      @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
       DateTime createdAt,
+      @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
       DateTime updatedAt});
 }
 
@@ -123,7 +127,9 @@ abstract class _$$CompanyImplCopyWith<$Res> implements $CompanyCopyWith<$Res> {
       CompanyRank rank,
       int totalAssets,
       int stepsToYenRate,
+      @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
       DateTime createdAt,
+      @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
       DateTime updatedAt});
 }
 
@@ -186,7 +192,7 @@ class __$$CompanyImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$CompanyImpl implements _Company {
+class _$CompanyImpl extends _Company {
   const _$CompanyImpl(
       {required this.id,
       required this.name,
@@ -194,8 +200,11 @@ class _$CompanyImpl implements _Company {
       required this.rank,
       this.totalAssets = 0,
       this.stepsToYenRate = 50,
+      @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
       required this.createdAt,
-      required this.updatedAt});
+      @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
+      required this.updatedAt})
+      : super._();
 
   factory _$CompanyImpl.fromJson(Map<String, dynamic> json) =>
       _$$CompanyImplFromJson(json);
@@ -215,8 +224,10 @@ class _$CompanyImpl implements _Company {
   @JsonKey()
   final int stepsToYenRate;
   @override
+  @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
   final DateTime createdAt;
   @override
+  @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
   final DateTime updatedAt;
 
   @override
@@ -262,7 +273,7 @@ class _$CompanyImpl implements _Company {
   }
 }
 
-abstract class _Company implements Company {
+abstract class _Company extends Company {
   const factory _Company(
       {required final String id,
       required final String name,
@@ -270,8 +281,11 @@ abstract class _Company implements Company {
       required final CompanyRank rank,
       final int totalAssets,
       final int stepsToYenRate,
+      @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
       required final DateTime createdAt,
+      @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
       required final DateTime updatedAt}) = _$CompanyImpl;
+  const _Company._() : super._();
 
   factory _Company.fromJson(Map<String, dynamic> json) = _$CompanyImpl.fromJson;
 
@@ -288,8 +302,10 @@ abstract class _Company implements Company {
   @override
   int get stepsToYenRate;
   @override
+  @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
   DateTime get createdAt;
   @override
+  @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
   DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
