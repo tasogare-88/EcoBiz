@@ -81,5 +81,4 @@
 ### 5. 技術要件
 
 README.mdに記載している通り。
-- 毎日の歩数データはローカルストレージに保存。
 - UnityとFlutterの連携はflutter_unity_widgetを使用。

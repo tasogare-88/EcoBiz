@@ -39,6 +39,45 @@ lib/
     └── navigation/   # 画面遷移
 ```
 
+## FireStoreのデータ（コレクション）構造
+```
+root/
+├── users/
+│   └── {userId}/
+│       ├── email: string
+│       ├── createdAt: timestamp
+│       └── dailyRecords/
+│           └── {date}/  # YYYYMMDD形式
+│               ├── steps: number
+│               ├── earnedAmount: number
+│               ├── totalAssets: number
+│               ├── createdAt: timestamp
+│               └── updatedAt: timestamp
+│
+├── companies/
+│   └── {userId}/
+│       ├── id: string
+│       ├── name: string
+│       ├── genre: string
+│       ├── rank: string
+│       ├── totalAssets: number
+│       ├── stepsToYenRate: number
+│       ├── createdAt: timestamp
+│       └── updatedAt: timestamp
+│
+└── battles/
+    └── {date}/  # YYYYMMDD形式
+        └── {battleId}/
+            ├── winnerId: string
+            ├── loserId: string
+            ├── winnerSteps: number
+            ├── loserSteps: number
+            ├── stepsDifference: number
+            ├── amountChanged: number
+            ├── multiplier: number  # 固定値4
+            └── createdAt: timestamp
+```
+
 各featureディレクトリは、presentation/domain/dataの3層構造を採用している。
 
 ## デザインパターン
