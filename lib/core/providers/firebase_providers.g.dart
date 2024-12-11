@@ -19,7 +19,7 @@ final firebaseAuthProvider = AutoDisposeProvider<FirebaseAuth>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef FirebaseAuthRef = Ref<FirebaseAuth>;
+typedef FirebaseAuthRef = AutoDisposeProviderRef<FirebaseAuth>;
 String _$authStateChangesHash() => r'386ea079ca75ac54d471519e1565d88b5c2efc08';
 
 /// See also [authStateChanges].
@@ -34,7 +34,7 @@ final authStateChangesProvider = AutoDisposeStreamProvider<User?>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef AuthStateChangesRef = Ref<User?>;
+typedef AuthStateChangesRef = AutoDisposeStreamProviderRef<User?>;
 String _$firestoreHash() => r'ef4a6b0737caace50a6d79dd3e4e2aa1bc3031d5';
 
 /// See also [firestore].
@@ -48,6 +48,6 @@ final firestoreProvider = AutoDisposeProvider<FirebaseFirestore>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef FirestoreRef = Ref<FirebaseFirestore>;
+typedef FirestoreRef = AutoDisposeProviderRef<FirebaseFirestore>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
