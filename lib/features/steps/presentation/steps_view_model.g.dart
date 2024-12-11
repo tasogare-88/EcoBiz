@@ -6,7 +6,7 @@ part of 'steps_view_model.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$stepsViewModelHash() => r'a2299a7013094623f6e6f4bd0c2885c63fbb593c';
+String _$stepsViewModelHash() => r'722e8f6cbd53bf3158444612aeeaf0de60a2d4a6';
 
 /// See also [StepsViewModel].
 @ProviderFor(StepsViewModel)
