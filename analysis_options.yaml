@@ -31,3 +31,4 @@ linter:
 analyzer:
   errors:
     deprecated_member_use: ignore  # Riverpodの非推奨警告を無視
+    invalid_annotation_target: ignore
