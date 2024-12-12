@@ -17,6 +17,10 @@ class AuthRepository extends _$AuthRepository {
   }) async {
     try {
       final auth = ref.read(firebaseAuthProvider);
+
+      // reCAPTCHAの検証をスキップ
+      await auth.setSettings(appVerificationDisabledForTesting: true);
+
       final credential = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
