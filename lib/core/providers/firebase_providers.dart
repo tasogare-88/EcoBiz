@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -12,4 +13,9 @@ FirebaseAuth firebaseAuth(FirebaseAuthRef ref) {
 Stream<User?> authStateChanges(AuthStateChangesRef ref) {
   final auth = ref.watch(firebaseAuthProvider);
   return auth.authStateChanges();
+}
+
+@riverpod
+FirebaseFirestore firestore(FirestoreRef ref) {
+  return FirebaseFirestore.instance;
 }
