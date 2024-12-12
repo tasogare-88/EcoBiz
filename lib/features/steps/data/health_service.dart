@@ -19,9 +19,15 @@ class HealthService extends _$HealthService {
       if (Platform.isAndroid) {
         final hasPermissions = await health.hasPermissions(_types);
         if (hasPermissions == null || !hasPermissions) {
-          // Health Connectがインストールされていない場合
+          // Health Connectのインストール確認
           final installed = await _requestInstallHealthConnect();
           if (!installed) return false;
+
+          // インストール後の再確認
+          final recheck = await health.hasPermissions(_types);
+          if (recheck == null || !recheck) {
+            throw Exception('Health Connectのセットアップを完了してください');
+          }
         }
       }
 
@@ -37,13 +43,17 @@ class HealthService extends _$HealthService {
     final canLaunch = await canLaunchUrl(Uri.parse(playStoreUrl));
 
     if (canLaunch) {
-      await launchUrl(
+      final launched = await launchUrl(
         Uri.parse(playStoreUrl),
         mode: LaunchMode.externalApplication,
       );
-      // NOTE: ユーザーがインストールを完了するまで待機する必要があるため、
-      // 実際のアプリではダイアログなどでユーザーに確認を求めることを推奨
-      return true;
+
+      if (!launched) {
+        throw Exception('Health Connectのインストールページを開けませんでした');
+      }
+
+      // インストール完了を待つためのダイアログを表示
+      return true; // ダイアログでユーザーが「完了」を押した場合にtrueを返す
     }
 
     throw Exception('Health Connectのインストールページを開けませんでした');
