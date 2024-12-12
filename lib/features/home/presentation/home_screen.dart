@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'home_view_model.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // initStateで歩数データを取得
+    Future.microtask(
+        () => ref.read(homeViewModelProvider.notifier).fetchSteps());
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final homeState = ref.watch(homeViewModelProvider);
 
     // 画面表示時に歩数データを取得
@@ -19,11 +31,6 @@ class HomeScreen extends ConsumerWidget {
         );
       }
     });
-
-    useEffect(() {
-      ref.read(homeViewModelProvider.notifier).fetchSteps();
-      return null;
-    }, const []);
 
     return Scaffold(
       body: SafeArea(
