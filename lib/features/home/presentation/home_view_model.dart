@@ -1,6 +1,10 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/auth/domain/auth_state.dart';
+import '../../../core/auth/presentation/auth_view_model.dart';
+import '../../steps/presentation/steps_view_model.dart';
+
 part 'home_view_model.freezed.dart';
 part 'home_view_model.g.dart';
 
@@ -24,8 +28,23 @@ class HomeViewModel extends _$HomeViewModel {
   Future<void> fetchSteps() async {
     state = state.copyWith(isLoading: true);
     try {
-      // TODO: ヘルスケアAPIから歩数を取得する実装
-      final steps = 0; // 仮の実装。後でHealth APIと連携
+      final authState = ref.read(authViewModelProvider);
+      if (authState is! AuthStateAuthenticated) {
+        throw Exception('ユーザーが認証されていません');
+      }
+
+      final stepsViewModel = ref.read(stepsViewModelProvider.notifier);
+
+      // Health APIの初期化と認証
+      await stepsViewModel.initializeHealthService();
+
+      // 歩数の取得と更新
+      await stepsViewModel.fetchAndUpdateSteps(authState.user.uid);
+
+      // 歩数データの取得
+      final dailyRecord = stepsViewModel.state.dailyRecord;
+      final steps = dailyRecord?.steps ?? 0;
+
       state = state.copyWith(steps: steps, isLoading: false);
     } catch (e) {
       state = state.copyWith(error: e.toString(), isLoading: false);
