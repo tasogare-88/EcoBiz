@@ -28,9 +28,13 @@ void main() {
     test('initial state', () {
       final authState = container.read(authViewModelProvider);
 
-      expect(authState.isLoading, false);
-      expect(authState.error, null);
-      expect(authState.user, null);
+      expect(
+        authState.maybeMap(
+          initial: (_) => true,
+          orElse: () => false,
+        ),
+        true,
+      );
     });
 
     test('signIn - success', () async {
@@ -41,8 +45,13 @@ void main() {
       );
 
       final state = container.read(authViewModelProvider);
-      expect(state.isLoading, false);
-      expect(state.error, null);
+      expect(
+        state.maybeMap(
+          authenticated: (state) => !state.isLoading && state.error == null,
+          orElse: () => false,
+        ),
+        true,
+      );
     });
 
     test('signIn - failure', () async {
@@ -53,8 +62,13 @@ void main() {
       );
 
       final state = container.read(authViewModelProvider);
-      expect(state.isLoading, false);
-      expect(state.error, isNotNull);
+      expect(
+        state.maybeMap(
+          unauthenticated: (state) => !state.isLoading && state.error != null,
+          orElse: () => false,
+        ),
+        true,
+      );
     });
   });
 }

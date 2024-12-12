@@ -12,8 +12,9 @@ class AuthWrapper extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authViewModelProvider);
 
-    return authState.user != null
-        ? const MainNavigation()
-        : const SignInScreen();
+    return authState.maybeMap(
+      authenticated: (state) => const MainNavigation(),
+      orElse: () => const SignInScreen(),
+    );
   }
 }

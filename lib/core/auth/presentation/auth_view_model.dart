@@ -9,23 +9,26 @@ part 'auth_view_model.g.dart';
 class AuthViewModel extends _$AuthViewModel {
   @override
   AuthState build() {
-    return const AuthState();
+    return const AuthState.initial();
   }
 
   Future<void> signIn({
     required String email,
     required String password,
   }) async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = const AuthState.unauthenticated(isLoading: true);
 
     try {
       final user = await ref.read(authRepositoryProvider.notifier).signIn(
             email: email,
             password: password,
           );
-      state = state.copyWith(user: user, isLoading: false);
+      state = AuthState.authenticated(user: user, isLoading: false);
     } catch (e) {
-      state = state.copyWith(error: e.toString(), isLoading: false);
+      state = AuthState.unauthenticated(
+        isLoading: false,
+        error: e.toString(),
+      );
     }
   }
 
@@ -33,27 +36,33 @@ class AuthViewModel extends _$AuthViewModel {
     required String email,
     required String password,
   }) async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = const AuthState.unauthenticated(isLoading: true);
 
     try {
       final user = await ref.read(authRepositoryProvider.notifier).signUp(
             email: email,
             password: password,
           );
-      state = state.copyWith(user: user, isLoading: false);
+      state = AuthState.authenticated(user: user, isLoading: false);
     } catch (e) {
-      state = state.copyWith(error: e.toString(), isLoading: false);
+      state = AuthState.unauthenticated(
+        isLoading: false,
+        error: e.toString(),
+      );
     }
   }
 
   Future<void> signOut() async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = const AuthState.unauthenticated(isLoading: true);
 
     try {
       await ref.read(authRepositoryProvider.notifier).signOut();
-      state = const AuthState();
+      state = const AuthState.initial();
     } catch (e) {
-      state = state.copyWith(error: e.toString(), isLoading: false);
+      state = AuthState.unauthenticated(
+        isLoading: false,
+        error: e.toString(),
+      );
     }
   }
 }
