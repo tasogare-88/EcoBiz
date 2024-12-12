@@ -6115,7 +6115,7 @@ MonoBehaviour:
   _placeArea_2: {fileID: 5420885948236774929}
   _placeArea_3: {fileID: 6325857211683509904}
   _companyPrefab: {fileID: 1097378603738760417, guid: 7a1cecfd3ea64ff458d5cd52cb452213, type: 3}
-  CompanyId: 0
+  CompanyId: 4
 --- !u!222 &9217324363127150463
 CanvasRenderer:
   m_ObjectHideFlags: 0

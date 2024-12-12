@@ -80,11 +80,48 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
         var rawImage = company.transform.GetChild(1).GetComponent<RawImage>();
         rawImage.texture = newRenderTexture;
 
+        // 会社IDに応じたモデルを表示
+        switch(companyId)
+        {
+            case 1:
+            {
+                company.transform.GetChild(2).gameObject.SetActive(true);
+                break;
+            }
+            case 2:
+            {
+                company.transform.GetChild(3).gameObject.SetActive(true);
+                break;
+            }
+            case 3:
+            {
+                company.transform.GetChild(4).gameObject.SetActive(true);
+                break;
+            }
+            case 4:
+            {
+                company.transform.GetChild(5).gameObject.SetActive(true);
+                break;
+            }
+            case 5:
+            {
+                company.transform.GetChild(6).gameObject.SetActive(true);
+                break;
+            }
+            case 6:
+            {
+                company.transform.GetChild(7).gameObject.SetActive(true);
+                break;
+            }
+            default:
+            {
+                Debug.LogError("会社IDが不正です");
+                break;
+            }
+        }
+
         _bubbleRectTransform.gameObject.SetActive(false);
         _bubbleRectTransform.parent.GetComponent<Image>().enabled = false;
-
-        
-        // ここに処理を記述
     }
 
     public void OnBeginDrag(PointerEventData eventData)
