@@ -29,7 +29,7 @@ lib/
 │   ├── home/         # HOME画面機能
 │   ├── gacha/        # ガチャ機能
 │   ├── company/      # 経営機能
-│   ├── communication/# 通信機能
+│   ├── communication/# すれ違い通信機能
 │   └── item/         # アイテム機能
 │
 └── shared/           # 共有コンポーネント
