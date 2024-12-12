@@ -13,6 +13,7 @@ import 'package:mocktail/mocktail.dart';
 class FakeHealthService extends AutoDisposeAsyncNotifier<void>
     implements HealthService {
   bool _shouldAuthorize = true;
+  bool _isAvailable = true;
   int _steps = 1000;
 
   @override
@@ -22,6 +23,14 @@ class FakeHealthService extends AutoDisposeAsyncNotifier<void>
   FutureOr<void> build() async {}
 
   @override
+  Future<bool> checkAndRequestAuthorization() async {
+    if (!_isAvailable) {
+      throw Exception('Health Connectのインストールページを開けませんでした');
+    }
+    return _shouldAuthorize;
+  }
+
+  @override
   Future<bool> requestAuthorization() async => _shouldAuthorize;
 
   @override
@@ -29,6 +38,10 @@ class FakeHealthService extends AutoDisposeAsyncNotifier<void>
 
   void setShouldAuthorize(bool value) {
     _shouldAuthorize = value;
+  }
+
+  void setAvailable(bool value) {
+    _isAvailable = value;
   }
 }
 
@@ -74,6 +87,17 @@ void main() {
 
       final state = container.read(stepsViewModelProvider);
       expect(state.error, 'Exception: ヘルスケアの認証が拒否されました');
+      expect(state.isLoading, false);
+    });
+
+    test('Health Connectが利用できない場合', () async {
+      fakeHealthService.setAvailable(false);
+
+      final viewModel = container.read(stepsViewModelProvider.notifier);
+      await viewModel.initializeHealthService();
+
+      final state = container.read(stepsViewModelProvider);
+      expect(state.error, 'Exception: Health Connectのインストールページを開けませんでした');
       expect(state.isLoading, false);
     });
   });

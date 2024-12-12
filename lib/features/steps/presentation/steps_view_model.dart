@@ -56,7 +56,7 @@ class StepsViewModel extends _$StepsViewModel {
 
     try {
       final healthService = ref.read(healthServiceProvider.notifier);
-      final isAuthorized = await healthService.requestAuthorization();
+      final isAuthorized = await healthService.checkAndRequestAuthorization();
 
       if (!isAuthorized) {
         throw Exception('ヘルスケアの認証が拒否されました');
