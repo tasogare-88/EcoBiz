@@ -1,7 +1,8 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.ecobiz">
     <application
+        android:name="${applicationName}"
         android:label="ecobiz"
-        android:name=".MyApplication"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"
         android:enableOnBackInvokedCallback="true">
