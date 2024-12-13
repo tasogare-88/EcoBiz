@@ -74,26 +74,65 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             child: Icon(Icons.person, size: 30),
           ),
           const SizedBox(width: 16),
-          Icon(Icons.directions_walk, size: 30, color: Colors.black),
-          const SizedBox(width: 4),
-          if (state.isLoading)
-            const SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-              ),
-            )
-          else
-            Text(
-              '${state.steps} 歩',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.black,
-              ),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.business, size: 30, color: Colors.black),
+                      const SizedBox(width: 8),
+                      Text(
+                        '${state.totalAssets} 円',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.directions_walk,
+                          size: 30, color: Colors.black),
+                      const SizedBox(width: 4),
+                      if (state.isLoading)
+                        const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.black),
+                          ),
+                        )
+                      else
+                        Text(
+                          '${state.steps} 歩',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          const Spacer(),
+          ),
           IconButton(
             icon: Icon(Icons.menu, color: Colors.black, size: 30),
             onPressed: () {

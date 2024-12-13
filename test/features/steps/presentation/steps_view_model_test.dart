@@ -1,14 +1,12 @@
 import 'dart:async';
 
 import 'package:ecobiz/core/providers/firebase_providers.dart';
-import 'package:ecobiz/features/company/presentation/company_view_model.dart';
 import 'package:ecobiz/features/steps/data/health_service.dart';
 import 'package:ecobiz/features/steps/presentation/steps_view_model.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health/health.dart';
-import 'package:mocktail/mocktail.dart';
 
 import '../../../../lib/shared/constants/health_error_messages.dart';
 
@@ -46,8 +44,6 @@ class FakeHealthService extends AutoDisposeAsyncNotifier<void>
     _isAvailable = value;
   }
 }
-
-class MockCompanyViewModel extends Mock implements CompanyViewModel {}
 
 void main() {
   late ProviderContainer container;

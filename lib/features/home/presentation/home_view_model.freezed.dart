@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$HomeState {
   int get steps => throw _privateConstructorUsedError;
+  int get totalAssets => throw _privateConstructorUsedError;
   int get currentCarouselIndex => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
@@ -32,7 +33,11 @@ abstract class $HomeStateCopyWith<$Res> {
       _$HomeStateCopyWithImpl<$Res, HomeState>;
   @useResult
   $Res call(
-      {int steps, int currentCarouselIndex, bool isLoading, String? error});
+      {int steps,
+      int totalAssets,
+      int currentCarouselIndex,
+      bool isLoading,
+      String? error});
 }
 
 /// @nodoc
@@ -49,6 +54,7 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
   @override
   $Res call({
     Object? steps = null,
+    Object? totalAssets = null,
     Object? currentCarouselIndex = null,
     Object? isLoading = null,
     Object? error = freezed,
@@ -57,6 +63,10 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
       steps: null == steps
           ? _value.steps
           : steps // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalAssets: null == totalAssets
+          ? _value.totalAssets
+          : totalAssets // ignore: cast_nullable_to_non_nullable
               as int,
       currentCarouselIndex: null == currentCarouselIndex
           ? _value.currentCarouselIndex
@@ -83,7 +93,11 @@ abstract class _$$HomeStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int steps, int currentCarouselIndex, bool isLoading, String? error});
+      {int steps,
+      int totalAssets,
+      int currentCarouselIndex,
+      bool isLoading,
+      String? error});
 }
 
 /// @nodoc
@@ -98,6 +112,7 @@ class __$$HomeStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? steps = null,
+    Object? totalAssets = null,
     Object? currentCarouselIndex = null,
     Object? isLoading = null,
     Object? error = freezed,
@@ -106,6 +121,10 @@ class __$$HomeStateImplCopyWithImpl<$Res>
       steps: null == steps
           ? _value.steps
           : steps // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalAssets: null == totalAssets
+          ? _value.totalAssets
+          : totalAssets // ignore: cast_nullable_to_non_nullable
               as int,
       currentCarouselIndex: null == currentCarouselIndex
           ? _value.currentCarouselIndex
@@ -128,6 +147,7 @@ class __$$HomeStateImplCopyWithImpl<$Res>
 class _$HomeStateImpl implements _HomeState {
   const _$HomeStateImpl(
       {this.steps = 0,
+      this.totalAssets = 0,
       this.currentCarouselIndex = 0,
       this.isLoading = false,
       this.error});
@@ -135,6 +155,9 @@ class _$HomeStateImpl implements _HomeState {
   @override
   @JsonKey()
   final int steps;
+  @override
+  @JsonKey()
+  final int totalAssets;
   @override
   @JsonKey()
   final int currentCarouselIndex;
@@ -146,7 +169,7 @@ class _$HomeStateImpl implements _HomeState {
 
   @override
   String toString() {
-    return 'HomeState(steps: $steps, currentCarouselIndex: $currentCarouselIndex, isLoading: $isLoading, error: $error)';
+    return 'HomeState(steps: $steps, totalAssets: $totalAssets, currentCarouselIndex: $currentCarouselIndex, isLoading: $isLoading, error: $error)';
   }
 
   @override
@@ -155,6 +178,8 @@ class _$HomeStateImpl implements _HomeState {
         (other.runtimeType == runtimeType &&
             other is _$HomeStateImpl &&
             (identical(other.steps, steps) || other.steps == steps) &&
+            (identical(other.totalAssets, totalAssets) ||
+                other.totalAssets == totalAssets) &&
             (identical(other.currentCarouselIndex, currentCarouselIndex) ||
                 other.currentCarouselIndex == currentCarouselIndex) &&
             (identical(other.isLoading, isLoading) ||
@@ -163,8 +188,8 @@ class _$HomeStateImpl implements _HomeState {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, steps, currentCarouselIndex, isLoading, error);
+  int get hashCode => Object.hash(
+      runtimeType, steps, totalAssets, currentCarouselIndex, isLoading, error);
 
   @JsonKey(ignore: true)
   @override
@@ -176,12 +201,15 @@ class _$HomeStateImpl implements _HomeState {
 abstract class _HomeState implements HomeState {
   const factory _HomeState(
       {final int steps,
+      final int totalAssets,
       final int currentCarouselIndex,
       final bool isLoading,
       final String? error}) = _$HomeStateImpl;
 
   @override
   int get steps;
+  @override
+  int get totalAssets;
   @override
   int get currentCarouselIndex;
   @override
