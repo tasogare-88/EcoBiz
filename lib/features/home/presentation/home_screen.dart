@@ -45,8 +45,16 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
         child: Column(
           children: [
             buildHeader(homeState),
-            buildCarousel(),
-            buildMenuGrid(),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    buildCarousel(),
+                    buildMenuGrid(),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -56,6 +64,9 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   Widget buildHeader(HomeState state) {
     return Container(
       padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Color(0xFFB5D4E4),
+      ),
       child: Row(
         children: [
           CircleAvatar(
@@ -64,25 +75,28 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             child: Icon(Icons.person, size: 30),
           ),
           const SizedBox(width: 16),
-          Icon(Icons.directions_walk, size: 30),
+          Icon(Icons.directions_walk, size: 30, color: Colors.black),
           const SizedBox(width: 4),
           if (state.isLoading)
             const SizedBox(
               width: 20,
               height: 20,
-              child: CircularProgressIndicator(strokeWidth: 2),
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+              ),
             )
           else
             Text(
               '${state.steps} 歩',
               style: TextStyle(
                 fontSize: 20,
-                // fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
             ),
           const Spacer(),
           IconButton(
-            icon: Icon(Icons.menu),
+            icon: Icon(Icons.menu, color: Colors.black),
             onPressed: () {
               // TODO: メニュー表示する
             },
@@ -113,69 +127,38 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
           return timer.cancel;
         }, []);
 
-        return Stack(
-          children: [
-            Container(
-              height: 200,
-              child: PageView.builder(
-                controller: pageController,
-                itemCount: 5,
-                onPageChanged: (index) {
-                  currentPage.value = index;
-                },
-                itemBuilder: (context, index) {
-                  return Card(
-                    margin: EdgeInsets.symmetric(horizontal: 8),
-                    child: Center(
-                      child: Text('カルーセル ${index + 1}'),
-                    ),
-                  );
-                },
-              ),
-            ),
-            // 左矢印
-            Positioned(
-              left: 8,
-              top: 0,
-              bottom: 0,
-              child: Center(
-                child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    pageController.previousPage(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
+        return Container(
+          color: Color(0xFFFFEBD5),
+          padding: EdgeInsets.symmetric(horizontal: 48),
+          child: Column(
+            children: [
+              Container(
+                height: 180,
+                child: PageView.builder(
+                  controller: pageController,
+                  itemCount: 5,
+                  onPageChanged: (index) {
+                    currentPage.value = index;
+                  },
+                  itemBuilder: (context, index) {
+                    return Card(
+                      elevation: 4,
+                      margin: EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 16,
+                      ),
+                      child: Center(
+                        child: Text('カルーセル ${index + 1}'),
+                      ),
                     );
                   },
                 ),
               ),
-            ),
-            // 右矢印
-            Positioned(
-              right: 8,
-              top: 0,
-              bottom: 0,
-              child: Center(
-                child: IconButton(
-                  icon: Icon(Icons.arrow_forward_ios),
-                  onPressed: () {
-                    pageController.nextPage(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  },
-                ),
-              ),
-            ),
-            // ページインジケーター
-            Positioned(
-              bottom: 16,
-              left: 0,
-              right: 0,
-              child: Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(5, (index) {
-                  return Container(
+                children: List.generate(
+                  5,
+                  (index) => Container(
                     margin: EdgeInsets.symmetric(horizontal: 4),
                     width: 8,
                     height: 8,
@@ -183,13 +166,14 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                       shape: BoxShape.circle,
                       color: currentPage.value == index
                           ? Colors.blue
-                          : Colors.grey.withOpacity(0.5),
+                          : Colors.grey.shade300,
                     ),
-                  );
-                }),
+                  ),
+                ),
               ),
-            ),
-          ],
+              SizedBox(height: 16),
+            ],
+          ),
         );
       },
     );
