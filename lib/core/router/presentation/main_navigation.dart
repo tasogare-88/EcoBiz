@@ -6,8 +6,8 @@ import '../../../features/company/presentation/company_screen.dart';
 import '../../../features/gacha/presentation/gacha_screen.dart';
 import '../../../features/home/presentation/home_screen.dart';
 import '../../../features/item/presentation/item_screen.dart';
-import '../../constants/app_constants.dart';
-import '../state/navigation_state.dart';
+import '../../../shared/constants/app_constants.dart';
+import '../domain/navigation_state.dart';
 
 class MainNavigation extends ConsumerWidget {
   const MainNavigation({super.key});

@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../shared/constants/health_error_messages.dart';
-import '../../../shared/navigation/navigation_service.dart';
+import '../../../shared/utils/navigation_util.dart';
 import '../../steps/presentation/steps_screen.dart';
 import 'health_connect_preferences.dart';
 

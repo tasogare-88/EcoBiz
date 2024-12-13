@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/auth/presentation/auth_wrapper.dart';
 import 'firebase_options.dart';
-import 'shared/navigation/navigation_service.dart';
+import 'shared/utils/navigation_util.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

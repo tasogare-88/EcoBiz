@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../constants/app_constants.dart';
+import '../../../shared/constants/app_constants.dart';
 
 part 'navigation_state.g.dart';
 
