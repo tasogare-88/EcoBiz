@@ -128,49 +128,89 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
 
         return Container(
           color: Color(0xFFFFEBD5),
-          padding: EdgeInsets.symmetric(horizontal: 48),
-          child: Column(
+          child: Row(
             children: [
-              Container(
-                height: 180,
-                child: PageView.builder(
-                  controller: pageController,
-                  itemCount: 5,
-                  onPageChanged: (index) {
-                    currentPage.value = index;
-                  },
-                  itemBuilder: (context, index) {
-                    return Card(
-                      elevation: 4,
-                      margin: EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 16,
-                      ),
-                      child: Center(
-                        child: Text('カルーセル ${index + 1}'),
-                      ),
-                    );
-                  },
+              // 左矢印
+              IconButton(
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: currentPage.value > 0
+                      ? Colors.black
+                      : Colors.grey.withOpacity(0.3),
                 ),
+                onPressed: currentPage.value > 0
+                    ? () {
+                        pageController.previousPage(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    : null,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  5,
-                  (index) => Container(
-                    margin: EdgeInsets.symmetric(horizontal: 4),
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: currentPage.value == index
-                          ? Colors.blue
-                          : Colors.grey.shade300,
+              // カルーセル
+              Expanded(
+                child: Column(
+                  children: [
+                    Container(
+                      height: 180,
+                      child: PageView.builder(
+                        controller: pageController,
+                        itemCount: 5,
+                        onPageChanged: (index) {
+                          currentPage.value = index;
+                        },
+                        itemBuilder: (context, index) {
+                          return Card(
+                            elevation: 4,
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 16,
+                            ),
+                            child: Center(
+                              child: Text('カルーセル ${index + 1}'),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        5,
+                        (index) => Container(
+                          margin: EdgeInsets.symmetric(horizontal: 4),
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: currentPage.value == index
+                                ? Colors.blue
+                                : Colors.grey.shade300,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                  ],
                 ),
               ),
-              SizedBox(height: 16),
+              // 右矢印
+              IconButton(
+                icon: Icon(
+                  Icons.arrow_forward_ios,
+                  color: currentPage.value < 4
+                      ? Colors.black
+                      : Colors.grey.withOpacity(0.3),
+                ),
+                onPressed: currentPage.value < 4
+                    ? () {
+                        pageController.nextPage(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    : null,
+              ),
             ],
           ),
         );
