@@ -15,10 +15,10 @@ enum CompanyGenre {
 
 enum CompanyRank {
   startup,
-  localBusiness,
-  regionalBusiness,
-  sme,
-  corporation,
+  localCompany,
+  regionalCompany,
+  smallMediumCompany,
+  largeCompany,
   globalCompany,
 }
 

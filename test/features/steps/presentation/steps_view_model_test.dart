@@ -10,6 +10,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:health/health.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../../../lib/shared/constants/health_error_messages.dart';
+
 class FakeHealthService extends AutoDisposeAsyncNotifier<void>
     implements HealthService {
   bool _shouldAuthorize = true;
@@ -25,8 +27,7 @@ class FakeHealthService extends AutoDisposeAsyncNotifier<void>
   @override
   Future<bool> checkAndRequestAuthorization() async {
     if (!_isAvailable) {
-      throw Exception(
-          'Health Connectがインストールされていないか、利用できません。インストール手順を確認してください。');
+      throw Exception(HealthErrorMessages.healthConnectNotInstalled);
     }
     return _shouldAuthorize;
   }
@@ -87,7 +88,8 @@ void main() {
       await viewModel.initializeHealthService();
 
       final state = container.read(stepsViewModelProvider);
-      expect(state.error, 'Exception: ヘルスケアの認証が拒否されました。設定を確認してください。');
+      expect(
+          state.error, 'Exception: ${HealthErrorMessages.authorizationDenied}');
       expect(state.isLoading, false);
     });
 
@@ -99,7 +101,7 @@ void main() {
 
       final state = container.read(stepsViewModelProvider);
       expect(state.error,
-          'Exception: Health Connectがインストールされていないか、利用できません。インストール手順を確認してください。');
+          'Exception: ${HealthErrorMessages.healthConnectNotInstalled}');
       expect(state.isLoading, false);
     });
   });

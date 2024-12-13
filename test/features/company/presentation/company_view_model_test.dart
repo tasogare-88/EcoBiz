@@ -5,6 +5,8 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../lib/shared/constants/company_constants.dart';
+
 void main() {
   late ProviderContainer container;
   late FakeFirebaseFirestore fakeFirestore;
@@ -41,24 +43,27 @@ void main() {
 
     test('総資産を更新', () async {
       final viewModel = container.read(companyViewModelProvider.notifier);
+      final userId = 'test-user-id';
 
       await viewModel.createCompany(
-        userId: 'test-user-id',
+        userId: userId,
         name: 'Test Company',
         genre: CompanyGenre.it,
       );
 
       var state = container.read(companyViewModelProvider);
-      expect(state.company?.totalAssets, 0);
+      expect(state.company?.totalAssets, CompanyConstants.initialAssets);
       expect(state.company?.rank, CompanyRank.startup);
-      expect(state.company?.stepsToYenRate, 50);
+      expect(state.company?.stepsToYenRate,
+          CompanyConstants.initialStepsToYenRate);
 
-      await viewModel.updateCompanyAssets('test-user-id', 100000);
+      await viewModel.updateCompanyAssets(userId, 100000);
 
       state = container.read(companyViewModelProvider);
       expect(state.company?.totalAssets, 100000);
-      expect(state.company?.rank, CompanyRank.localBusiness);
-      expect(state.company?.stepsToYenRate, 75);
+      expect(state.company?.rank, CompanyRank.localCompany);
+      expect(state.company?.stepsToYenRate,
+          CompanyConstants.ranks['localCompany']?['rate']);
     });
   });
 }

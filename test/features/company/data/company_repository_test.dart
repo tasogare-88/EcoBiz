@@ -5,6 +5,8 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../lib/shared/constants/company_constants.dart';
+
 void main() {
   late ProviderContainer container;
   late FakeFirebaseFirestore fakeFirestore;
@@ -36,8 +38,8 @@ void main() {
       expect(company.name, 'Test Company');
       expect(company.genre, CompanyGenre.it);
       expect(company.rank, CompanyRank.startup);
-      expect(company.totalAssets, 0);
-      expect(company.stepsToYenRate, 50);
+      expect(company.totalAssets, CompanyConstants.initialAssets);
+      expect(company.stepsToYenRate, CompanyConstants.initialStepsToYenRate);
     });
 
     test('存在しない会社の場合', () async {
@@ -51,54 +53,61 @@ void main() {
       final repository = container.read(companyRepositoryProvider.notifier);
       final userId = 'test-user-id';
 
-      final company = await repository.createCompany(
+      await repository.createCompany(
         userId: userId,
         name: 'Test Company',
         genre: CompanyGenre.it,
       );
-      expect(company.rank, CompanyRank.startup);
-      expect(company.stepsToYenRate, 50);
-      expect(company.totalAssets, 0);
 
-      final localBusiness = await repository.updateCompanyRankAndRate(
+      // ローカルビジネスへの昇格
+      final localCompany = await repository.updateCompanyRankAndRate(
         userId,
         100000,
       );
-      expect(localBusiness.totalAssets, 100000);
-      expect(localBusiness.rank, CompanyRank.localBusiness);
-      expect(localBusiness.stepsToYenRate, 75);
+      expect(localCompany.totalAssets, 100000);
+      expect(localCompany.rank, CompanyRank.localCompany);
+      expect(localCompany.stepsToYenRate,
+          CompanyConstants.ranks['localCompany']?['rate']);
 
-      final regionalBusiness = await repository.updateCompanyRankAndRate(
+      // 地域企業への昇格
+      final regionalCompany = await repository.updateCompanyRankAndRate(
         userId,
         500000,
       );
-      expect(regionalBusiness.totalAssets, 500000);
-      expect(regionalBusiness.rank, CompanyRank.regionalBusiness);
-      expect(regionalBusiness.stepsToYenRate, 100);
+      expect(regionalCompany.totalAssets, 500000);
+      expect(regionalCompany.rank, CompanyRank.regionalCompany);
+      expect(regionalCompany.stepsToYenRate,
+          CompanyConstants.ranks['regionalCompany']?['rate']);
 
-      final sme = await repository.updateCompanyRankAndRate(
+      // 中小企業への昇格
+      final smallMediumCompany = await repository.updateCompanyRankAndRate(
         userId,
         2000000,
       );
-      expect(sme.totalAssets, 2000000);
-      expect(sme.rank, CompanyRank.sme);
-      expect(sme.stepsToYenRate, 150);
+      expect(smallMediumCompany.totalAssets, 2000000);
+      expect(smallMediumCompany.rank, CompanyRank.smallMediumCompany);
+      expect(smallMediumCompany.stepsToYenRate,
+          CompanyConstants.ranks['smallMediumCompany']?['rate']);
 
-      final corporation = await repository.updateCompanyRankAndRate(
+      // 大企業への昇格
+      final largeCompany = await repository.updateCompanyRankAndRate(
         userId,
         10000000,
       );
-      expect(corporation.totalAssets, 10000000);
-      expect(corporation.rank, CompanyRank.corporation);
-      expect(corporation.stepsToYenRate, 300);
+      expect(largeCompany.totalAssets, 10000000);
+      expect(largeCompany.rank, CompanyRank.largeCompany);
+      expect(largeCompany.stepsToYenRate,
+          CompanyConstants.ranks['largeCompany']?['rate']);
 
+      // グローバル企業への昇格
       final globalCompany = await repository.updateCompanyRankAndRate(
         userId,
         200000000,
       );
       expect(globalCompany.totalAssets, 200000000);
       expect(globalCompany.rank, CompanyRank.globalCompany);
-      expect(globalCompany.stepsToYenRate, 500);
+      expect(globalCompany.stepsToYenRate,
+          CompanyConstants.ranks['globalCompany']?['rate']);
     });
   });
 }

@@ -1,6 +1,9 @@
 import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../shared/constants/app_constants.dart';
+import '../../../shared/constants/health_error_messages.dart';
+import '../../../shared/constants/validation_messages.dart';
 import '../../company/presentation/company_view_model.dart';
 import '../data/health_service.dart';
 import '../data/steps_repository.dart';
@@ -17,12 +20,12 @@ class StepsViewModel extends _$StepsViewModel {
 
   Future<void> fetchDailyRecord(String userId) async {
     if (userId.isEmpty) {
-      throw Exception('ユーザーIDが無効です');
+      throw Exception(ValidationMessages.invalidUserId);
     }
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      final today = DateFormat('yyyyMMdd').format(DateTime.now());
+      final today = DateFormat(AppConstants.dateFormat).format(DateTime.now());
       final dailyRecord = await ref
           .read(stepsRepositoryProvider.notifier)
           .getDailyRecord(userId, today);
@@ -40,7 +43,7 @@ class StepsViewModel extends _$StepsViewModel {
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      final today = DateFormat('yyyyMMdd').format(DateTime.now());
+      final today = DateFormat(AppConstants.dateFormat).format(DateTime.now());
       final updatedRecord = await ref
           .read(stepsRepositoryProvider.notifier)
           .updateSteps(userId, today, steps, stepsToYenRate);
@@ -62,7 +65,7 @@ class StepsViewModel extends _$StepsViewModel {
       final isAuthorized = await healthService.checkAndRequestAuthorization();
 
       if (!isAuthorized) {
-        throw Exception('ヘルスケアの認証が拒否されました。設定を確認してください。');
+        throw Exception(HealthErrorMessages.authorizationDenied);
       }
 
       state = state.copyWith(isLoading: false);
@@ -73,7 +76,7 @@ class StepsViewModel extends _$StepsViewModel {
 
   Future<void> fetchAndUpdateSteps(String userId) async {
     if (userId.isEmpty) {
-      throw Exception('ユーザーIDが無効です');
+      throw Exception(ValidationMessages.invalidUserId);
     }
     state = state.copyWith(isLoading: true, error: null);
 
@@ -88,6 +91,12 @@ class StepsViewModel extends _$StepsViewModel {
       await updateSteps(userId, steps, stepsToYenRate);
     } catch (e) {
       state = state.copyWith(error: e.toString(), isLoading: false);
+    }
+  }
+
+  Future<void> validateSteps(int steps) async {
+    if (steps < AppConstants.minimumStepsRequired) {
+      throw Exception('最低${AppConstants.minimumStepsRequired}歩以上必要です');
     }
   }
 }

@@ -60,21 +60,21 @@ class HealthService extends _$HealthService {
       );
 
       if (!launched) {
-        throw Exception('Health Connectのインストールページを開けませんでした');
+        throw Exception(HealthErrorMessages.healthConnectInstallFailed);
       }
 
       // インストール完了を待つためのダイアログを表示
       return true; // ダイアログでユーザーが「完了」を押した場合にtrueを返す
     }
 
-    throw Exception('Health Connectのインストールページを開けませんでした');
+    throw Exception(HealthErrorMessages.healthConnectSetupIncomplete);
   }
 
   Future<bool> requestAuthorization() async {
     try {
       return await health.requestAuthorization(_types);
     } catch (e) {
-      throw Exception('ヘルスケアの認証に失敗しました: $e');
+      throw Exception(HealthErrorMessages.authorizationDenied);
     }
   }
 

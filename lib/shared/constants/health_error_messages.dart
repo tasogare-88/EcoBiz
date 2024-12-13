@@ -12,4 +12,7 @@ class HealthErrorMessages {
 
   static const String healthKitPermissionDenied =
       'ヘルスケアへのアクセスが拒否されました。設定からアクセスを許可してください。';
+
+  static const String healthConnectInstallFailed =
+      'Health Connectのインストールページを開けませんでした。';
 }

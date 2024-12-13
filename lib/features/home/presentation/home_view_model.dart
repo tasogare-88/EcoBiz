@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/auth/domain/auth_state.dart';
 import '../../../core/auth/presentation/auth_view_model.dart';
+import '../../../shared/constants/auth_error_messages.dart';
 import '../../steps/presentation/steps_view_model.dart';
 
 part 'home_view_model.freezed.dart';
@@ -30,7 +31,7 @@ class HomeViewModel extends _$HomeViewModel {
     try {
       final authState = ref.read(authViewModelProvider);
       if (authState is! AuthStateAuthenticated) {
-        throw Exception('ユーザーが認証されていません');
+        throw Exception(AuthErrorMessages.unauthenticated);
       }
 
       final stepsViewModel = ref.read(stepsViewModelProvider.notifier);
