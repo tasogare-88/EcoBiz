@@ -44,3 +44,43 @@ Future<void> showHealthConnectSetupDialog(
     await ref.read(stepsViewModelProvider.notifier).initializeHealthService();
   }
 }
+
+Future<bool?> showHealthConnectInstallDialog(BuildContext context) async {
+  return showDialog<bool>(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => AlertDialog(
+      title: const Text('Health Connectのインストール'),
+      content: const Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'EcoBizで歩数データを計測するためには、Health Connectのアプリのインストールを推奨しています。'
+            'Google PlayのHealth Connectインストールページに遷移しますか？',
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          SizedBox(height: 16),
+          Text(
+            '※歩数データを計測しない場合には歩数は0となります。',
+            style: TextStyle(
+              color: Colors.red,
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: const Text('いいえ'),
+        ),
+        ElevatedButton(
+          onPressed: () => Navigator.pop(context, true),
+          child: const Text('はい'),
+        ),
+      ],
+    ),
+  );
+}

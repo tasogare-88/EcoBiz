@@ -5,6 +5,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../shared/constants/health_error_messages.dart';
+import '../../../shared/navigation/navigation_service.dart';
+import '../../steps/presentation/steps_screen.dart';
+import 'health_connect_preferences.dart';
 
 part 'health_service.g.dart';
 
@@ -54,17 +57,30 @@ class HealthService extends _$HealthService {
     final canLaunch = await canLaunchUrl(Uri.parse(playStoreUrl));
 
     if (canLaunch) {
-      final launched = await launchUrl(
-        Uri.parse(playStoreUrl),
-        mode: LaunchMode.externalApplication,
-      );
+      final prefs = ref.read(healthConnectPreferencesProvider.notifier);
+      final hasShown = await prefs.hasShownDialog();
 
-      if (!launched) {
-        throw Exception(HealthErrorMessages.healthConnectInstallFailed);
+      if (!hasShown) {
+        // インストール確認ダイアログを表示
+        final shouldInstall =
+            await showHealthConnectInstallDialog(navigatorKey.currentContext!);
+
+        await prefs.markDialogAsShown();
+
+        if (shouldInstall == true) {
+          final launched = await launchUrl(
+            Uri.parse(playStoreUrl),
+            mode: LaunchMode.externalApplication,
+          );
+
+          if (!launched) {
+            throw Exception(HealthErrorMessages.healthConnectInstallFailed);
+          }
+          return true;
+        }
+        return false;
       }
-
-      // インストール完了を待つためのダイアログを表示
-      return true; // ダイアログでユーザーが「完了」を押した場合にtrueを返す
+      return false;
     }
 
     throw Exception(HealthErrorMessages.healthConnectSetupIncomplete);

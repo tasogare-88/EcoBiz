@@ -15,4 +15,7 @@ class HealthErrorMessages {
 
   static const String healthConnectInstallFailed =
       'Health Connectのインストールページを開けませんでした。';
+
+  static const String healthConnectAccessRequired =
+      'EcoBizで歩数データを計測するためには、Health Connectのアプリの歩数データのアクセス権を許可してください。';
 }
