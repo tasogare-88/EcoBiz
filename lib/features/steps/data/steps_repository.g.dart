@@ -6,7 +6,7 @@ part of 'steps_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$stepsRepositoryHash() => r'508439238e40763c60f1f0cff35fe62fab624344';
+String _$stepsRepositoryHash() => r'346ad3e81fcf70714b5ae4889a7bdc63c0f450fe';
 
 /// See also [StepsRepository].
 @ProviderFor(StepsRepository)

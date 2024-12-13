@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../features/steps/presentation/steps_screen.dart';
 import 'home_view_model.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -26,9 +27,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     // 画面表示時に歩数データを取得
     ref.listen(homeViewModelProvider, (previous, next) {
       if (next.error != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(next.error!)),
-        );
+        if (next.error!.contains('Health Connect')) {
+          showHealthConnectSetupDialog(context, ref);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(next.error!),
+              action: SnackBarAction(
+                label: '再試行',
+                onPressed: () {
+                  ref.read(homeViewModelProvider.notifier).fetchSteps();
+                },
+              ),
+            ),
+          );
+        }
       }
     });
 

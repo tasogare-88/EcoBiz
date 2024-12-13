@@ -25,7 +25,8 @@ class FakeHealthService extends AutoDisposeAsyncNotifier<void>
   @override
   Future<bool> checkAndRequestAuthorization() async {
     if (!_isAvailable) {
-      throw Exception('Health Connectのインストールページを開けませんでした');
+      throw Exception(
+          'Health Connectがインストールされていないか、利用できません。インストール手順を確認してください。');
     }
     return _shouldAuthorize;
   }
@@ -86,7 +87,7 @@ void main() {
       await viewModel.initializeHealthService();
 
       final state = container.read(stepsViewModelProvider);
-      expect(state.error, 'Exception: ヘルスケアの認証が拒否されました');
+      expect(state.error, 'Exception: ヘルスケアの認証が拒否されました。設定を確認してください。');
       expect(state.isLoading, false);
     });
 
@@ -97,7 +98,8 @@ void main() {
       await viewModel.initializeHealthService();
 
       final state = container.read(stepsViewModelProvider);
-      expect(state.error, 'Exception: Health Connectのインストールページを開けませんでした');
+      expect(state.error,
+          'Exception: Health Connectがインストールされていないか、利用できません。インストール手順を確認してください。');
       expect(state.isLoading, false);
     });
   });

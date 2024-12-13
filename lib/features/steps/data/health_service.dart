@@ -4,6 +4,8 @@ import 'package:health/health.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../shared/constants/health_error_messages.dart';
+
 part 'health_service.g.dart';
 
 @riverpod
@@ -21,19 +23,28 @@ class HealthService extends _$HealthService {
         if (hasPermissions == null || !hasPermissions) {
           // Health Connectのインストール確認
           final installed = await _requestInstallHealthConnect();
-          if (!installed) return false;
+          if (!installed) {
+            throw Exception(HealthErrorMessages.healthConnectNotInstalled);
+          }
 
           // インストール後の再確認
           final recheck = await health.hasPermissions(_types);
           if (recheck == null || !recheck) {
-            throw Exception('Health Connectのセットアップを完了してください');
+            throw Exception(HealthErrorMessages.healthConnectSetupIncomplete);
           }
         }
       }
 
-      return await requestAuthorization();
+      final authorized = await requestAuthorization();
+      if (!authorized) {
+        throw Exception(HealthErrorMessages.authorizationDenied);
+      }
+      return true;
     } catch (e) {
-      throw Exception('ヘルスケアの認証に失敗しました: $e');
+      if (e is Exception) {
+        rethrow;
+      }
+      throw Exception(HealthErrorMessages.stepsRetrievalFailed);
     }
   }
 
@@ -75,7 +86,7 @@ class HealthService extends _$HealthService {
       final steps = await health.getTotalStepsInInterval(midnight, now);
       return steps?.toInt() ?? 0;
     } catch (e) {
-      throw Exception('歩数の取得に失敗しました: $e');
+      throw Exception(HealthErrorMessages.stepsRetrievalFailed);
     }
   }
 }

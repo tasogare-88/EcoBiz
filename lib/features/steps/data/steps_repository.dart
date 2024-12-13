@@ -20,7 +20,7 @@ class StepsRepository extends _$StepsRepository {
           .doc(date)
           .get();
 
-      if (!doc.exists) return null;
+      if (!doc.exists) throw Exception('指定された日付のデータが存在しません');
       return DailyRecord.fromJson(doc.data()!);
     } catch (e) {
       throw Exception('歩数データの取得に失敗しました: $e');

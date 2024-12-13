@@ -16,7 +16,7 @@ class AuthViewModel extends _$AuthViewModel {
     required String email,
     required String password,
   }) async {
-    state = const AuthState.unauthenticated(isLoading: true);
+    state = const AuthState.unauthenticated(isLoading: true, error: null);
 
     try {
       final user = await ref.read(authRepositoryProvider.notifier).signIn(
@@ -36,7 +36,7 @@ class AuthViewModel extends _$AuthViewModel {
     required String email,
     required String password,
   }) async {
-    state = const AuthState.unauthenticated(isLoading: true);
+    state = const AuthState.unauthenticated(isLoading: true, error: null);
 
     try {
       final user = await ref.read(authRepositoryProvider.notifier).signUp(
@@ -53,7 +53,7 @@ class AuthViewModel extends _$AuthViewModel {
   }
 
   Future<void> signOut() async {
-    state = const AuthState.unauthenticated(isLoading: true);
+    state = const AuthState.unauthenticated(isLoading: true, error: null);
 
     try {
       await ref.read(authRepositoryProvider.notifier).signOut();

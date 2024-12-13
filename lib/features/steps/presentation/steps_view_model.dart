@@ -16,6 +16,9 @@ class StepsViewModel extends _$StepsViewModel {
   }
 
   Future<void> fetchDailyRecord(String userId) async {
+    if (userId.isEmpty) {
+      throw Exception('ユーザーIDが無効です');
+    }
     state = state.copyWith(isLoading: true, error: null);
 
     try {
@@ -59,7 +62,7 @@ class StepsViewModel extends _$StepsViewModel {
       final isAuthorized = await healthService.checkAndRequestAuthorization();
 
       if (!isAuthorized) {
-        throw Exception('ヘルスケアの認証が拒否されました');
+        throw Exception('ヘルスケアの認証が拒否されました。設定を確認してください。');
       }
 
       state = state.copyWith(isLoading: false);
@@ -69,6 +72,9 @@ class StepsViewModel extends _$StepsViewModel {
   }
 
   Future<void> fetchAndUpdateSteps(String userId) async {
+    if (userId.isEmpty) {
+      throw Exception('ユーザーIDが無効です');
+    }
     state = state.copyWith(isLoading: true, error: null);
 
     try {
