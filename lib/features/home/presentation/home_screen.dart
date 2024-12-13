@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -65,10 +67,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: [
           CircleAvatar(
             radius: 24,
-            child: Icon(Icons.person),
+            backgroundColor: const Color.fromARGB(255, 234, 221, 255),
+            child: Icon(Icons.person, size: 30),
           ),
-          const SizedBox(width: 12),
-          Icon(Icons.directions_walk),
+          const SizedBox(width: 16),
+          Icon(Icons.directions_walk, size: 30),
+          const SizedBox(width: 4),
           if (state.isLoading)
             const SizedBox(
               width: 20,
@@ -76,7 +80,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: CircularProgressIndicator(strokeWidth: 2),
             )
           else
-            Text('${state.steps}歩'),
+            Text(
+              '${state.steps} 歩',
+              style: TextStyle(
+                fontSize: 20,
+                // fontWeight: FontWeight.bold,
+              ),
+            ),
           const Spacer(),
           IconButton(
             icon: Icon(Icons.menu),
@@ -128,9 +138,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(item.icon, size: 32),
-          SizedBox(height: 8),
-          Text(item.title),
+          Icon(item.icon, size: 100),
+          SizedBox(height: 12),
+          Text(
+            item.title,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ],
       ),
     );
