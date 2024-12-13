@@ -131,21 +131,27 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
           child: Row(
             children: [
               // 左矢印
-              IconButton(
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: currentPage.value > 0
-                      ? Colors.black
-                      : Colors.grey.withOpacity(0.3),
+              Container(
+                height: 180,
+                child: Align(
+                  alignment: Alignment(0, -0.1),
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios_new_outlined,
+                      color: currentPage.value > 0
+                          ? Colors.black
+                          : Colors.grey.withOpacity(0.3),
+                    ),
+                    onPressed: currentPage.value > 0
+                        ? () {
+                            pageController.previousPage(
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          }
+                        : null,
+                  ),
                 ),
-                onPressed: currentPage.value > 0
-                    ? () {
-                        pageController.previousPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      }
-                    : null,
               ),
               // カルーセル
               Expanded(
@@ -195,21 +201,27 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ),
               // 右矢印
-              IconButton(
-                icon: Icon(
-                  Icons.arrow_forward_ios,
-                  color: currentPage.value < 4
-                      ? Colors.black
-                      : Colors.grey.withOpacity(0.3),
+              Container(
+                height: 180,
+                child: Align(
+                  alignment: Alignment(0, -0.1),
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.arrow_forward_ios_outlined,
+                      color: currentPage.value < 4
+                          ? Colors.black
+                          : Colors.grey.withOpacity(0.3),
+                    ),
+                    onPressed: currentPage.value < 4
+                        ? () {
+                            pageController.nextPage(
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          }
+                        : null,
+                  ),
                 ),
-                onPressed: currentPage.value < 4
-                    ? () {
-                        pageController.nextPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      }
-                    : null,
               ),
             ],
           ),
