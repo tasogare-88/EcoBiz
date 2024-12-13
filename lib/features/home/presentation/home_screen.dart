@@ -19,7 +19,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final homeState = ref.watch(homeViewModelProvider);
 
-    // 画面表示時に歩数データを取得
     ref.listen(homeViewModelProvider, (previous, next) {
       if (next.error != null) {
         if (next.error!.contains('Health Connect')) {
@@ -63,7 +62,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget buildHeader(HomeState state) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Color(0xFFB5D4E4),
       ),
