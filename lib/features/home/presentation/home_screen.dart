@@ -96,9 +96,9 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           const Spacer(),
           IconButton(
-            icon: Icon(Icons.menu, color: Colors.black),
+            icon: Icon(Icons.menu, color: Colors.black, size: 30),
             onPressed: () {
-              // TODO: メニュー表示する
+              // TODO: 設定メニューを表示する
             },
           ),
         ],
@@ -181,20 +181,29 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget buildMenuItem(MenuItemData item) {
     return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
       color: Color(0xFFFFDEAA),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(item.icon, size: 100),
-          SizedBox(height: 12),
-          Text(
-            item.title,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+      child: InkWell(
+        onTap: () {
+          // TODO: メニュー項目タップ時の処理
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(item.icon, size: 100),
+            SizedBox(height: 8),
+            Text(
+              item.title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -207,13 +216,16 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
       MenuItemData('タスク', Icons.checklist),
     ];
 
-    return GridView.count(
-      shrinkWrap: true,
-      crossAxisCount: 2,
-      padding: EdgeInsets.all(16),
-      mainAxisSpacing: 16,
-      crossAxisSpacing: 16,
-      children: menuItems.map((item) => buildMenuItem(item)).toList(),
+    return Container(
+      color: Color(0xFFFEF0E5),
+      child: GridView.count(
+        shrinkWrap: true,
+        crossAxisCount: 2,
+        padding: EdgeInsets.all(16),
+        mainAxisSpacing: 16,
+        crossAxisSpacing: 16,
+        children: menuItems.map((item) => buildMenuItem(item)).toList(),
+      ),
     );
   }
 }
