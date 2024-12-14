@@ -19,4 +19,9 @@ class AuthStyles {
   static const Color primaryButtonTextColor = Colors.white;
 
   static const double buttonTextSize = 16.0;
+
+  static const InputDecorationTheme textFieldStyle = InputDecorationTheme(
+    contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+    border: OutlineInputBorder(),
+  );
 }
