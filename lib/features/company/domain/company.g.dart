@@ -41,9 +41,9 @@ const _$CompanyGenreEnumMap = {
 
 const _$CompanyRankEnumMap = {
   CompanyRank.startup: 'startup',
-  CompanyRank.localBusiness: 'localBusiness',
-  CompanyRank.regionalBusiness: 'regionalBusiness',
-  CompanyRank.sme: 'sme',
-  CompanyRank.corporation: 'corporation',
+  CompanyRank.localCompany: 'localCompany',
+  CompanyRank.regionalCompany: 'regionalCompany',
+  CompanyRank.smallMediumCompany: 'smallMediumCompany',
+  CompanyRank.largeCompany: 'largeCompany',
   CompanyRank.globalCompany: 'globalCompany',
 };

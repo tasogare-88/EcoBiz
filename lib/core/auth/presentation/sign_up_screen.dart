@@ -88,7 +88,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 },
               ),
               const SizedBox(height: 24),
-              if (authState.isLoading) const CircularProgressIndicator(),
+              if (authState.maybeMap(
+                authenticated: (state) => state.isLoading,
+                unauthenticated: (state) => state.isLoading,
+                orElse: () => false,
+              ))
+                const CircularProgressIndicator(),
               Column(
                 children: [
                   ElevatedButton(
@@ -114,11 +119,19 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   ),
                 ],
               ),
-              if (authState.error != null)
+              if (authState.maybeMap(
+                authenticated: (state) => state.error != null,
+                unauthenticated: (state) => state.error != null,
+                orElse: () => false,
+              ))
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Text(
-                    authState.error!,
+                    authState.maybeMap(
+                      authenticated: (state) => state.error!,
+                      unauthenticated: (state) => state.error!,
+                      orElse: () => '',
+                    ),
                     style: const TextStyle(color: Colors.red),
                   ),
                 ),

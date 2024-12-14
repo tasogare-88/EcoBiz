@@ -46,6 +46,10 @@ dependencies:
   intl: ^0.20.1
   health: ^9.0.1
   url_launcher: ^6.3.1
+  dots_indicator: ^3.0.0
+  flutter_hooks: ^0.20.5
+  shared_preferences: ^2.3.3
+  hooks_riverpod: ^2.6.1
 
 
 dev_dependencies:

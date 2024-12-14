@@ -128,9 +128,10 @@ class __$$AuthUserImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$AuthUserImpl implements _AuthUser {
+class _$AuthUserImpl extends _AuthUser {
   const _$AuthUserImpl(
-      {required this.id, required this.email, this.displayName, this.photoURL});
+      {required this.id, required this.email, this.displayName, this.photoURL})
+      : super._();
 
   factory _$AuthUserImpl.fromJson(Map<String, dynamic> json) =>
       _$$AuthUserImplFromJson(json);
@@ -181,12 +182,13 @@ class _$AuthUserImpl implements _AuthUser {
   }
 }
 
-abstract class _AuthUser implements AuthUser {
+abstract class _AuthUser extends AuthUser {
   const factory _AuthUser(
       {required final String id,
       required final String email,
       final String? displayName,
       final String? photoURL}) = _$AuthUserImpl;
+  const _AuthUser._() : super._();
 
   factory _AuthUser.fromJson(Map<String, dynamic> json) =
       _$AuthUserImpl.fromJson;

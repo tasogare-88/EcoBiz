@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../shared/constants/company_constants.dart';
 import '../data/company_repository.dart';
 import '../domain/company.dart';
 import '../domain/company_state.dart';
@@ -67,7 +68,8 @@ class CompanyViewModel extends _$CompanyViewModel {
 
   // 現在の歩数換算レートを取得
   int getCurrentStepsToYenRate() {
-    return state.company?.stepsToYenRate ?? 50;
+    return state.company?.stepsToYenRate ??
+        CompanyConstants.initialStepsToYenRate;
   }
 
   // 会社のランクを取得

@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/providers/firebase_providers.dart';
+import '../../../shared/constants/company_constants.dart';
+import '../../../shared/constants/company_error_messages.dart';
 import '../domain/company.dart';
 
 part 'company_repository.g.dart';
@@ -35,7 +37,7 @@ class CompanyRepository extends _$CompanyRepository {
       await companyDoc.set(company.toJson());
       return company;
     } catch (e) {
-      throw Exception('会社の作成に失敗しました: $e');
+      throw Exception(CompanyErrorMessages.companyCreationFailed);
     }
   }
 
@@ -47,7 +49,7 @@ class CompanyRepository extends _$CompanyRepository {
       if (!doc.exists) return null;
       return Company.fromJson(doc.data()!);
     } catch (e) {
-      throw Exception('会社情報の取得に失敗しました: $e');
+      throw Exception(CompanyErrorMessages.companyFetchFailed);
     }
   }
 
@@ -58,11 +60,10 @@ class CompanyRepository extends _$CompanyRepository {
       final companyDoc = firestore.collection('companies').doc(userId);
       final now = Timestamp.fromDate(DateTime.now());
 
-      // 新しいランクと換算レートを計算
       final (newRank, newRate) = _calculateRankAndRate(newTotalAssets);
 
       await companyDoc.update({
-        'rank': newRank.name,
+        'rank': newRank,
         'totalAssets': newTotalAssets,
         'stepsToYenRate': newRate,
         'updatedAt': now,
@@ -71,23 +72,22 @@ class CompanyRepository extends _$CompanyRepository {
       final updatedDoc = await companyDoc.get();
       return Company.fromJson(updatedDoc.data()!);
     } catch (e) {
-      throw Exception('会社情報の更新に失敗しました: $e');
+      throw Exception(CompanyErrorMessages.companyUpdateFailed);
     }
   }
 
-  (CompanyRank, int) _calculateRankAndRate(int totalAssets) {
-    if (totalAssets <= 50000) {
-      return (CompanyRank.startup, 50);
-    } else if (totalAssets <= 325000) {
-      return (CompanyRank.localBusiness, 75);
-    } else if (totalAssets <= 1000000) {
-      return (CompanyRank.regionalBusiness, 100);
-    } else if (totalAssets <= 5000000) {
-      return (CompanyRank.sme, 150);
-    } else if (totalAssets <= 100000000) {
-      return (CompanyRank.corporation, 300);
-    } else {
-      return (CompanyRank.globalCompany, 500);
+  (String, int) _calculateRankAndRate(int totalAssets) {
+    for (var entry in CompanyConstants.ranks.entries) {
+      final minAssets = entry.value['minAssets'] as int;
+      final maxAssets = entry.value['maxAssets'] as int;
+
+      if (totalAssets >= minAssets && totalAssets <= maxAssets) {
+        return (entry.key, entry.value['rate'] as int);
+      }
     }
+    return (
+      CompanyConstants.initialRank,
+      CompanyConstants.initialStepsToYenRate
+    );
   }
 }

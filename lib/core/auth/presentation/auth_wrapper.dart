@@ -1,4 +1,4 @@
-import 'package:ecobiz/shared/navigation/presentation/main_navigation.dart';
+import 'package:ecobiz/core/router/presentation/main_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,8 +12,9 @@ class AuthWrapper extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authViewModelProvider);
 
-    return authState.user != null
-        ? const MainNavigation()
-        : const SignInScreen();
+    return authState.maybeMap(
+      authenticated: (state) => const MainNavigation(),
+      orElse: () => const SignInScreen(),
+    );
   }
 }

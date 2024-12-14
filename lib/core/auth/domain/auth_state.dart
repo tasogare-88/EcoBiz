@@ -1,14 +1,19 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'auth_user.dart';
+import '../domain/auth_user.dart';
 
 part 'auth_state.freezed.dart';
 
 @freezed
-class AuthState with _$AuthState {
-  const factory AuthState({
-    AuthUser? user,
+sealed class AuthState with _$AuthState {
+  const factory AuthState.initial() = AuthStateInitial;
+  const factory AuthState.authenticated({
+    required AuthUser user,
     @Default(false) bool isLoading,
     String? error,
-  }) = _AuthState;
+  }) = AuthStateAuthenticated;
+  const factory AuthState.unauthenticated({
+    @Default(false) bool isLoading,
+    String? error,
+  }) = AuthStateUnauthenticated;
 }

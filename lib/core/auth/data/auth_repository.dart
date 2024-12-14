@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../shared/constants/auth_error_messages.dart';
 import '../../providers/firebase_providers.dart';
 import '../domain/auth_user.dart';
 
@@ -75,21 +76,21 @@ class AuthRepository extends _$AuthRepository {
   String _handleFirebaseAuthError(FirebaseAuthException e) {
     switch (e.code) {
       case 'invalid-email':
-        return 'メールアドレスの形式が正しくありません';
+        return AuthErrorMessages.invalidEmail;
       case 'user-disabled':
-        return 'このアカウントは無効化されています';
+        return AuthErrorMessages.userDisabled;
       case 'user-not-found':
-        return 'アカウントが見つかりません';
+        return AuthErrorMessages.userNotFound;
       case 'wrong-password':
-        return 'パスワードが正しくありません';
+        return AuthErrorMessages.wrongPassword;
       case 'email-already-in-use':
-        return 'このメールアドレスは既に使用されています';
+        return AuthErrorMessages.emailAlreadyInUse;
       case 'operation-not-allowed':
-        return 'この操作は許可されていません';
+        return AuthErrorMessages.operationNotAllowed;
       case 'weak-password':
-        return 'パスワードが脆弱です';
+        return AuthErrorMessages.weakPassword;
       default:
-        return 'エラーが発生しました';
+        return AuthErrorMessages.defaultError;
     }
   }
 }
