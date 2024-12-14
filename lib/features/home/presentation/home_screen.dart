@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../features/steps/presentation/steps_screen.dart';
+import '../../../shared/widgets/menu_item.dart';
 import 'home_view_model.dart';
 
 class HomeScreen extends StatefulHookConsumerWidget {
@@ -18,7 +19,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final homeState = ref.watch(homeViewModelProvider);
-
     ref.listen(homeViewModelProvider, (previous, next) {
       if (next.error != null) {
         if (next.error!.contains('Health Connect')) {
@@ -41,20 +41,66 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            buildHeader(homeState),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    buildCarousel(),
-                    buildMenuGrid(),
-                  ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final availableHeight = constraints.maxHeight;
+            final headerHeight = availableHeight * 0.10;
+            final carouselHeight = availableHeight * 0.27;
+
+            return Column(
+              children: [
+                SizedBox(
+                  height: headerHeight,
+                  child: buildHeader(homeState),
                 ),
-              ),
-            ),
-          ],
+                SizedBox(
+                  height: carouselHeight,
+                  child: buildCarousel(),
+                ),
+                Expanded(
+                  child: buildResponsiveMenuGrid(constraints),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget buildResponsiveMenuGrid(BoxConstraints constraints) {
+    final menuItems = [
+      MenuItemData('記録', Icons.book),
+      MenuItemData('ランキング', Icons.leaderboard),
+      MenuItemData('ショップ', Icons.store),
+      MenuItemData('タスク', Icons.checklist),
+    ];
+
+    final itemWidth = (constraints.maxWidth - 48) / 2;
+    final itemHeight = itemWidth * 0.9;
+    final aspectRatio = itemWidth / itemHeight;
+
+    return Container(
+      color: const Color(0xFFFEF0E5),
+      child: Center(
+        child: GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: aspectRatio,
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 16,
+          ),
+          padding: const EdgeInsets.all(16),
+          itemCount: menuItems.length,
+          itemBuilder: (context, index) => ResponsiveMenuItem(
+            title: menuItems[index].title,
+            icon: menuItems[index].icon,
+            onTap: () {
+              // TODO: メニュー項目タップ時の処理
+            },
+          ),
         ),
       ),
     );
@@ -266,56 +312,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         );
       },
-    );
-  }
-
-  Widget buildMenuItem(MenuItemData item) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      color: Color(0xFFFFDEAA),
-      child: InkWell(
-        onTap: () {
-          // TODO: メニュー項目タップ時の処理
-        },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(item.icon, size: 100),
-            SizedBox(height: 8),
-            Text(
-              item.title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildMenuGrid() {
-    final menuItems = [
-      MenuItemData('記録', Icons.book),
-      MenuItemData('ランキング', Icons.leaderboard),
-      MenuItemData('ショップ', Icons.store),
-      MenuItemData('タスク', Icons.checklist),
-    ];
-
-    return Container(
-      color: Color(0xFFFEF0E5),
-      child: GridView.count(
-        shrinkWrap: true,
-        crossAxisCount: 2,
-        padding: EdgeInsets.all(16),
-        mainAxisSpacing: 16,
-        crossAxisSpacing: 16,
-        children: menuItems.map((item) => buildMenuItem(item)).toList(),
-      ),
     );
   }
 }
