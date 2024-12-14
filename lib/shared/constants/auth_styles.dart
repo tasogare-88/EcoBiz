@@ -13,7 +13,7 @@ class AuthStyles {
   static const String orText = 'または';
   static const String continueWithGoogle = 'Googleで続ける';
 
-  static const double googleButtonHeight = 48.0;
+  static const double googleButtonHeight = 52.0;
 
   static const Color primaryButtonColor = Color(0xFF4CAF50);
   static const Color primaryButtonTextColor = Colors.white;

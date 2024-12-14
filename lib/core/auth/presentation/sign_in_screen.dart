@@ -36,13 +36,15 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AuthStyles.horizontalPadding,
+            padding: const EdgeInsets.only(
+              left: AuthStyles.horizontalPadding,
+              right: AuthStyles.horizontalPadding,
+              top: 32.0,
             ),
             child: Form(
               key: _formKey,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const AppLogo(size: AuthStyles.logoSize),
                   const SizedBox(height: AuthStyles.verticalSpacing),
@@ -160,6 +162,8 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                             },
                           ),
                         ),
+                        const SizedBox(
+                            height: AuthStyles.verticalSpacing * 1.5),
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pushReplacement(
