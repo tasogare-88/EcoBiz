@@ -1,4 +1,4 @@
-.PHONY: clean get analyze format build-runner watch test build-ios build-android run dev-setup rebuild check create-podspec help
+.PHONY: clean get analyze format build-runner watch test build-ios build-ios-all build-android build-android-all run dev-setup rebuild check create-podspec help
 
 # Clean build files
 clean:
@@ -62,8 +62,15 @@ dev-setup: clean get build-runner
 
 # Run all checks
 check: format analyze test
+
+# Build Android --all
+build-android-all: clean get build-runner build-android
+
+# Build iOS --all
+build-ios-all: clean get build-runner build-ios
+
 # Rebuild everything
-rebuild: clean get build-runner build-ios build-android
+rebuild: clean get build-runner check build-ios build-android
 
 # Unity関連の変数
 UNITY_LIBRARY_PATH = ios/UnityLibrary
@@ -86,10 +93,12 @@ help:
 	@echo "  make format      - コードのフォーマット"
 	@echo "  make build-runner - コードファイルの生成"
 	@echo "  make watch       - コードファイルの監視と生成"
-	@echo "  make check       - すべてのチェックを実行 (format, analyze, test)"
+	@echo "  make check       - すべてのチェックを実行(format, analyze, test)"
 	@echo "  make test        - テストの実行"
 	@echo "  make build-ios   - iOSアプリのビルド"
+	@echo "  make build-ios-all - iOSアプリのビルド(clean, get, build-runner, build-ios)"
 	@echo "  make build-android - Androidアプリのビルド"
+	@echo "  make build-android-all - Androidアプリのビルド(clean, get, build-runner, build-android)"
 	@echo "  make run         - アプリの実行"
 	@echo "  make rebuild     - すべてのビルド"
 	@echo "  make clean       - ビルドファイルのクリーンアップ"
