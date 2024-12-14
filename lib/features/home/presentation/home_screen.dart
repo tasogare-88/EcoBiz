@@ -45,7 +45,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
           builder: (context, constraints) {
             final availableHeight = constraints.maxHeight;
             final headerHeight = availableHeight * 0.10;
-            final carouselHeight = availableHeight * 0.27;
+            final carouselHeight = availableHeight * 0.35;
 
             return Column(
               children: [
@@ -240,10 +240,14 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               ),
               // カルーセル
               Expanded(
-                child: Column(
+                child: Stack(
+                  alignment: Alignment.center,
                   children: [
-                    Container(
-                      height: 180,
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 24,
                       child: PageView.builder(
                         controller: pageController,
                         itemCount: 5,
@@ -264,24 +268,27 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                         },
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                        5,
-                        (index) => Container(
-                          margin: EdgeInsets.symmetric(horizontal: 4),
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: currentPage.value == index
-                                ? Colors.blue
-                                : Colors.grey.shade300,
+                    // インジケータ
+                    Positioned(
+                      bottom: 8,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          5,
+                          (index) => Container(
+                            margin: EdgeInsets.symmetric(horizontal: 4),
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: currentPage.value == index
+                                  ? Colors.blue
+                                  : Colors.grey.shade300,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 16),
                   ],
                 ),
               ),
