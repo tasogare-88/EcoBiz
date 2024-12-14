@@ -16,6 +16,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _obscurePassword = true;
 
   @override
   void dispose() {
@@ -54,11 +55,23 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _passwordController,
-                decoration: const InputDecoration(
+                obscureText: _obscurePassword,
+                decoration: InputDecoration(
                   labelText: 'パスワード',
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
                 ),
-                obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'パスワードを入力してください';

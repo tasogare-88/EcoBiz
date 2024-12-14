@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sign_in_button/sign_in_button.dart';
 
 import 'auth_view_model.dart';
 import 'sign_up_screen.dart';
@@ -15,6 +16,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _obscurePassword = true;
 
   @override
   void dispose() {
@@ -52,9 +54,22 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _passwordController,
-                    decoration: const InputDecoration(
+                    obscureText: _obscurePassword,
+                    decoration: InputDecoration(
                       labelText: 'パスワード',
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
+                        },
+                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -80,6 +95,16 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                       }
                     },
                     child: const Text('ログイン'),
+                  ),
+                  const SizedBox(height: 16),
+                  SignInButton(
+                    Buttons.google,
+                    text: "Googleでログイン",
+                    onPressed: () async {
+                      await ref
+                          .read(authViewModelProvider.notifier)
+                          .signInWithGoogle();
+                    },
                   ),
                   TextButton(
                     onPressed: () {

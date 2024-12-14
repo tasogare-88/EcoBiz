@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../shared/constants/auth_error_messages.dart';
@@ -28,7 +29,7 @@ class AuthRepository extends _$AuthRepository {
       );
 
       if (credential.user == null) {
-        throw Exception('ユーザー登録に失敗しました');
+        throw Exception(AuthErrorMessages.signUpFailed);
       }
 
       return AuthUser(
@@ -54,7 +55,7 @@ class AuthRepository extends _$AuthRepository {
       );
 
       if (credential.user == null) {
-        throw Exception('ログインに失敗しました');
+        throw Exception(AuthErrorMessages.signInFailed);
       }
 
       return AuthUser(
@@ -71,6 +72,40 @@ class AuthRepository extends _$AuthRepository {
   Future<void> signOut() async {
     final auth = ref.read(firebaseAuthProvider);
     await auth.signOut();
+  }
+
+  Future<AuthUser> signInWithGoogle() async {
+    try {
+      final googleSignIn = ref.read(googleSignInProvider);
+      final googleUser = await googleSignIn.signIn();
+
+      if (googleUser == null) {
+        throw Exception(AuthErrorMessages.googleSignInCanceled);
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final auth = ref.read(firebaseAuthProvider);
+      final userCredential = await auth.signInWithCredential(credential);
+
+      if (userCredential.user == null) {
+        throw Exception(AuthErrorMessages.googleSignInFailed);
+      }
+
+      return AuthUser(
+        id: userCredential.user!.uid,
+        email: userCredential.user!.email ?? '',
+        displayName: userCredential.user!.displayName,
+        photoURL: userCredential.user!.photoURL,
+      );
+    } on FirebaseAuthException catch (e) {
+      throw _handleFirebaseAuthError(e);
+    }
   }
 
   String _handleFirebaseAuthError(FirebaseAuthException e) {

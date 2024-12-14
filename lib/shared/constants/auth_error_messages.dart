@@ -8,4 +8,8 @@ class AuthErrorMessages {
   static const String weakPassword = 'パスワードが脆弱です';
   static const String defaultError = 'エラーが発生しました';
   static const String unauthenticated = 'ユーザーが認証されていません';
+  static const String signUpFailed = 'ユーザー登録に失敗しました';
+  static const String signInFailed = 'ログインに失敗しました';
+  static const String googleSignInCanceled = 'Googleログインがキャンセルされました';
+  static const String googleSignInFailed = 'Googleログインに失敗しました';
 }
