@@ -13,6 +13,7 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField] private GameObject _battleUI; // バトルUI
 
+    [SerializeField] private RectTransform _vsLineImage; // VSのライン
     [SerializeField] private RectTransform _vsBGOrange; // VSエリアのオレンジ部分
     [SerializeField] private RectTransform _vsBGBlue; // VSエリアの青部分
     [SerializeField] private RectTransform _vsText; // VSのテキスト
@@ -38,6 +39,7 @@ public class BattleManager : MonoBehaviour
 
     public void StartBattle()
     {
+        _vsLineImage.gameObject.SetActive(true);
         _vsBGBlue.DOAnchorPos3DX(0, 1.0f).SetEase(Ease.OutQuart);
         _vsBGOrange.DOAnchorPos3DX(0, 1.0f).SetEase(Ease.OutQuart);
         DOVirtual.DelayedCall(1.0f, () => {
