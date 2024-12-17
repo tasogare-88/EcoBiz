@@ -11,7 +11,10 @@ public class BattleManager : MonoBehaviour
     public int OpponentStep = 0;
 
     [SerializeField] private GameObject _battleUI; // バトルUI
+    [SerializeField] private GameObject _resultUI; // リザルトUI
 
+    #region VS~バトルUIの各要素
+    [Header("VS~バトルUIの各要素")]
     [SerializeField] private Image _vsLineImage; // VSのライン
     [SerializeField] private RectTransform _vsBGOrange; // VSエリアのオレンジ部分
     [SerializeField] private RectTransform _vsBGBlue; // VSエリアの青部分
@@ -26,6 +29,14 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private RectTransform _stepDifferenceArrow_Mine; // 自分のグラフから延びるステップ差分の矢印
     [SerializeField] private RectTransform _stepDifferenceArrow_Opponent; // 相手のグラフから延びるステップ差分の矢印
     [SerializeField] private RectTransform _stepDifferenceBubble; // ステップ差分のバブル
+    #endregion
+
+    #region バトル結果UIの各要素
+    [Header("バトル結果UIの各要素")]
+    [SerializeField] private Image _resultBG; // リザルトエリアの背景
+    [SerializeField] private Text _resultText; // リザルトテキスト
+    [SerializeField] private Text _earningsText; // 収益のテキスト
+    #endregion
 
     private void Awake() 
     {
@@ -40,6 +51,7 @@ public class BattleManager : MonoBehaviour
         _stepDifferenceArrow_Mine.gameObject.SetActive(false);
         _stepDifferenceArrow_Opponent.gameObject.SetActive(false);
         _battleUI.SetActive(false);
+        _resultUI.SetActive(false);
         if(IsDebugMode)
         {
             StartBattle();
@@ -62,29 +74,36 @@ public class BattleManager : MonoBehaviour
         .AsyncWaitForCompletion();
 
         await UniTask.Delay(1500);
-
         await _whiteOutImage.DOFade(1f, 1.0f).AsyncWaitForCompletion();
 
         await UniTask.Delay(1500);
-        StepGraphDraw(MyStep, OpponentStep);
+        var result = await StepGraphDraw(MyStep, OpponentStep);
+
+        await UniTask.Delay(3000);
+        stepDifferenceLine_Mine.gameObject.SetActive(false);
+        stepDifferenceLine_Opponent.gameObject.SetActive(false);
+        await _whiteOutImage.DOFade(1f, 1.0f).AsyncWaitForCompletion();
+
+        await UniTask.Delay(1500);
+        ShowResult(result);
         
     }
 
-    public async void StepGraphDraw(int myStep, int opponentStep)
+    public async UniTask<int> StepGraphDraw(int myStep, int opponentStep)
     {
         _battleUI.SetActive(true);
         _whiteOutImage.DOFade(0f, 1.0f);
 
         int fewerStep = 0;
         int higherStep = 0;
-        Slider stepGraph = null;
+        Slider higherStepGraph = null;
         LineRenderer stepDifferenceLine = null;
         RectTransform stepDifferenceArrow = null;
         if(myStep < opponentStep)
         {
             fewerStep = myStep;
             higherStep = opponentStep;
-            stepGraph = _opponentStepGraph;
+            higherStepGraph = _opponentStepGraph;
             stepDifferenceLine = stepDifferenceLine_Opponent;
             stepDifferenceArrow = _stepDifferenceArrow_Mine;
             _stepDifferenceBubble.localRotation = Quaternion.Euler(0f, 0f, -90f);
@@ -94,7 +113,7 @@ public class BattleManager : MonoBehaviour
         {
             fewerStep = opponentStep;
             higherStep = myStep;
-            stepGraph = _myStepGraph;
+            higherStepGraph = _myStepGraph;
             stepDifferenceLine = stepDifferenceLine_Mine;
             stepDifferenceArrow = _stepDifferenceArrow_Opponent;
             _stepDifferenceBubble.localRotation = Quaternion.Euler(0f, 0f, 90f);
@@ -102,7 +121,10 @@ public class BattleManager : MonoBehaviour
         }
         else if(myStep == opponentStep)
         {
-            return;
+            fewerStep = myStep;
+            higherStep = opponentStep;
+            await DrawMatch();
+            return 2;
         }
 
         float higherStepValue = 1.0f;
@@ -112,8 +134,10 @@ public class BattleManager : MonoBehaviour
         await _opponentStepGraph.DOValue(fewerStepValue, 3.0f).AsyncWaitForCompletion();
         
         await UniTask.Delay(1500);
-        await stepGraph.DOValue(higherStepValue, 0.5f).AsyncWaitForCompletion();
+        await higherStepGraph.DOValue(higherStepValue, 0.5f).AsyncWaitForCompletion();
         DrawStepDifferenceDashLine(stepDifferenceLine, stepDifferenceArrow, fewerStepValue);
+
+        return myStep < opponentStep ? 0 : 1;   
         
     }
 
@@ -135,5 +159,68 @@ public class BattleManager : MonoBehaviour
         
     }
 
+    private async UniTask DrawMatch()
+    {
+        float stepValue = 1.0f;
+
+        _myStepGraph.DOValue(stepValue - 0.5f, 3.0f);
+        await _opponentStepGraph.DOValue(stepValue - 0.5f, 3.0f).AsyncWaitForCompletion();
+        
+        await UniTask.Delay(1500);
+        _myStepGraph.DOValue(stepValue, 0.5f);
+        await _opponentStepGraph.DOValue(stepValue, 0.5f).AsyncWaitForCompletion();
+
+        stepDifferenceLine_Mine.SetPosition(0, stepDifferenceLine_Mine.transform.GetChild(0).position);
+        stepDifferenceLine_Mine.SetPosition(1, stepDifferenceLine_Mine.transform.GetChild(1).position);
+        stepDifferenceLine_Opponent.SetPosition(0, stepDifferenceLine_Opponent.transform.GetChild(0).position);
+        stepDifferenceLine_Opponent.SetPosition(1, stepDifferenceLine_Opponent.transform.GetChild(1).position);
+
+    }
+
+    private void ShowResult(int result)
+    {
+        int earnings = 1000;
+        switch(result)
+        {
+            case 0:
+            {
+                if(ColorUtility.TryParseHtmlString("#699AE2", out Color color))
+                {
+                    Debug.Log(color);
+                    _resultBG.color = color;
+                }
+                _resultText.text = "Lose..";
+                _earningsText.text = $"{earnings} 円損失";
+                break;
+            }
+            case 1:
+            {
+                if(ColorUtility.TryParseHtmlString("#E8764A", out Color color))
+                {
+                    Debug.Log(color);
+                    _resultBG.color = color;
+                }
+                _resultText.text = "Win!";
+                _earningsText.text = $"{earnings} 円獲得";
+                break;
+            }
+            case 2:
+            {
+                if(ColorUtility.TryParseHtmlString("#F2E86A", out Color color))
+                {
+                    _resultBG.color = color;
+                }
+                _resultText.text = "Draw!";
+                _earningsText.text = "損益なし";
+                break;
+            }
+            default:
+                break;
+        }
+
+        _resultUI.SetActive(true);
+        _whiteOutImage.DOFade(0f, 1.0f);
+
+    }
 
 }
