@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../features/communication/presentation/communication_screen.dart';
-import '../../../features/company/presentation/company_screen.dart';
+import '../../../features/company/presentation/select_company_screen.dart';
 import '../../../features/gacha/presentation/gacha_screen.dart';
 import '../../../features/home/presentation/home_screen.dart';
 import '../../../features/item/presentation/item_screen.dart';
@@ -19,7 +19,7 @@ class MainNavigation extends ConsumerWidget {
     final screenOptions = {
       AppConstants.navigationIndices['home']!: const HomeScreen(),
       AppConstants.navigationIndices['gacha']!: const GachaScreen(),
-      AppConstants.navigationIndices['company']!: const CompanyScreen(),
+      AppConstants.navigationIndices['company']!: const SelectCompanyScreen(),
       AppConstants.navigationIndices['communication']!:
           const CommunicationScreen(),
       AppConstants.navigationIndices['item']!: const ItemScreen(),
