@@ -76,4 +76,18 @@ class CompanyViewModel extends _$CompanyViewModel {
   CompanyRank? getCurrentRank() {
     return state.company?.rank;
   }
+
+  // 会社データが存在するかどうかを取得
+  Future<bool> hasCompanyData(String userId) async {
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      final company =
+          await ref.read(companyRepositoryProvider.notifier).getCompany(userId);
+      state = state.copyWith(isLoading: false);
+      return company != null;
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+      return false;
+    }
+  }
 }
