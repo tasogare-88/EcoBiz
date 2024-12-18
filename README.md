@@ -45,7 +45,9 @@ root/
 ├── users/
 │   └── {userId}/
 │       ├── email: string
+│       ├── name: string
 │       ├── createdAt: timestamp
+│       ├── updatedAt: timestamp
 │       └── dailyRecords/
 │           └── {date}/  # YYYYMMDD形式
 │               ├── steps: number
