@@ -19,6 +19,7 @@ class CompanyRepository extends _$CompanyRepository {
     required CompanyGenre genre,
   }) async {
     try {
+      final firestore = ref.read(firestoreProvider);
       final company = Company(
         id: userId,
         name: name,
@@ -30,10 +31,7 @@ class CompanyRepository extends _$CompanyRepository {
         updatedAt: DateTime.now(),
       );
 
-      await FirebaseFirestore.instance
-          .collection('companies')
-          .doc(userId)
-          .set(company.toJson());
+      await firestore.collection('companies').doc(userId).set(company.toJson());
 
       return company;
     } catch (e) {

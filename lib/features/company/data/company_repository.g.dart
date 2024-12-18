@@ -6,7 +6,7 @@ part of 'company_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$companyRepositoryHash() => r'4bd0ae3278a01d5c0b6e3d05eb1c5b8894086743';
+String _$companyRepositoryHash() => r'eedaee7b0e7d73609618218633b02b52f6f77ac8';
 
 /// See also [CompanyRepository].
 @ProviderFor(CompanyRepository)
