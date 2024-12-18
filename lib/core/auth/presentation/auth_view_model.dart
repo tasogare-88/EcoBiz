@@ -65,4 +65,19 @@ class AuthViewModel extends _$AuthViewModel {
       );
     }
   }
+
+  Future<void> signInWithGoogle() async {
+    state = const AuthState.unauthenticated(isLoading: true, error: null);
+
+    try {
+      final user =
+          await ref.read(authRepositoryProvider.notifier).signInWithGoogle();
+      state = AuthState.authenticated(user: user, isLoading: false);
+    } catch (e) {
+      state = AuthState.unauthenticated(
+        isLoading: false,
+        error: e.toString(),
+      );
+    }
+  }
 }

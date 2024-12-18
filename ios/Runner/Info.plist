@@ -49,5 +49,16 @@
 	<string>歩数データを取得してアプリ内で使用するために使用します</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>歩数データを取得してアプリ内で使用するために使用します</string>
+	<key>GIDClientID</key>
+	<string>642974287834-qnaig32dqh6n0r4oamapbdpqipgeap3e.apps.googleusercontent.com</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.642974287834-qnaig32dqh6n0r4oamapbdpqipgeap3e</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

@@ -1,11 +1,10 @@
-import 'dart:async';
-
 import 'package:ecobiz/core/auth/data/auth_repository.dart';
 import 'package:ecobiz/core/auth/domain/auth_user.dart';
 import 'package:ecobiz/core/auth/presentation/auth_view_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:riverpod/riverpod.dart';
+
+import '../../../../lib/shared/constants/auth_error_messages.dart';
 
 void main() {
   late ProviderContainer container;
@@ -73,26 +72,36 @@ void main() {
   });
 }
 
-class FakeAuthRepository extends AutoDisposeAsyncNotifier<void>
-    implements AuthRepository {
-  @override
-  FutureOr<void> build() async {}
-
+class FakeAuthRepository extends AuthRepository {
   @override
   Future<AuthUser> signIn(
       {required String email, required String password}) async {
     if (password == 'wrongPassword') {
-      throw FirebaseAuthException(code: 'wrong-password');
+      throw Exception(AuthErrorMessages.wrongPassword);
     }
-    return const AuthUser(id: 'test-id', email: 'test@example.com');
+    return AuthUser(
+      id: 'test-id',
+      email: email,
+    );
   }
 
   @override
   Future<AuthUser> signUp(
       {required String email, required String password}) async {
-    return const AuthUser(id: 'test-id', email: 'test@example.com');
+    return AuthUser(
+      id: 'test-id',
+      email: email,
+    );
   }
 
   @override
   Future<void> signOut() async {}
+
+  @override
+  Future<AuthUser> signInWithGoogle() async {
+    return AuthUser(
+      id: 'test-id',
+      email: 'test@example.com',
+    );
+  }
 }
