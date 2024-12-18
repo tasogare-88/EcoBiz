@@ -7,7 +7,7 @@ part of 'input_company_name_view_model.dart';
 // **************************************************************************
 
 String _$inputCompanyNameViewModelHash() =>
-    r'8404d4db1ffc34f75f7cc2a2f30c94891169c21b';
+    r'16d9f0737676e1befa5cb72b57ce18b3cff42d6b';
 
 /// See also [InputCompanyNameViewModel].
 @ProviderFor(InputCompanyNameViewModel)

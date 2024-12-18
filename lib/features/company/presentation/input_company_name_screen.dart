@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/auth/presentation/auth_view_model.dart';
 import 'input_company_name_view_model.dart';
 
 class InputCompanyNameScreen extends ConsumerWidget {
@@ -54,8 +55,37 @@ class InputCompanyNameScreen extends ConsumerWidget {
                 child: ElevatedButton(
                   onPressed: state.companyName.isEmpty
                       ? null
-                      : () {
-                          // TODO: Unityの会社設置場所選択画面への遷移を実装
+                      : () async {
+                          final userId =
+                              ref.read(authViewModelProvider).maybeMap(
+                                    authenticated: (state) => state.user.id,
+                                    orElse: () => null,
+                                  );
+
+                          if (userId == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('ユーザー情報の取得に失敗しました')),
+                            );
+                            return;
+                          }
+
+                          await ref
+                              .read(inputCompanyNameViewModelProvider.notifier)
+                              .createCompany(
+                                userId: userId,
+                                genre: selectedGenre,
+                              );
+
+                          if (!context.mounted) return;
+
+                          if (state.error != null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(state.error!)),
+                            );
+                            return;
+                          }
+
+                          // TODO: Unityの会社設置場所選択画面への遷移
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFE1511B),
