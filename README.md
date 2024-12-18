@@ -116,7 +116,7 @@ MVVMパターンを採用している。
 ### APIやライブラリ
 - Health API（歩数計測）
 - flutter_unity_widget（Unity連携）
-- flutter_blue_plus（Bluetooth通信）
+- flutter_blue_plus（BLE通信）
 - freezed（データモデル）
 - riverpod（状態管理）
 
