@@ -114,9 +114,9 @@ MVVMパターンを採用している。
 - Cloud Firestore
 
 ### APIやライブラリ
-- ヘルスコネクトAPI（歩数計測）
-- Apple Health API（歩数計測）
+- Health API（歩数計測）
 - flutter_unity_widget（Unity連携）
+- flutter_blue_plus（Bluetooth通信）
 - freezed（データモデル）
 - riverpod（状態管理）
 
