@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../data/ble_repository.dart';
-import './communication_state.dart';
+import '../domain/communication_state.dart';
 
 part 'communication_view_model.g.dart';
 

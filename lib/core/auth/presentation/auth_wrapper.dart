@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/auth/domain/auth_state.dart';
 import '../../../features/splash/presentation/splash_screen.dart';
 import '../../../features/splash/presentation/splash_view_model.dart';
 import '../../router/presentation/main_navigation.dart';
@@ -35,10 +36,10 @@ class _AuthWrapperState extends ConsumerState<AuthWrapper> {
       return const SplashScreen();
     }
 
-    // 認証状態に基づく画面遷移
-    return authState.maybeMap(
-      authenticated: (state) => const MainNavigation(),
-      orElse: () => const SignInScreen(),
-    );
+    return switch (authState) {
+      AuthStateInitial() => const SplashScreen(),
+      AuthStateUnauthenticated() => const SignInScreen(),
+      AuthStateAuthenticated() => const MainNavigation(),
+    };
   }
 }
