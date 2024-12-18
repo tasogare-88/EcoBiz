@@ -20,24 +20,22 @@ class CompanyRepository extends _$CompanyRepository {
   }) async {
     try {
       final firestore = ref.read(firestoreProvider);
-      final companyDoc = firestore.collection('companies').doc(userId);
-      final now = DateTime.now();
-
       final company = Company(
         id: userId,
         name: name,
         genre: genre,
         rank: CompanyRank.startup,
-        totalAssets: 0,
-        stepsToYenRate: 50,
-        createdAt: now,
-        updatedAt: now,
+        totalAssets: CompanyConstants.initialAssets,
+        stepsToYenRate: CompanyConstants.initialStepsToYenRate,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
       );
 
-      await companyDoc.set(company.toJson());
+      await firestore.collection('companies').doc(userId).set(company.toJson());
+
       return company;
     } catch (e) {
-      throw Exception(CompanyErrorMessages.companyCreationFailed);
+      throw Exception('会社の作成に失敗しました: $e');
     }
   }
 
@@ -63,7 +61,7 @@ class CompanyRepository extends _$CompanyRepository {
       final (newRank, newRate) = _calculateRankAndRate(newTotalAssets);
 
       await companyDoc.update({
-        'rank': newRank,
+        'rank': newRank.name,
         'totalAssets': newTotalAssets,
         'stepsToYenRate': newRate,
         'updatedAt': now,
@@ -76,18 +74,18 @@ class CompanyRepository extends _$CompanyRepository {
     }
   }
 
-  (String, int) _calculateRankAndRate(int totalAssets) {
+  (CompanyRank, int) _calculateRankAndRate(int totalAssets) {
     for (var entry in CompanyConstants.ranks.entries) {
       final minAssets = entry.value['minAssets'] as int;
       final maxAssets = entry.value['maxAssets'] as int;
 
       if (totalAssets >= minAssets && totalAssets <= maxAssets) {
-        return (entry.key, entry.value['rate'] as int);
+        return (
+          CompanyRank.values.firstWhere((r) => r.name == entry.key),
+          entry.value['rate'] as int
+        );
       }
     }
-    return (
-      CompanyConstants.initialRank,
-      CompanyConstants.initialStepsToYenRate
-    );
+    return (CompanyRank.startup, CompanyConstants.initialStepsToYenRate);
   }
 }

@@ -1,10 +1,10 @@
-import 'package:ecobiz/core/providers/firebase_providers.dart';
-import 'package:ecobiz/features/company/data/company_repository.dart';
-import 'package:ecobiz/features/company/domain/company.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../lib/core/providers/firebase_providers.dart';
+import '../../../../lib/features/company/data/company_repository.dart';
+import '../../../../lib/features/company/domain/company.dart';
 import '../../../../lib/shared/constants/company_constants.dart';
 
 void main() {
@@ -28,6 +28,7 @@ void main() {
     test('会社を登録＆取得', () async {
       final repository = container.read(companyRepositoryProvider.notifier);
       final userId = 'test-user-id';
+
       final company = await repository.createCompany(
         userId: userId,
         name: 'Test Company',
@@ -40,6 +41,10 @@ void main() {
       expect(company.rank, CompanyRank.startup);
       expect(company.totalAssets, CompanyConstants.initialAssets);
       expect(company.stepsToYenRate, CompanyConstants.initialStepsToYenRate);
+
+      final fetchedCompany = await repository.getCompany(userId);
+      expect(fetchedCompany, isNotNull);
+      expect(fetchedCompany?.name, 'Test Company');
     });
 
     test('存在しない会社の場合', () async {
