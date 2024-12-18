@@ -5,6 +5,7 @@ import 'package:sign_in_button/sign_in_button.dart';
 import '../../../shared/constants/auth_styles.dart';
 import '../../../shared/widgets/app_logo.dart';
 import 'auth_view_model.dart';
+import 'input_user_name_screen.dart';
 import 'sign_in_screen.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
@@ -158,6 +159,23 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                                         email: _emailController.text,
                                         password: _passwordController.text,
                                       );
+
+                                  if (!mounted) return;
+                                  final authState =
+                                      ref.read(authViewModelProvider);
+                                  authState.maybeMap(
+                                    authenticated: (state) {
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              InputUserNameScreen(
+                                            userId: state.user.uid,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    orElse: () {},
+                                  );
                                 }
                               },
                               style: ElevatedButton.styleFrom(
@@ -191,6 +209,21 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               await ref
                                   .read(authViewModelProvider.notifier)
                                   .signInWithGoogle();
+
+                              if (!mounted) return;
+                              final authState = ref.read(authViewModelProvider);
+                              authState.maybeMap(
+                                authenticated: (state) {
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) => InputUserNameScreen(
+                                        userId: state.user.uid,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                orElse: () {},
+                              );
                             },
                           ),
                         ),

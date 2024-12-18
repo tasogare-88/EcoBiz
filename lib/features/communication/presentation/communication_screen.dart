@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/auth/domain/auth_state.dart';
 import '../../../core/auth/presentation/auth_view_model.dart';
 import '../../../shared/widgets/confirmation_dialog.dart';
 import './communication_view_model.dart';
@@ -12,8 +11,11 @@ class CommunicationScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(communicationViewModelProvider);
-    final authState =
-        ref.watch(authViewModelProvider) as AuthStateAuthenticated;
+    final authState = ref.watch(authViewModelProvider);
+    final user = authState.maybeMap(
+      authenticated: (state) => state.user,
+      orElse: () => throw Exception('Unauthorized'),
+    );
     // if (!state.isBluetoothAvailable) {
     //   return const Scaffold(
     //     body: Center(
