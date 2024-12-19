@@ -69,4 +69,28 @@ class HomeViewModel extends _$HomeViewModel {
   void updateCarouselIndex(int index) {
     state = state.copyWith(currentCarouselIndex: index);
   }
+
+  Future<void> initializeApp(String userId) async {
+    state = state.copyWith(isLoading: true, error: null);
+
+    try {
+      final stepsViewModel = ref.read(stepsViewModelProvider.notifier);
+      final companyViewModel = ref.read(companyViewModelProvider.notifier);
+
+      // Health APIの初期化と認証
+      await stepsViewModel.initializeHealthService();
+
+      // 歩数の取得と更新
+      await stepsViewModel.fetchAndUpdateSteps(userId);
+
+      // 会社データの取得
+      await companyViewModel.loadCompany(userId);
+
+      state = state.copyWith(
+        isLoading: false,
+      );
+    } catch (e) {
+      state = state.copyWith(error: e.toString(), isLoading: false);
+    }
+  }
 }

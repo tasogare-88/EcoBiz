@@ -6,7 +6,7 @@ part of 'ble_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$bleRepositoryHash() => r'e37d445480cec61fe15788c38ed636804725a0a3';
+String _$bleRepositoryHash() => r'c9834590dce05e2faf676e07940f1503bbe53571';
 
 /// See also [BleRepository].
 @ProviderFor(BleRepository)

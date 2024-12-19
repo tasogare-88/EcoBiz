@@ -26,6 +26,7 @@ mixin _$Company {
   CompanyRank get rank => throw _privateConstructorUsedError;
   int get totalAssets => throw _privateConstructorUsedError;
   int get stepsToYenRate => throw _privateConstructorUsedError;
+  int? get locationIndex => throw _privateConstructorUsedError;
   @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
   DateTime get createdAt => throw _privateConstructorUsedError;
   @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
@@ -48,6 +49,7 @@ abstract class $CompanyCopyWith<$Res> {
       CompanyRank rank,
       int totalAssets,
       int stepsToYenRate,
+      int? locationIndex,
       @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
       DateTime createdAt,
       @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
@@ -73,6 +75,7 @@ class _$CompanyCopyWithImpl<$Res, $Val extends Company>
     Object? rank = null,
     Object? totalAssets = null,
     Object? stepsToYenRate = null,
+    Object? locationIndex = freezed,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -101,6 +104,10 @@ class _$CompanyCopyWithImpl<$Res, $Val extends Company>
           ? _value.stepsToYenRate
           : stepsToYenRate // ignore: cast_nullable_to_non_nullable
               as int,
+      locationIndex: freezed == locationIndex
+          ? _value.locationIndex
+          : locationIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -127,6 +134,7 @@ abstract class _$$CompanyImplCopyWith<$Res> implements $CompanyCopyWith<$Res> {
       CompanyRank rank,
       int totalAssets,
       int stepsToYenRate,
+      int? locationIndex,
       @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
       DateTime createdAt,
       @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
@@ -150,6 +158,7 @@ class __$$CompanyImplCopyWithImpl<$Res>
     Object? rank = null,
     Object? totalAssets = null,
     Object? stepsToYenRate = null,
+    Object? locationIndex = freezed,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
@@ -178,6 +187,10 @@ class __$$CompanyImplCopyWithImpl<$Res>
           ? _value.stepsToYenRate
           : stepsToYenRate // ignore: cast_nullable_to_non_nullable
               as int,
+      locationIndex: freezed == locationIndex
+          ? _value.locationIndex
+          : locationIndex // ignore: cast_nullable_to_non_nullable
+              as int?,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -200,6 +213,7 @@ class _$CompanyImpl extends _Company {
       required this.rank,
       this.totalAssets = 0,
       this.stepsToYenRate = 50,
+      this.locationIndex,
       @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
       required this.createdAt,
       @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
@@ -224,6 +238,8 @@ class _$CompanyImpl extends _Company {
   @JsonKey()
   final int stepsToYenRate;
   @override
+  final int? locationIndex;
+  @override
   @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
   final DateTime createdAt;
   @override
@@ -232,7 +248,7 @@ class _$CompanyImpl extends _Company {
 
   @override
   String toString() {
-    return 'Company(id: $id, name: $name, genre: $genre, rank: $rank, totalAssets: $totalAssets, stepsToYenRate: $stepsToYenRate, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Company(id: $id, name: $name, genre: $genre, rank: $rank, totalAssets: $totalAssets, stepsToYenRate: $stepsToYenRate, locationIndex: $locationIndex, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -248,6 +264,8 @@ class _$CompanyImpl extends _Company {
                 other.totalAssets == totalAssets) &&
             (identical(other.stepsToYenRate, stepsToYenRate) ||
                 other.stepsToYenRate == stepsToYenRate) &&
+            (identical(other.locationIndex, locationIndex) ||
+                other.locationIndex == locationIndex) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -257,7 +275,7 @@ class _$CompanyImpl extends _Company {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, name, genre, rank,
-      totalAssets, stepsToYenRate, createdAt, updatedAt);
+      totalAssets, stepsToYenRate, locationIndex, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -281,6 +299,7 @@ abstract class _Company extends Company {
       required final CompanyRank rank,
       final int totalAssets,
       final int stepsToYenRate,
+      final int? locationIndex,
       @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
       required final DateTime createdAt,
       @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
@@ -301,6 +320,8 @@ abstract class _Company extends Company {
   int get totalAssets;
   @override
   int get stepsToYenRate;
+  @override
+  int? get locationIndex;
   @override
   @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
   DateTime get createdAt;

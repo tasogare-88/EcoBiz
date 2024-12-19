@@ -44,6 +44,7 @@ class Company with _$Company {
     required CompanyRank rank,
     @Default(0) int totalAssets,
     @Default(50) int stepsToYenRate,
+    int? locationIndex,
     @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)
     required DateTime createdAt,
     @JsonKey(fromJson: _timestampToDateTime, toJson: _dateTimeToTimestamp)

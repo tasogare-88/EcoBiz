@@ -1,7 +1,7 @@
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import './models/battle_device.dart';
+import '../domain/battle_device.dart';
 
 part 'ble_repository.g.dart';
 
@@ -41,9 +41,10 @@ class BleRepository extends _$BleRepository {
       final devices = results
           .map((result) => BattleDevice(
                 id: result.device.id.id,
+                userId: result.device.id.id,
                 name:
                     result.device.name.isEmpty ? 'unknown' : result.device.name,
-                rssi: result.rssi,
+                steps: 0,
               ))
           .toList();
       updateDevices(devices);

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_unity_widget/flutter_unity_widget.dart';
 
+import '../../../core/auth/data/user_repository.dart';
 import './battle_view_model.dart';
 
 class UnityBattleScreen extends ConsumerWidget {
@@ -21,6 +22,12 @@ class UnityBattleScreen extends ConsumerWidget {
   });
 
   void onUnityCreated(UnityWidgetController controller, WidgetRef ref) async {
+    final user1 =
+        await ref.read(userRepositoryProvider.notifier).getUser(userId1);
+    final user2 =
+        await ref.read(userRepositoryProvider.notifier).getUser(userId2);
+
+    // バトル結果を取得
     final battleResult =
         await ref.read(battleViewModelProvider.notifier).startBattle(
               userId1: userId1,
@@ -29,11 +36,21 @@ class UnityBattleScreen extends ConsumerWidget {
               steps2: steps2,
             );
 
-    // Unity側にバトル結果を送信
+    // Unity側に送信するデータ
+    final battleData = {
+      'myName': user1?.name ?? 'Unknown',
+      'opponentName': user2?.name ?? 'Unknown',
+      'mySteps': steps1,
+      'opponentSteps': steps2,
+      'isWinner': battleResult.winnerId == userId1,
+      'isDraw': battleResult.stepsDifference == 0,
+      'assetChange': battleResult.amountChanged,
+    };
+
     controller.postMessage(
-      'BattleManager',
-      'ProcessBattleResult',
-      jsonEncode(battleResult.toJson()),
+      'BattleCanvas',
+      'SetBattleData',
+      jsonEncode(battleData),
     );
   }
 
