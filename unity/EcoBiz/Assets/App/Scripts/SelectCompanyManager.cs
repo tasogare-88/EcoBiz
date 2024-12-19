@@ -4,18 +4,33 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 using UnityEngine.UI;
+using FlutterUnityIntegration;
 
 public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
 {
+    public bool isDebug; // デバッグモードかどうか
     [SerializeField] private RectTransform _placeArea_1; // デフォルトの画面
     [SerializeField] private RectTransform _placeArea_2; // 右にスライドした画面
     [SerializeField] private RectTransform _placeArea_3; // 左にスライドした画面
     [SerializeField] private GameObject[] _buttons; // ボタン
     [SerializeField] private GameObject _companyPrefab; // 会社のPrefab
-    public int companyId; // 会社ID
-    public int locationId; // 建設場所ID
-    public bool isAlreadyBuild; // すでに会社が建設されているかどうか
-    public bool isDebug; // デバッグモードかどうか
+
+    private class CompanyData
+    {
+        public string userId;  // ユーザーID
+        public string userName; // ユーザー名
+        public string companyName; // 会社名
+        public string genre; // 会社のジャンル（"it", "manufacturing", "food", "transport", "advertising", "construction"のいずれか）
+        public int locationIndex; // 既存の場所インデックス（初回時はnull）（0はじまり）
+        public bool isInitialSetup; // 初回設置かどうか
+    }
+    private CompanyData _companyData;
+
+    private class LocationData
+    {
+        public string type;
+        public int locationIndex; // 建設場所のインデックス（0はじまり）
+    }
 
     private Vector2 _initialTopBottom; // 初期の画面のTop,Bottomの値
     private float _initialBubblePositionY; // 初期の吹き出しのY座標 
@@ -40,7 +55,7 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
 
         if(isDebug)
         {
-            SetData(this.companyId, this.locationId, this.isAlreadyBuild);
+            SetCompanyData("{\"userId\":\"1\",\"userName\":\"user1\",\"companyName\":\"ecobiz\",\"genre\":\"construction\",\"locationIndex\":4,\"isInitialSetup\":false}");
         }
     }
 
@@ -55,36 +70,35 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
     /// <param name="companyId"></param>
     /// <param name="locationId"></param>
     /// <param name="isAlreadyBuild"></param>
-    public void SetData(int companyId, int locationId, bool isAlreadyBuild)
+    public void SetCompanyData(string jsonCompanyData)
     {
-        this.companyId = companyId;
-        this.locationId = locationId;
-        this.isAlreadyBuild = isAlreadyBuild;
-        if(this.companyId < 1 || this.companyId > 6)
+        var companyData = JsonUtility.FromJson<CompanyData>(jsonCompanyData);
+        _companyData = new CompanyData
         {
-            Debug.LogError("会社IDが不正です");
-        }
-        else if(this.locationId < 1 || this.locationId > 9)
-        {
-            Debug.LogError("建設場所IDが不正です");
-        }
+            userId = companyData.userId,
+            userName = companyData.userName,
+            companyName = companyData.companyName,
+            genre = companyData.genre,
+            locationIndex = companyData.locationIndex,
+            isInitialSetup = companyData.isInitialSetup
+        };
 
-        if(isAlreadyBuild)
+        if(!_companyData.isInitialSetup)
         {
             // 既に会社が建設されている場合
             // 会社を表示し、その画面に遷移する
-            _bubbleRectTransform = GameObject.Find(locationId.ToString()).transform.GetChild(0).GetComponent<RectTransform>();
-            float pointX = this.locationId <= 3 ? 1080f : this.locationId <= 6 ? 0f : -1080f;
+            _bubbleRectTransform = GameObject.Find(_companyData.locationIndex.ToString()).transform.GetChild(0).GetComponent<RectTransform>();
+            float pointX = _companyData.locationIndex <= 2 ? 1080f : _companyData.locationIndex <= 5 ? 0f : -1080f;
             SetFixedPositions(pointX);
-            BuildCompany(this.companyId);
-            HideSelectCompanyUI(this.locationId);
+            BuildCompany(_companyData.genre);
+            HideSelectCompanyUI(_companyData.locationIndex);
         }
     }
 
     private void HideSelectCompanyUI(int locationId)
     {
-        // 1~9の建設場所をlocationIdの場所以外非表示にする
-        for(int i = 1; i <= 9; i++)
+        // 0~8の建設場所をlocationIdの場所以外非表示にする
+        for(int i = 0; i <= 8; i++)
         {
             if(i != locationId)
             {
@@ -115,8 +129,8 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
             .SetEase(Ease.OutQuad).SetLoops(-1, LoopType.Yoyo);
             // 建設場所を確定するか確認する
             // 親のオブジェクトの名前から建設場所IDを取得
-            locationId = int.Parse(_bubbleRectTransform.parent.name);
-            ConfirmationConstractionLocation(locationId);
+            _companyData.locationIndex = int.Parse(_bubbleRectTransform.parent.name);
+            ConfirmationConstractionLocation(_companyData.locationIndex);
         }
         else if(_clickTween != null)
         {
@@ -130,12 +144,13 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
     {
         // 建設場所の確認
         Debug.Log("建設場所を確認");
-        var IDs = BuildCompany(companyId);
-        Debug.Log("会社ID: " + IDs[0] + " 建設場所ID: " + IDs[1]);
-        // ここに処理を記述
+        var jsonLocationData = BuildCompany(_companyData.genre);
+        // Flutter側に建設場所を通知
+        UnityMessageManager.Instance.SendMessageToFlutter(jsonLocationData);
+        Debug.Log(jsonLocationData);
     }
 
-    private int[] BuildCompany(int companyId)
+    private string BuildCompany(string companyGenre)
     {
         // 会社を建設
         Debug.Log("会社を建設");
@@ -147,41 +162,41 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
         rawImage.texture = newRenderTexture;
 
         // 会社IDに応じたモデルを表示
-        switch(companyId)
+        switch(companyGenre)
         {
-            case 1:
+            case "it":
             {
                 company.transform.GetChild(2).gameObject.SetActive(true);
                 break;
             }
-            case 2:
+            case "manufacturing":
             {
                 company.transform.GetChild(3).gameObject.SetActive(true);
                 break;
             }
-            case 3:
+            case "food":
             {
                 company.transform.GetChild(4).gameObject.SetActive(true);
                 break;
             }
-            case 4:
+            case "transport":
             {
                 company.transform.GetChild(5).gameObject.SetActive(true);
                 break;
             }
-            case 5:
+            case "advertising":
             {
                 company.transform.GetChild(6).gameObject.SetActive(true);
                 break;
             }
-            case 6:
+            case "construction":
             {
                 company.transform.GetChild(7).gameObject.SetActive(true);
                 break;
             }
             default:
             {
-                Debug.LogError("会社IDが不正です");
+                Debug.LogError("会社ジャンルが不正です");
                 break;
             }
         }
@@ -189,7 +204,8 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
         _bubbleRectTransform.gameObject.SetActive(false);
         _bubbleRectTransform.parent.GetComponent<Image>().enabled = false;
 
-        return new int[] {companyId, locationId};
+        string json = JsonUtility.ToJson(new LocationData{type = "COMPANY_PLACE_SELECTED", locationIndex = _companyData.locationIndex}, prettyPrint: true);
+        return json;
     }
     #endregion
 

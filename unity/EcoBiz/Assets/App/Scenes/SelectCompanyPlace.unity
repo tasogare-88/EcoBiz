@@ -3564,7 +3564,7 @@ GameObject:
   - component: {fileID: 3406928337083413441}
   - component: {fileID: 8359392726655366654}
   m_Layer: 5
-  m_Name: 5
+  m_Name: 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3876,7 +3876,7 @@ GameObject:
   - component: {fileID: 5598454061545043972}
   - component: {fileID: 5929460704888859366}
   m_Layer: 5
-  m_Name: 3
+  m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3902,7 +3902,7 @@ GameObject:
   - component: {fileID: 1357747623587008398}
   - component: {fileID: 4306229110718648105}
   m_Layer: 5
-  m_Name: 2
+  m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4368,7 +4368,7 @@ GameObject:
   - component: {fileID: 2254931376995930620}
   - component: {fileID: 4337659149800723337}
   m_Layer: 5
-  m_Name: 8
+  m_Name: 7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4591,7 +4591,7 @@ GameObject:
   - component: {fileID: 8096566708677022289}
   - component: {fileID: 2913284387637433912}
   m_Layer: 5
-  m_Name: 1
+  m_Name: 0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4716,7 +4716,7 @@ GameObject:
   - component: {fileID: 8155944162720551674}
   - component: {fileID: 9170139944081058932}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: SelectCompanyCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5291,7 +5291,7 @@ GameObject:
   - component: {fileID: 1105192473231425455}
   - component: {fileID: 6465530454687364850}
   m_Layer: 5
-  m_Name: 6
+  m_Name: 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5471,7 +5471,7 @@ GameObject:
   - component: {fileID: 437815333037137164}
   - component: {fileID: 8216357259533900445}
   m_Layer: 5
-  m_Name: 9
+  m_Name: 8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5536,7 +5536,7 @@ GameObject:
   - component: {fileID: 6693305492868378289}
   - component: {fileID: 3233386228033697075}
   m_Layer: 5
-  m_Name: 7
+  m_Name: 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5655,7 +5655,7 @@ GameObject:
   - component: {fileID: 16089928440758854}
   - component: {fileID: 5609354809838694520}
   m_Layer: 5
-  m_Name: 4
+  m_Name: 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6111,6 +6111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32ab53e026696cc4582a23ea2746217c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDebug: 0
   _placeArea_1: {fileID: 945954173615003686}
   _placeArea_2: {fileID: 5420885948236774929}
   _placeArea_3: {fileID: 6325857211683509904}
@@ -6120,10 +6121,6 @@ MonoBehaviour:
   - {fileID: 1067791661}
   - {fileID: 962108858}
   _companyPrefab: {fileID: 1097378603738760417, guid: 5ee8e292a2d8d284296df60613a62dbd, type: 3}
-  companyId: 3
-  locationId: 3
-  isAlreadyBuild: 0
-  isDebug: 0
 --- !u!222 &9217324363127150463
 CanvasRenderer:
   m_ObjectHideFlags: 0

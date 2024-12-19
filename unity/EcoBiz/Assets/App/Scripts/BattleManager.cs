@@ -7,24 +7,18 @@ public class BattleManager : MonoBehaviour
 {
     [Header("デバッグモード(実行後Startメソッドでバトル開始)")]
     public bool IsDebug = false;
-    public int userId;
-    public int opponentId;
-    private bool isMyWin;
-    private int totalAssetsClimbRange;
-    private int totalAssetsDeclineRange;
 
-    public int myStep;
-    public int opponentStep;
-
-    private class ResultData
+    private class BattleData
     {
-        public int userId;
-        public int opponentId;
-        public bool isMyWin;
-        public int totalAssetsClimbRange;
-        public int totalAssetsDeclineRange;
+        public string userName; // バトルを仕掛けたユーザーの名前
+        public string opponentName; // 対戦相手の名前
+        public int mySteps; // バトルを仕掛けたユーザーの歩数
+        public int opponentSteps; // 対戦相手の歩数
+        public bool isWinner;  // 対戦相手の歩数
+        public bool isDraw; // バトルを仕掛けたユーザーが勝ったか否か
+        public int assetChange; // 資産の変動額（勝者が得る/敗者が失う金額）
     }
-    private ResultData _resultData = null;
+    private BattleData _battleData = null;
 
     [SerializeField] private GameObject _battleUI; // バトルUI
     [SerializeField] private GameObject _resultUI; // リザルトUI
@@ -55,16 +49,25 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private Text _earningsText; // 収益のテキスト
     #endregion
 
-    public void SetData(int userId, int opponentId, bool isMyWin, int totalAssetsClimbRange, int totalAssetsDeclineRange)
+    /// <summary>
+    /// バトルデータをセットする
+    /// </summary>
+    /// <param name="jsonBattleData"></param> <summary>
+    /// 
+    /// </summary>
+    /// <param name="jsonBattleData"></param>
+    public void SetBattleData(string jsonBattleData)
     {
-        _resultData = new ResultData
-        {
-            userId = userId,
-            opponentId = opponentId,
-            isMyWin = isMyWin,
-            totalAssetsClimbRange = totalAssetsClimbRange,
-            totalAssetsDeclineRange = totalAssetsDeclineRange
-        };
+        var battleData = JsonUtility.FromJson<BattleData>(jsonBattleData);
+        _battleData = new BattleData();
+        _battleData.userName = battleData.userName;
+        _battleData.opponentName = battleData.opponentName;
+        _battleData.mySteps = battleData.mySteps;
+        _battleData.opponentSteps = battleData.opponentSteps;
+        _battleData.isWinner = battleData.isWinner;
+        _battleData.assetChange = battleData.assetChange;
+        
+        StartBattle();
     }
 
     private void Start() 
@@ -77,49 +80,46 @@ public class BattleManager : MonoBehaviour
         _resultUI.SetActive(false);
         if(IsDebug)
         {
-            SetData(userId, opponentId, isMyWin, totalAssetsClimbRange, totalAssetsDeclineRange);
-            StartBattle();
+            SetBattleData("{\"userName\":\"userA\",\"opponentName\":\"userB\",\"mySteps\":100,\"opponentSteps\":150,\"isWinner\":false,\"isDraw\":false,\"assetChange\":400}");
         }
-
-        if(_resultData == null)
-        {
-            Debug.LogError("バトルに使用するデータが設定されていません");
-        }
-        StartBattle();
     }
 
     public async void StartBattle()
     {
+        // 中央の斜め白色のラインをフェードイン
         _vsLineImage.DOFade(1f, 0.5f).WaitForCompletion();
         await UniTask.Delay(500);
 
+        // VSエリアのオレンジ部分と青部分をフェードイン
         _vsBGBlue.DOAnchorPos3DX(0, 1.0f).SetEase(Ease.OutQuart);
         await _vsBGOrange.DOAnchorPos3DX(0, 1.0f).SetEase(Ease.OutQuart)
         .OnComplete(() => {
+            _myPlayerName.GetComponent<Text>().text = _battleData.userName;
             _myPlayerName.gameObject.SetActive(true);
+            _opponentPlayerName.GetComponent<Text>().text = _battleData.opponentName;
             _opponentPlayerName.gameObject.SetActive(true);
             _vsText.gameObject.SetActive(true);
             _vsText.DOScale(Vector3.one, 0.8f).SetEase(Ease.OutBack);
         })
         .AsyncWaitForCompletion();
-
         await UniTask.Delay(1500);
+        // ホワイトアウト
         await _whiteOutImage.DOFade(1f, 1.0f).AsyncWaitForCompletion();
-
         await UniTask.Delay(1500);
-        var result = await StepGraphDraw(this.myStep, this.opponentStep);
-
+        // 歩数の比較グラフを表示
+        var result = await StepGraphDraw(_battleData.isWinner, _battleData.isDraw, _battleData.mySteps, _battleData.opponentSteps);
         await UniTask.Delay(3000);
+        // ホワイトアウト
         stepDifferenceLine_Mine.gameObject.SetActive(false);
         stepDifferenceLine_Opponent.gameObject.SetActive(false);
         await _whiteOutImage.DOFade(1f, 1.0f).AsyncWaitForCompletion();
-
         await UniTask.Delay(1500);
-        var resultData = ShowResult(result);
+        // リザルト表示
+        ShowResult(result);
         
     }
 
-    public async UniTask<int> StepGraphDraw(int myStep, int opponentStep)
+    public async UniTask<int> StepGraphDraw(bool isWinner, bool isDraw, int myStep, int opponentStep)
     {
         _battleUI.SetActive(true);
         _whiteOutImage.DOFade(0f, 1.0f);
@@ -129,7 +129,15 @@ public class BattleManager : MonoBehaviour
         Slider higherStepGraph = null;
         LineRenderer stepDifferenceLine = null;
         RectTransform stepDifferenceArrow = null;
-        if(myStep < opponentStep)
+
+        if(isDraw)
+        {
+            fewerStep = myStep;
+            higherStep = opponentStep;
+            await DrawMatch();
+            return 2;
+        }
+        else if(!isWinner)
         {
             fewerStep = myStep;
             higherStep = opponentStep;
@@ -139,7 +147,7 @@ public class BattleManager : MonoBehaviour
             _stepDifferenceBubble.localRotation = Quaternion.Euler(0f, 0f, -90f);
             _stepDifferenceBubble.GetChild(0).GetComponent<RectTransform>().localRotation = Quaternion.Euler(0f, 0f, 0f);
         }
-        else if(myStep > opponentStep)
+        else if(isWinner)
         {
             fewerStep = opponentStep;
             higherStep = myStep;
@@ -149,25 +157,19 @@ public class BattleManager : MonoBehaviour
             _stepDifferenceBubble.localRotation = Quaternion.Euler(0f, 0f, 90f);
             _stepDifferenceBubble.GetChild(0).GetComponent<RectTransform>().localRotation = Quaternion.Euler(0f, 0f, 180f);
         }
-        else if(myStep == opponentStep)
-        {
-            fewerStep = myStep;
-            higherStep = opponentStep;
-            await DrawMatch();
-            return 2;
-        }
 
         float higherStepValue = 1.0f;
         float fewerStepValue = (float)fewerStep / (float)higherStep;
 
         _myStepGraph.DOValue(fewerStepValue, 3.0f);
         await _opponentStepGraph.DOValue(fewerStepValue, 3.0f).AsyncWaitForCompletion();
-        
         await UniTask.Delay(1500);
+        
         await higherStepGraph.DOValue(higherStepValue, 0.5f).AsyncWaitForCompletion();
+        // ステップ差分の矢印を表示
         DrawStepDifferenceDashLine(stepDifferenceLine, stepDifferenceArrow, fewerStepValue);
 
-        return myStep < opponentStep ? 0 : 1;   
+        return isWinner ? 1 : 0;   
         
     }
 
@@ -184,7 +186,7 @@ public class BattleManager : MonoBehaviour
             stepDifferenceArrow.offsetMin = new Vector2(stepDifferenceArrowX, stepDifferenceArrow.offsetMin.y);
             stepDifferenceArrow.gameObject.SetActive(true);
 
-            _stepDifferenceText.text = $"{Mathf.Abs(this.myStep - this.opponentStep)}歩";
+            _stepDifferenceText.text = $"{Mathf.Abs(_battleData.mySteps - _battleData.opponentSteps)}歩";
             _stepDifferenceBubble.gameObject.SetActive(true);
         }
         
@@ -208,25 +210,18 @@ public class BattleManager : MonoBehaviour
 
     }
 
-    private ResultData ShowResult(int result)
+    private void ShowResult(int result)
     {
-        int earnings = 0;
         switch(result)
         {
             case 0:
             {
                 if(ColorUtility.TryParseHtmlString("#699AE2", out Color color))
                 {
-                    Debug.Log(color);
                     _resultBG.color = color;
                 }
                 _resultText.text = "Lose..";
-                
-                _resultData.isMyWin = false;
-                _resultData.totalAssetsClimbRange = (this.opponentStep - this.myStep) * 4;
-                _resultData.totalAssetsDeclineRange = (this.myStep - this.opponentStep) * 4;
-                earnings = _resultData.totalAssetsDeclineRange;
-                _earningsText.text = $"{earnings} 円損失";
+                _earningsText.text = $"{_battleData.assetChange} 円損失";
                 break;
             }
             case 1:
@@ -236,12 +231,7 @@ public class BattleManager : MonoBehaviour
                     _resultBG.color = color;
                 }
                 _resultText.text = "Win!";
-
-                _resultData.totalAssetsClimbRange = (this.myStep - this.opponentStep) * 4;
-                _resultData.totalAssetsDeclineRange = (this.opponentStep - this.myStep) * 4;
-                _resultData.isMyWin = true;
-                earnings = _resultData.totalAssetsClimbRange;
-                _earningsText.text = $"{earnings} 円獲得";
+                _earningsText.text = $"{_battleData.assetChange} 円獲得";
                 break;
             }
             case 2:
@@ -251,11 +241,6 @@ public class BattleManager : MonoBehaviour
                     _resultBG.color = color;
                 }
                 _resultText.text = "Draw!";
-                _earningsText.text = "損益なし";
-                _resultData.totalAssetsClimbRange = 0;
-                _resultData.totalAssetsDeclineRange = 0;
-                _resultData.isMyWin = false;
-                earnings = 0;
                 _earningsText.text = $"損益なし";
                 break;
             }
@@ -265,8 +250,6 @@ public class BattleManager : MonoBehaviour
 
         _resultUI.SetActive(true);
         _whiteOutImage.DOFade(0f, 1.0f);
-
-        return _resultData;
 
     }
 
