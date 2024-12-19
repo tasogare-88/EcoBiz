@@ -48,8 +48,8 @@ class UnityBattleScreen extends ConsumerWidget {
     };
 
     controller.postMessage(
-      'BattleManager',
-      'ProcessBattleResult',
+      'BattleCanvas',
+      'SetBattleData',
       jsonEncode(battleData),
     );
   }
