@@ -43,13 +43,6 @@ class _InputUserNameScreenState extends ConsumerState<InputUserNameScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const Text(
-                  '※名前は後で変更できません',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
-                ),
                 const SizedBox(height: 24),
                 TextFormField(
                   controller: _nameController,
