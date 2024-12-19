@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'firebase_providers.g.dart';
@@ -19,3 +20,7 @@ Stream<User?> authStateChanges(AuthStateChangesRef ref) {
 FirebaseFirestore firestore(FirestoreRef ref) {
   return FirebaseFirestore.instance;
 }
+
+final googleSignInProvider = Provider<GoogleSignIn>((ref) {
+  return GoogleSignIn();
+});

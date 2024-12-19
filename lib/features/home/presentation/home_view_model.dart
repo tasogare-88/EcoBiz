@@ -1,9 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../core/auth/domain/auth_state.dart';
 import '../../../core/auth/presentation/auth_view_model.dart';
-import '../../../shared/constants/auth_error_messages.dart';
 import '../../company/presentation/company_view_model.dart';
 import '../../steps/presentation/steps_view_model.dart';
 
@@ -32,8 +30,14 @@ class HomeViewModel extends _$HomeViewModel {
     state = state.copyWith(isLoading: true);
     try {
       final authState = ref.read(authViewModelProvider);
-      if (authState is! AuthStateAuthenticated) {
-        throw Exception(AuthErrorMessages.unauthenticated);
+      final userId = authState.maybeMap(
+        authenticated: (state) => state.user.id,
+        orElse: () => null,
+      );
+
+      if (userId == null) {
+        state = state.copyWith(error: 'ユーザー情報の取得に失敗しました');
+        return;
       }
 
       final stepsViewModel = ref.read(stepsViewModelProvider.notifier);
@@ -43,7 +47,7 @@ class HomeViewModel extends _$HomeViewModel {
       await stepsViewModel.initializeHealthService();
 
       // 歩数の取得と更新
-      await stepsViewModel.fetchAndUpdateSteps(authState.user.uid);
+      await stepsViewModel.fetchAndUpdateSteps(userId);
 
       // 歩数データの取得
       final dailyRecord = stepsViewModel.state.dailyRecord;

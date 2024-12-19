@@ -50,6 +50,10 @@ dependencies:
   flutter_hooks: ^0.20.5
   shared_preferences: ^2.3.3
   hooks_riverpod: ^2.6.1
+  google_sign_in: ^6.2.2
+  sign_in_button: ^3.2.0
+  flutter_svg: ^2.0.16
+  flutter_blue_plus: ^1.34.5
 
 
 dev_dependencies:
@@ -114,3 +118,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+  assets:
+    - assets/images/logo.svg

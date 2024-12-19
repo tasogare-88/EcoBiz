@@ -45,7 +45,9 @@ root/
 ├── users/
 │   └── {userId}/
 │       ├── email: string
+│       ├── name: string
 │       ├── createdAt: timestamp
+│       ├── updatedAt: timestamp
 │       └── dailyRecords/
 │           └── {date}/  # YYYYMMDD形式
 │               ├── steps: number
@@ -114,9 +116,9 @@ MVVMパターンを採用している。
 - Cloud Firestore
 
 ### APIやライブラリ
-- ヘルスコネクトAPI（歩数計測）
-- Apple Health API（歩数計測）
+- Health API（歩数計測）
 - flutter_unity_widget（Unity連携）
+- flutter_blue_plus（BLE通信）
 - freezed（データモデル）
 - riverpod（状態管理）
 
