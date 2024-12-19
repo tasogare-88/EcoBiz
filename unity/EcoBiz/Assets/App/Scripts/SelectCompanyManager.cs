@@ -10,6 +10,7 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
     [SerializeField] private RectTransform _placeArea_1; // デフォルトの画面
     [SerializeField] private RectTransform _placeArea_2; // 右にスライドした画面
     [SerializeField] private RectTransform _placeArea_3; // 左にスライドした画面
+    [SerializeField] private GameObject[] _buttons; // ボタン
     [SerializeField] private GameObject _companyPrefab; // 会社のPrefab
     public int companyId; // 会社ID
     public int locationId; // 建設場所ID
@@ -70,9 +71,32 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
 
         if(isAlreadyBuild)
         {
+            // 既に会社が建設されている場合
+            // 会社を表示し、その画面に遷移する
             _bubbleRectTransform = GameObject.Find(locationId.ToString()).transform.GetChild(0).GetComponent<RectTransform>();
+            float pointX = this.locationId <= 3 ? 1080f : this.locationId <= 6 ? 0f : -1080f;
+            SetFixedPositions(pointX);
             BuildCompany(this.companyId);
+            HideSelectCompanyUI(this.locationId);
         }
+    }
+
+    private void HideSelectCompanyUI(int locationId)
+    {
+        // 1~9の建設場所をlocationIdの場所以外非表示にする
+        for(int i = 1; i <= 9; i++)
+        {
+            if(i != locationId)
+            {
+                GameObject.Find(i.ToString()).SetActive(false);
+            }
+        }
+
+        // ボタンを非表示にする
+        // foreach(var button in _buttons)
+        // {
+        //     button.SetActive(false);
+        // }
     }
 
     # region クリックイベント

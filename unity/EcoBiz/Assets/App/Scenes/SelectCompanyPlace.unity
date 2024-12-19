@@ -6114,11 +6114,16 @@ MonoBehaviour:
   _placeArea_1: {fileID: 945954173615003686}
   _placeArea_2: {fileID: 5420885948236774929}
   _placeArea_3: {fileID: 6325857211683509904}
+  _buttons:
+  - {fileID: 1991111636}
+  - {fileID: 872439333}
+  - {fileID: 1067791661}
+  - {fileID: 962108858}
   _companyPrefab: {fileID: 1097378603738760417, guid: 5ee8e292a2d8d284296df60613a62dbd, type: 3}
-  companyId: 6
-  locationId: 8
-  isAlreadyBuild: 1
-  isDebug: 1
+  companyId: 3
+  locationId: 3
+  isAlreadyBuild: 0
+  isDebug: 0
 --- !u!222 &9217324363127150463
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -830,11 +830,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a42d6d1003c1c04884bd1978067973e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsDebugMode: 1
+  IsDebug: 0
   userId: 1
   opponentId: 2
-  myStep: 1400
-  opponentStep: 1400
+  myStep: 1500
+  opponentStep: 1000
   _battleUI: {fileID: 708300709}
   _resultUI: {fileID: 599516029}
   _vsLineImage: {fileID: 538012821}

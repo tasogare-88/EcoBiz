@@ -6,7 +6,7 @@ using Cysharp.Threading.Tasks;
 public class BattleManager : MonoBehaviour
 {
     [Header("デバッグモード(実行後Startメソッドでバトル開始)")]
-    public bool IsDebugMode = false;
+    public bool IsDebug = false;
     public int userId;
     public int opponentId;
     private bool isMyWin;
@@ -24,7 +24,7 @@ public class BattleManager : MonoBehaviour
         public int totalAssetsClimbRange;
         public int totalAssetsDeclineRange;
     }
-    private ResultData _resultData;
+    private ResultData _resultData = null;
 
     [SerializeField] private GameObject _battleUI; // バトルUI
     [SerializeField] private GameObject _resultUI; // リザルトUI
@@ -75,11 +75,17 @@ public class BattleManager : MonoBehaviour
         _stepDifferenceArrow_Opponent.gameObject.SetActive(false);
         _battleUI.SetActive(false);
         _resultUI.SetActive(false);
-        if(IsDebugMode)
+        if(IsDebug)
         {
             SetData(userId, opponentId, isMyWin, totalAssetsClimbRange, totalAssetsDeclineRange);
             StartBattle();
         }
+
+        if(_resultData == null)
+        {
+            Debug.LogError("バトルに使用するデータが設定されていません");
+        }
+        StartBattle();
     }
 
     public async void StartBattle()
