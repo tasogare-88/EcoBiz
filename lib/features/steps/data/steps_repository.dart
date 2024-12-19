@@ -20,10 +20,10 @@ class StepsRepository extends _$StepsRepository {
           .doc(date)
           .get();
 
-      if (!doc.exists) throw Exception('指定された日付のデータが存在しません');
+      if (!doc.exists) return null;
       return DailyRecord.fromJson(doc.data()!);
     } catch (e) {
-      throw Exception('歩数データの取得に失敗しました: $e');
+      return null;
     }
   }
 
@@ -37,6 +37,7 @@ class StepsRepository extends _$StepsRepository {
           .collection('dailyRecords')
           .doc(date);
 
+      final existingRecord = await getDailyRecord(userId, date);
       final earnedAmount = steps * stepsToYenRate;
       final now = DateTime.now();
 
@@ -45,8 +46,8 @@ class StepsRepository extends _$StepsRepository {
         date: date,
         steps: steps,
         earnedAmount: earnedAmount,
-        totalAssets: earnedAmount, // MVPでは収益=総資産
-        createdAt: now,
+        totalAssets: existingRecord?.totalAssets ?? earnedAmount,
+        createdAt: existingRecord?.createdAt ?? now,
         updatedAt: now,
       );
 
