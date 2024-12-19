@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_unity_widget/flutter_unity_widget.dart';
 
+import '../../../core/auth/data/user_repository.dart';
 import './battle_view_model.dart';
 
 class UnityBattleScreen extends ConsumerWidget {
@@ -21,6 +22,11 @@ class UnityBattleScreen extends ConsumerWidget {
   });
 
   void onUnityCreated(UnityWidgetController controller, WidgetRef ref) async {
+    final user1 =
+        await ref.read(userRepositoryProvider.notifier).getUser(userId1);
+    final user2 =
+        await ref.read(userRepositoryProvider.notifier).getUser(userId2);
+
     // バトル結果を取得
     final battleResult =
         await ref.read(battleViewModelProvider.notifier).startBattle(
@@ -32,8 +38,8 @@ class UnityBattleScreen extends ConsumerWidget {
 
     // Unity側に送信するデータ
     final battleData = {
-      'myUserId': userId1,
-      'opponentUserId': userId2,
+      'myName': user1?.name ?? 'Unknown',
+      'opponentName': user2?.name ?? 'Unknown',
       'mySteps': steps1,
       'opponentSteps': steps2,
       'isWinner': battleResult.winnerId == userId1,
