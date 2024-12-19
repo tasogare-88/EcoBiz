@@ -6,7 +6,7 @@ part of 'company_view_model.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$companyViewModelHash() => r'b71c60a83ff6e6e16fd3275168f20fb4a837e1d9';
+String _$companyViewModelHash() => r'1a71fff3fc4f9983cb8ff07604e7a84a52f271b3';
 
 /// See also [CompanyViewModel].
 @ProviderFor(CompanyViewModel)

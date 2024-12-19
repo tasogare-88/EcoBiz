@@ -14,6 +14,7 @@ _$CompanyImpl _$$CompanyImplFromJson(Map<String, dynamic> json) =>
       rank: $enumDecode(_$CompanyRankEnumMap, json['rank']),
       totalAssets: (json['totalAssets'] as num?)?.toInt() ?? 0,
       stepsToYenRate: (json['stepsToYenRate'] as num?)?.toInt() ?? 50,
+      locationIndex: (json['locationIndex'] as num?)?.toInt(),
       createdAt: _timestampToDateTime(json['createdAt']),
       updatedAt: _timestampToDateTime(json['updatedAt']),
     );
@@ -26,6 +27,7 @@ Map<String, dynamic> _$$CompanyImplToJson(_$CompanyImpl instance) =>
       'rank': _$CompanyRankEnumMap[instance.rank]!,
       'totalAssets': instance.totalAssets,
       'stepsToYenRate': instance.stepsToYenRate,
+      'locationIndex': instance.locationIndex,
       'createdAt': _dateTimeToTimestamp(instance.createdAt),
       'updatedAt': _dateTimeToTimestamp(instance.updatedAt),
     };

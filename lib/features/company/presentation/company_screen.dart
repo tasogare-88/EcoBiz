@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/auth/presentation/auth_view_model.dart';
 import 'company_view_model.dart';
 import 'select_company_screen.dart';
+import 'unity_company_place_screen.dart';
 
 class CompanyScreen extends ConsumerStatefulWidget {
   const CompanyScreen({super.key});
@@ -48,7 +49,19 @@ class _CompanyScreenState extends ConsumerState<CompanyScreen> {
 
     return Scaffold(
       body: hasCompany == true
-          ? const Center(child: Text('Unityの会社画面へ遷移'))
+          ? Consumer(
+              builder: (context, ref, _) {
+                final company = ref.watch(companyViewModelProvider).company;
+                if (company == null) return const CircularProgressIndicator();
+
+                return UnityCompanyPlaceScreen(
+                  userId: company.id,
+                  companyName: company.name,
+                  genre: company.genre.name,
+                  locationIndex: company.locationIndex,
+                );
+              },
+            )
           : const SelectCompanyScreen(),
     );
   }
