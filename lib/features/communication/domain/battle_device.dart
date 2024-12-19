@@ -7,8 +7,9 @@ part 'battle_device.g.dart';
 class BattleDevice with _$BattleDevice {
   const factory BattleDevice({
     required String id,
+    required String userId,
     required String name,
-    required int rssi,
+    required int steps,
   }) = _BattleDevice;
 
   factory BattleDevice.fromJson(Map<String, dynamic> json) =>
