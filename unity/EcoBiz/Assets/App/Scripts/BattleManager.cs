@@ -7,8 +7,24 @@ public class BattleManager : MonoBehaviour
 {
     [Header("デバッグモード(実行後Startメソッドでバトル開始)")]
     public bool IsDebugMode = false;
-    public int MyStep = 0;
-    public int OpponentStep = 0;
+    public int userId;
+    public int opponentId;
+    private bool isMyWin;
+    private int totalAssetsClimbRange;
+    private int totalAssetsDeclineRange;
+
+    public int myStep;
+    public int opponentStep;
+
+    private class ResultData
+    {
+        public int userId;
+        public int opponentId;
+        public bool isMyWin;
+        public int totalAssetsClimbRange;
+        public int totalAssetsDeclineRange;
+    }
+    private ResultData _resultData;
 
     [SerializeField] private GameObject _battleUI; // バトルUI
     [SerializeField] private GameObject _resultUI; // リザルトUI
@@ -29,6 +45,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private RectTransform _stepDifferenceArrow_Mine; // 自分のグラフから延びるステップ差分の矢印
     [SerializeField] private RectTransform _stepDifferenceArrow_Opponent; // 相手のグラフから延びるステップ差分の矢印
     [SerializeField] private RectTransform _stepDifferenceBubble; // ステップ差分のバブル
+    [SerializeField] private Text _stepDifferenceText; // ステップ差分のテキスト
     #endregion
 
     #region バトル結果UIの各要素
@@ -38,10 +55,16 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private Text _earningsText; // 収益のテキスト
     #endregion
 
-    private void Awake() 
+    public void SetData(int userId, int opponentId, bool isMyWin, int totalAssetsClimbRange, int totalAssetsDeclineRange)
     {
-        // _myPlayerName.gameObject.SetActive(false);
-        // _opponentPlayerName.gameObject.SetActive(false);
+        _resultData = new ResultData
+        {
+            userId = userId,
+            opponentId = opponentId,
+            isMyWin = isMyWin,
+            totalAssetsClimbRange = totalAssetsClimbRange,
+            totalAssetsDeclineRange = totalAssetsDeclineRange
+        };
     }
 
     private void Start() 
@@ -54,6 +77,7 @@ public class BattleManager : MonoBehaviour
         _resultUI.SetActive(false);
         if(IsDebugMode)
         {
+            SetData(userId, opponentId, isMyWin, totalAssetsClimbRange, totalAssetsDeclineRange);
             StartBattle();
         }
     }
@@ -77,7 +101,7 @@ public class BattleManager : MonoBehaviour
         await _whiteOutImage.DOFade(1f, 1.0f).AsyncWaitForCompletion();
 
         await UniTask.Delay(1500);
-        var result = await StepGraphDraw(MyStep, OpponentStep);
+        var result = await StepGraphDraw(this.myStep, this.opponentStep);
 
         await UniTask.Delay(3000);
         stepDifferenceLine_Mine.gameObject.SetActive(false);
@@ -85,7 +109,7 @@ public class BattleManager : MonoBehaviour
         await _whiteOutImage.DOFade(1f, 1.0f).AsyncWaitForCompletion();
 
         await UniTask.Delay(1500);
-        ShowResult(result);
+        var resultData = ShowResult(result);
         
     }
 
@@ -154,6 +178,7 @@ public class BattleManager : MonoBehaviour
             stepDifferenceArrow.offsetMin = new Vector2(stepDifferenceArrowX, stepDifferenceArrow.offsetMin.y);
             stepDifferenceArrow.gameObject.SetActive(true);
 
+            _stepDifferenceText.text = $"{Mathf.Abs(this.myStep - this.opponentStep)}歩";
             _stepDifferenceBubble.gameObject.SetActive(true);
         }
         
@@ -177,9 +202,9 @@ public class BattleManager : MonoBehaviour
 
     }
 
-    private void ShowResult(int result)
+    private ResultData ShowResult(int result)
     {
-        int earnings = 1000;
+        int earnings = 0;
         switch(result)
         {
             case 0:
@@ -190,6 +215,11 @@ public class BattleManager : MonoBehaviour
                     _resultBG.color = color;
                 }
                 _resultText.text = "Lose..";
+                
+                _resultData.isMyWin = false;
+                _resultData.totalAssetsClimbRange = (this.opponentStep - this.myStep) * 4;
+                _resultData.totalAssetsDeclineRange = (this.myStep - this.opponentStep) * 4;
+                earnings = _resultData.totalAssetsDeclineRange;
                 _earningsText.text = $"{earnings} 円損失";
                 break;
             }
@@ -197,10 +227,14 @@ public class BattleManager : MonoBehaviour
             {
                 if(ColorUtility.TryParseHtmlString("#E8764A", out Color color))
                 {
-                    Debug.Log(color);
                     _resultBG.color = color;
                 }
                 _resultText.text = "Win!";
+
+                _resultData.totalAssetsClimbRange = (this.myStep - this.opponentStep) * 4;
+                _resultData.totalAssetsDeclineRange = (this.opponentStep - this.myStep) * 4;
+                _resultData.isMyWin = true;
+                earnings = _resultData.totalAssetsClimbRange;
                 _earningsText.text = $"{earnings} 円獲得";
                 break;
             }
@@ -212,6 +246,11 @@ public class BattleManager : MonoBehaviour
                 }
                 _resultText.text = "Draw!";
                 _earningsText.text = "損益なし";
+                _resultData.totalAssetsClimbRange = 0;
+                _resultData.totalAssetsDeclineRange = 0;
+                _resultData.isMyWin = false;
+                earnings = 0;
+                _earningsText.text = $"損益なし";
                 break;
             }
             default:
@@ -220,6 +259,8 @@ public class BattleManager : MonoBehaviour
 
         _resultUI.SetActive(true);
         _whiteOutImage.DOFade(0f, 1.0f);
+
+        return _resultData;
 
     }
 

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
@@ -12,7 +11,10 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
     [SerializeField] private RectTransform _placeArea_2; // 右にスライドした画面
     [SerializeField] private RectTransform _placeArea_3; // 左にスライドした画面
     [SerializeField] private GameObject _companyPrefab; // 会社のPrefab
-    public int CompanyId;
+    public int companyId; // 会社ID
+    public int locationId; // 建設場所ID
+    public bool isAlreadyBuild; // すでに会社が建設されているかどうか
+    public bool isDebug; // デバッグモードかどうか
 
     private Vector2 _initialTopBottom; // 初期の画面のTop,Bottomの値
     private float _initialBubblePositionY; // 初期の吹き出しのY座標 
@@ -21,7 +23,6 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
     private RectTransform[] parentRectTransforms = new RectTransform[3]; // 移動したいオブジェクトの親のRectTransform
     private RectTransform _bubbleRectTransform; // 吹き出しのRectTransform
     private Tweener _clickTween; // 吹き出しクリック時のTweenアニメーション
-    
     
     
     private void Start() 
@@ -35,8 +36,46 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
         parentRectTransforms[2] = _placeArea_3.parent as RectTransform;
 
         _initialTopBottom = new Vector2(rectTransforms[0].offsetMax.y, rectTransforms[0].offsetMin.y);
+
+        if(isDebug)
+        {
+            SetData(this.companyId, this.locationId, this.isAlreadyBuild);
+        }
     }
 
+    /// <summary>
+    /// 会社IDと建設場所IDを設定
+    /// </summary>
+    /// <param name="companyId"> 1~6を想定</param>
+    /// <param name="locationId">1~9を想定</param>
+    /// <param name="isAlreadyBuild"></param> <summary>
+    /// 
+    /// </summary>
+    /// <param name="companyId"></param>
+    /// <param name="locationId"></param>
+    /// <param name="isAlreadyBuild"></param>
+    public void SetData(int companyId, int locationId, bool isAlreadyBuild)
+    {
+        this.companyId = companyId;
+        this.locationId = locationId;
+        this.isAlreadyBuild = isAlreadyBuild;
+        if(this.companyId < 1 || this.companyId > 6)
+        {
+            Debug.LogError("会社IDが不正です");
+        }
+        else if(this.locationId < 1 || this.locationId > 9)
+        {
+            Debug.LogError("建設場所IDが不正です");
+        }
+
+        if(isAlreadyBuild)
+        {
+            _bubbleRectTransform = GameObject.Find(locationId.ToString()).transform.GetChild(0).GetComponent<RectTransform>();
+            BuildCompany(this.companyId);
+        }
+    }
+
+    # region クリックイベント
     public void OnPointerClick(PointerEventData eventData)
     {
         // クリックしたオブジェクトのタグを確認
@@ -51,7 +90,9 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
             .OnComplete(() => _bubbleRectTransform.DOAnchorPosY(_initialBubblePositionY, 0.75f))
             .SetEase(Ease.OutQuad).SetLoops(-1, LoopType.Yoyo);
             // 建設場所を確定するか確認する
-            ConfirmationConstractionLocation();
+            // 親のオブジェクトの名前から建設場所IDを取得
+            locationId = int.Parse(_bubbleRectTransform.parent.name);
+            ConfirmationConstractionLocation(locationId);
         }
         else if(_clickTween != null)
         {
@@ -61,15 +102,16 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
         }
     }
 
-    private void ConfirmationConstractionLocation()
+    private void ConfirmationConstractionLocation(int locationId)
     {
         // 建設場所の確認
         Debug.Log("建設場所を確認");
-        BuildCompany(CompanyId);
+        var IDs = BuildCompany(companyId);
+        Debug.Log("会社ID: " + IDs[0] + " 建設場所ID: " + IDs[1]);
         // ここに処理を記述
     }
 
-    private void BuildCompany(int companyId)
+    private int[] BuildCompany(int companyId)
     {
         // 会社を建設
         Debug.Log("会社を建設");
@@ -122,8 +164,12 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
 
         _bubbleRectTransform.gameObject.SetActive(false);
         _bubbleRectTransform.parent.GetComponent<Image>().enabled = false;
-    }
 
+        return new int[] {companyId, locationId};
+    }
+    #endregion
+
+    # region ドラッグイベント
     public void OnBeginDrag(PointerEventData eventData)
     {
         Vector2 localPointerPosition = GetLocalPosition(eventData.position);
@@ -187,4 +233,5 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
 
         return nearestPositionNumber;
     }
+    #endregion
 }
