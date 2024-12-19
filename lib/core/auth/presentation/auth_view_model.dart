@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../data/auth_repository.dart';
+import '../data/user_repository.dart';
 import '../domain/auth_state.dart';
 
 part 'auth_view_model.g.dart';
@@ -36,19 +37,22 @@ class AuthViewModel extends _$AuthViewModel {
     required String email,
     required String password,
   }) async {
-    state = const AuthState.unauthenticated(isLoading: true, error: null);
-
+    state = const AuthState.unauthenticated(isLoading: true);
     try {
-      final user = await ref.read(authRepositoryProvider.notifier).signUp(
+      final authUser = await ref.read(authRepositoryProvider.notifier).signUp(
             email: email,
             password: password,
           );
-      state = AuthState.authenticated(user: user, isLoading: false);
+
+      await ref.read(userRepositoryProvider.notifier).createUser(
+            id: authUser.uid,
+            email: authUser.email,
+            name: '',
+          );
+
+      state = AuthState.authenticated(user: authUser);
     } catch (e) {
-      state = AuthState.unauthenticated(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = AuthState.unauthenticated(error: e.toString());
     }
   }
 
@@ -67,17 +71,20 @@ class AuthViewModel extends _$AuthViewModel {
   }
 
   Future<void> signInWithGoogle() async {
-    state = const AuthState.unauthenticated(isLoading: true, error: null);
-
+    state = const AuthState.unauthenticated(isLoading: true);
     try {
-      final user =
+      final authUser =
           await ref.read(authRepositoryProvider.notifier).signInWithGoogle();
-      state = AuthState.authenticated(user: user, isLoading: false);
+
+      await ref.read(userRepositoryProvider.notifier).createUser(
+            id: authUser.uid,
+            email: authUser.email,
+            name: authUser.displayName ?? '',
+          );
+
+      state = AuthState.authenticated(user: authUser);
     } catch (e) {
-      state = AuthState.unauthenticated(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = AuthState.unauthenticated(error: e.toString());
     }
   }
 }

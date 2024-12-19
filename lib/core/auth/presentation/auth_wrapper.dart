@@ -35,10 +35,10 @@ class _AuthWrapperState extends ConsumerState<AuthWrapper> {
       return const SplashScreen();
     }
 
-    // 認証状態に基づく画面遷移
-    return authState.maybeMap(
-      authenticated: (state) => const MainNavigation(),
-      orElse: () => const SignInScreen(),
+    return authState.when(
+      initial: () => const SignInScreen(),
+      unauthenticated: (isLoading, error) => const SignInScreen(),
+      authenticated: (user, isLoading, error) => const MainNavigation(),
     );
   }
 }
