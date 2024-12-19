@@ -16,12 +16,25 @@ class CommunicationViewModel extends _$CommunicationViewModel {
   }
 
   Future<void> _initialize() async {
-    final bleRepo = ref.read(bleRepositoryProvider.notifier);
-    final isAvailable = await bleRepo.isBluetoothAvailable();
+    try {
+      final bleRepo = ref.read(bleRepositoryProvider.notifier);
+      final isAvailable = await bleRepo.isBluetoothAvailable();
 
-    state = state.copyWith(isBluetoothAvailable: isAvailable);
-    if (isAvailable) {
-      _startScanning();
+      if (!isAvailable) {
+        state = state.copyWith(
+          error: 'Bluetoothが無効です。設定から有効にしてください。',
+          isBluetoothAvailable: false,
+        );
+        return;
+      }
+
+      state = state.copyWith(isBluetoothAvailable: true);
+      await _startScanning();
+    } catch (e) {
+      state = state.copyWith(
+        error: 'Bluetoothの初期化に失敗しました: ${e.toString()}',
+        isBluetoothAvailable: false,
+      );
     }
   }
 
