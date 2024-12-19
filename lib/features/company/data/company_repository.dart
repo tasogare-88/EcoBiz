@@ -88,4 +88,22 @@ class CompanyRepository extends _$CompanyRepository {
     }
     return (CompanyRank.startup, CompanyConstants.initialStepsToYenRate);
   }
+
+  Future<Company?> updateCompanyLocation(
+      String userId, int locationIndex) async {
+    try {
+      final firestore = ref.read(firestoreProvider);
+      final companyRef = firestore.collection('companies').doc(userId);
+
+      await companyRef.update({
+        'locationIndex': locationIndex,
+        'updatedAt': DateTime.now().toIso8601String(),
+      });
+
+      final doc = await companyRef.get();
+      return doc.exists ? Company.fromJson(doc.data()!) : null;
+    } catch (e) {
+      throw Exception('会社の場所の更新に失敗しました: $e');
+    }
+  }
 }

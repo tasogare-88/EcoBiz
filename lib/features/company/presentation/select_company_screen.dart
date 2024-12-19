@@ -21,7 +21,7 @@ class SelectCompanyScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'あなたはどの職種の\n会社をつくりますか？',
+                'あなたはどの業界の\n会社をつくりますか？',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,

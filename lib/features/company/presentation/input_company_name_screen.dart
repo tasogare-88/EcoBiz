@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/auth/presentation/auth_view_model.dart';
 import 'input_company_name_view_model.dart';
+import 'unity_company_place_screen.dart';
 
 class InputCompanyNameScreen extends ConsumerWidget {
   final String selectedGenre;
@@ -85,7 +86,15 @@ class InputCompanyNameScreen extends ConsumerWidget {
                             return;
                           }
 
-                          // TODO: Unityの会社設置場所選択画面への遷移
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => UnityCompanyPlaceScreen(
+                                userId: userId,
+                                companyName: state.companyName,
+                                genre: selectedGenre,
+                              ),
+                            ),
+                          );
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFE1511B),

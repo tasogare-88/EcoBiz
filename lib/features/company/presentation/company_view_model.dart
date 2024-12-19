@@ -61,6 +61,21 @@ class CompanyViewModel extends _$CompanyViewModel {
     }
   }
 
+  Future<void> updateCompanyLocation(
+      {required String userId, required int locationIndex}) async {
+    state = state.copyWith(isLoading: true, error: null);
+
+    try {
+      final updatedCompany = await ref
+          .read(companyRepositoryProvider.notifier)
+          .updateCompanyLocation(userId, locationIndex);
+
+      state = state.copyWith(company: updatedCompany, isLoading: false);
+    } catch (e) {
+      state = state.copyWith(error: e.toString(), isLoading: false);
+    }
+  }
+
   // 現在の総資産を取得
   int getCurrentTotalAssets() {
     return state.company?.totalAssets ?? 0;
