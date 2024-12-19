@@ -21,6 +21,7 @@ class UnityBattleScreen extends ConsumerWidget {
   });
 
   void onUnityCreated(UnityWidgetController controller, WidgetRef ref) async {
+    // バトル結果を取得
     final battleResult =
         await ref.read(battleViewModelProvider.notifier).startBattle(
               userId1: userId1,
@@ -29,11 +30,21 @@ class UnityBattleScreen extends ConsumerWidget {
               steps2: steps2,
             );
 
-    // Unity側にバトル結果を送信
+    // Unity側に送信するデータ
+    final battleData = {
+      'myUserId': userId1,
+      'opponentUserId': userId2,
+      'mySteps': steps1,
+      'opponentSteps': steps2,
+      'isWinner': battleResult.winnerId == userId1,
+      'isDraw': battleResult.stepsDifference == 0,
+      'assetChange': battleResult.amountChanged,
+    };
+
     controller.postMessage(
       'BattleManager',
       'ProcessBattleResult',
-      jsonEncode(battleResult.toJson()),
+      jsonEncode(battleData),
     );
   }
 
