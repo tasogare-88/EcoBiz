@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/auth/data/user_repository.dart';
 import '../../../core/auth/presentation/auth_view_model.dart';
 import '../../../shared/widgets/confirmation_dialog.dart';
+import '../../battle/presentation/unity_battle_screen.dart';
+import '../../steps/presentation/steps_view_model.dart';
 import './communication_view_model.dart';
 
 class CommunicationScreen extends ConsumerWidget {
@@ -16,13 +19,7 @@ class CommunicationScreen extends ConsumerWidget {
       authenticated: (state) => state.user,
       orElse: () => throw Exception('Unauthorized'),
     );
-    // if (!state.isBluetoothAvailable) {
-    //   return const Scaffold(
-    //     body: Center(
-    //       child: Text('Bluetoothを有効にしてください'),
-    //     ),
-    //   );
-    // }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('対戦相手'),
@@ -37,46 +34,67 @@ class CommunicationScreen extends ConsumerWidget {
                 itemCount: state.devices.length,
                 itemBuilder: (context, index) {
                   final device = state.devices[index];
-                  return Card(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    color: const Color(0xFFFFE4C4),
-                    child: ListTile(
-                      leading: const CircleAvatar(
-                        backgroundColor: Color(0xFFEADDFF),
-                        child: Icon(Icons.person),
-                      ),
-                      title: Text(device.name),
-                      onTap: () async {
-                        final result = await showDialog<bool>(
-                          context: context,
-                          builder: (context) => ConfirmationDialog(
-                            title: '対戦確認',
-                            content: '${device.name}と対戦しますか？',
+                  return FutureBuilder(
+                    future: ref
+                        .read(userRepositoryProvider.notifier)
+                        .getUser(device.userId),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Card(
+                          child: ListTile(
+                            leading: CircularProgressIndicator(),
+                            title: Text('読み込み中...'),
                           ),
                         );
+                      }
 
-                        // if (result == true && context.mounted) {
-                        //   Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (context) => UnityBattleScreen(
-                        //         userId1: authState.user.uid,
-                        //         userId2: device.id,
-                        //         steps1: ref
-                        //                 .read(stepsViewModelProvider)
-                        //                 .dailyRecord
-                        //                 ?.steps ??
-                        //             0,
-                        //         steps2: device.steps,
-                        //       ),
-                        //     ),
-                        //   );
-                        // }
-                      },
-                    ),
+                      final opponent = snapshot.data;
+                      if (opponent == null) {
+                        return const SizedBox.shrink();
+                      }
+
+                      return Card(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        color: const Color(0xFFFFE4C4),
+                        child: ListTile(
+                          leading: const CircleAvatar(
+                            backgroundColor: Color(0xFFEADDFF),
+                            child: Icon(Icons.person),
+                          ),
+                          title: Text(opponent.name),
+                          onTap: () async {
+                            final result = await showDialog<bool>(
+                              context: context,
+                              builder: (context) => ConfirmationDialog(
+                                title: '対戦確認',
+                                content: '${opponent.name}と対戦しますか？',
+                              ),
+                            );
+
+                            if (result == true && context.mounted) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UnityBattleScreen(
+                                    userId1: user.uid,
+                                    userId2: opponent.id,
+                                    steps1: ref
+                                            .read(stepsViewModelProvider)
+                                            .dailyRecord
+                                            ?.steps ??
+                                        0,
+                                    steps2: device.steps,
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      );
+                    },
                   );
                 },
               ),

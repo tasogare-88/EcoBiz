@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../data/models/battle_device.dart';
+import 'battle_device.dart';
 
 part 'communication_state.freezed.dart';
 

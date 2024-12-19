@@ -21,8 +21,9 @@ BattleDevice _$BattleDeviceFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$BattleDevice {
   String get id => throw _privateConstructorUsedError;
+  String get userId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  int get rssi => throw _privateConstructorUsedError;
+  int get steps => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +37,7 @@ abstract class $BattleDeviceCopyWith<$Res> {
           BattleDevice value, $Res Function(BattleDevice) then) =
       _$BattleDeviceCopyWithImpl<$Res, BattleDevice>;
   @useResult
-  $Res call({String id, String name, int rssi});
+  $Res call({String id, String userId, String name, int steps});
 }
 
 /// @nodoc
@@ -53,21 +54,26 @@ class _$BattleDeviceCopyWithImpl<$Res, $Val extends BattleDevice>
   @override
   $Res call({
     Object? id = null,
+    Object? userId = null,
     Object? name = null,
-    Object? rssi = null,
+    Object? steps = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      rssi: null == rssi
-          ? _value.rssi
-          : rssi // ignore: cast_nullable_to_non_nullable
+      steps: null == steps
+          ? _value.steps
+          : steps // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
   }
@@ -81,7 +87,7 @@ abstract class _$$BattleDeviceImplCopyWith<$Res>
       __$$BattleDeviceImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, String name, int rssi});
+  $Res call({String id, String userId, String name, int steps});
 }
 
 /// @nodoc
@@ -96,21 +102,26 @@ class __$$BattleDeviceImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? userId = null,
     Object? name = null,
-    Object? rssi = null,
+    Object? steps = null,
   }) {
     return _then(_$BattleDeviceImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      rssi: null == rssi
-          ? _value.rssi
-          : rssi // ignore: cast_nullable_to_non_nullable
+      steps: null == steps
+          ? _value.steps
+          : steps // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
@@ -120,7 +131,10 @@ class __$$BattleDeviceImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$BattleDeviceImpl implements _BattleDevice {
   const _$BattleDeviceImpl(
-      {required this.id, required this.name, required this.rssi});
+      {required this.id,
+      required this.userId,
+      required this.name,
+      required this.steps});
 
   factory _$BattleDeviceImpl.fromJson(Map<String, dynamic> json) =>
       _$$BattleDeviceImplFromJson(json);
@@ -128,13 +142,15 @@ class _$BattleDeviceImpl implements _BattleDevice {
   @override
   final String id;
   @override
+  final String userId;
+  @override
   final String name;
   @override
-  final int rssi;
+  final int steps;
 
   @override
   String toString() {
-    return 'BattleDevice(id: $id, name: $name, rssi: $rssi)';
+    return 'BattleDevice(id: $id, userId: $userId, name: $name, steps: $steps)';
   }
 
   @override
@@ -143,13 +159,14 @@ class _$BattleDeviceImpl implements _BattleDevice {
         (other.runtimeType == runtimeType &&
             other is _$BattleDeviceImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.rssi, rssi) || other.rssi == rssi));
+            (identical(other.steps, steps) || other.steps == steps));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, name, rssi);
+  int get hashCode => Object.hash(runtimeType, id, userId, name, steps);
 
   @JsonKey(ignore: true)
   @override
@@ -168,8 +185,9 @@ class _$BattleDeviceImpl implements _BattleDevice {
 abstract class _BattleDevice implements BattleDevice {
   const factory _BattleDevice(
       {required final String id,
+      required final String userId,
       required final String name,
-      required final int rssi}) = _$BattleDeviceImpl;
+      required final int steps}) = _$BattleDeviceImpl;
 
   factory _BattleDevice.fromJson(Map<String, dynamic> json) =
       _$BattleDeviceImpl.fromJson;
@@ -177,9 +195,11 @@ abstract class _BattleDevice implements BattleDevice {
   @override
   String get id;
   @override
+  String get userId;
+  @override
   String get name;
   @override
-  int get rssi;
+  int get steps;
   @override
   @JsonKey(ignore: true)
   _$$BattleDeviceImplCopyWith<_$BattleDeviceImpl> get copyWith =>
