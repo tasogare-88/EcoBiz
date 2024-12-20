@@ -35,4 +35,9 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
+
+    public void LoadScene(string sceneName)
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+    }
 }
