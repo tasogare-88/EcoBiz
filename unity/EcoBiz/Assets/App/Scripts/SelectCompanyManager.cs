@@ -153,6 +153,7 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
         var jsonLocationData = BuildCompany(_companyData.genre);
         // Flutter側に建設場所を通知
         UnityMessageManager.Instance.SendMessageToFlutter(jsonLocationData);
+        HideSelectCompanyUI(locationId);
         Debug.Log(jsonLocationData);
     }
 

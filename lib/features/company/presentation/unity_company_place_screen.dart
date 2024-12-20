@@ -27,7 +27,7 @@ class UnityCompanyPlaceScreen extends ConsumerWidget {
       await controller.postMessage('BattleManager', 'LoadScene', 'SelectCompanyPlace');
     }
     catch (e) {
-      await controller.postMessage('SelectCompanyCanvas', 'LoadScene', 'SelectCompanyPlace');
+      await controller.postMessage('CompanyManager', 'LoadScene', 'SelectCompanyPlace');
     }
     
 
@@ -61,6 +61,7 @@ class UnityCompanyPlaceScreen extends ConsumerWidget {
             locationIndex: selectedLocationIndex,
           );
     }
+    
   }
 
   @override

@@ -29,7 +29,7 @@ class UnityBattleScreen extends ConsumerWidget {
       try {
         await controller.postMessage('BattleManager', 'LoadScene', 'Battle');
       } catch (e) {
-        await controller.postMessage('SelectCompanyCanvas', 'LoadScene', 'Battle');
+        await controller.postMessage('CompanyManager', 'LoadScene', 'Battle');
       }
 
       await Future.delayed(const Duration(seconds: 1));
