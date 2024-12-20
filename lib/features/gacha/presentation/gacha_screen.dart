@@ -6,8 +6,15 @@ class GachaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-        body: Center(
-      child: Text('ガチャ画面（未実装）'),
-    ));
+      body: Center(
+        child: Text(
+          'COMING SOON...',
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
   }
 }

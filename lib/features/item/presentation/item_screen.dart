@@ -6,8 +6,15 @@ class ItemScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-        body: Center(
-      child: Text('アイテム画面（未実装）'),
-    ));
+      body: Center(
+        child: Text(
+          'COMING SOON...',
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
   }
 }
