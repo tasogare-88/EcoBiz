@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using DG.Tweening;
 using UnityEngine.UI;
 using FlutterUnityIntegration;
+using UnityEngine.SceneManagement;
 
 public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler
 {
@@ -70,6 +71,11 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
     /// <param name="companyId"></param>
     /// <param name="locationId"></param>
     /// <param name="isAlreadyBuild"></param>
+    
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
     public void SetCompanyData(string jsonCompanyData)
     {
         var companyData = JsonUtility.FromJson<CompanyData>(jsonCompanyData);
