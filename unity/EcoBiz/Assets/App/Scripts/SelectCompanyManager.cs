@@ -55,7 +55,7 @@ public class SelectCompanyManager : MonoBehaviour, IDragHandler, IBeginDragHandl
 
         if(isDebug)
         {
-            SetCompanyData("{\"userId\":\"1\",\"userName\":\"user1\",\"companyName\":\"ecobiz\",\"genre\":\"construction\",\"locationIndex\":4,\"isInitialSetup\":false}");
+            SetCompanyData("{\"userId\":\"1\",\"userName\":\"user1\",\"companyName\":\"ecobiz\",\"genre\":\"construction\",\"locationIndex\":4,\"isInitialSetup\":true}");
         }
     }
 
