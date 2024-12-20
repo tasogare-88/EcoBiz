@@ -1219,6 +1219,8 @@ PODS:
     - nanopb (~> 3.30910.0)
   - FirebaseSharedSwift (11.6.0)
   - Flutter (1.0.0)
+  - flutter_blue_plus (0.0.1):
+    - Flutter
   - flutter_unity_widget (4.0.0):
     - Flutter
   - google_sign_in_ios (0.0.1):
@@ -1374,6 +1376,7 @@ DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
+  - flutter_blue_plus (from `.symlinks/plugins/flutter_blue_plus/ios`)
   - flutter_unity_widget (from `.symlinks/plugins/flutter_unity_widget/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
   - GTMSessionFetcher/Core (~> 3.3)
@@ -1419,6 +1422,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   Flutter:
     :path: Flutter
+  flutter_blue_plus:
+    :path: ".symlinks/plugins/flutter_blue_plus/ios"
   flutter_unity_widget:
     :path: ".symlinks/plugins/flutter_unity_widget/ios"
   google_sign_in_ios:
@@ -1453,6 +1458,7 @@ SPEC CHECKSUMS:
   FirebaseFirestoreInternal: 004452c4669d5df8869c9f8f7a24ee0009852d5b
   FirebaseSharedSwift: a4e5dfca3e210633bb3a3dfb94176c019211948b
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_blue_plus: 4837da7d00cf5d441fdd6635b3a57f936778ea96
   flutter_unity_widget: e509f3109933aa0c63b1bc149ca3d5b90fb68543
   google_sign_in_ios: 07375bfbf2620bc93a602c0e27160d6afc6ead38
   GoogleSignIn: d4281ab6cf21542b1cfaff85c191f230b399d2db

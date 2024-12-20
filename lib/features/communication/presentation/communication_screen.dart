@@ -5,6 +5,7 @@ import '../../../core/auth/data/user_repository.dart';
 import '../../../core/auth/presentation/auth_view_model.dart';
 import '../../../shared/widgets/confirmation_dialog.dart';
 import '../../battle/presentation/unity_battle_screen.dart';
+import '../../mock/data/mock_ble_repository.dart';
 import '../../steps/presentation/steps_view_model.dart';
 import './communication_view_model.dart';
 
@@ -20,6 +21,12 @@ class CommunicationScreen extends ConsumerWidget {
       orElse: () => throw Exception('Unauthorized'),
     );
 
+    // デバッグモード時はモックデータを直接使用
+    final devices =
+        const bool.fromEnvironment('DEBUG_MODE', defaultValue: false)
+            ? MockBleRepository().mockDevices
+            : state.devices;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('対戦相手'),
@@ -30,12 +37,57 @@ class CommunicationScreen extends ConsumerWidget {
             ref.read(communicationViewModelProvider.notifier).refreshDevices(),
         child: state.error != null
             ? Center(child: Text(state.error!))
-            : state.devices.isEmpty
+            : devices.isEmpty
                 ? const Center(child: Text('近くに対戦相手が見つかりません'))
                 : ListView.builder(
-                    itemCount: state.devices.length,
+                    itemCount: devices.length,
                     itemBuilder: (context, index) {
-                      final device = state.devices[index];
+                      final device = devices[index];
+                      // デバッグモード時はデバイスの情報を直接表示
+                      if (const bool.fromEnvironment('DEBUG_MODE',
+                          defaultValue: true)) {
+                        return Card(
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          color: const Color(0xFFFFE4C4),
+                          child: ListTile(
+                            leading: const CircleAvatar(
+                              backgroundColor: Color(0xFFEADDFF),
+                              child: Icon(Icons.person),
+                            ),
+                            title: Text(device.name),
+                            onTap: () async {
+                              final result = await showDialog<bool>(
+                                context: context,
+                                builder: (context) => ConfirmationDialog(
+                                  title: '対戦確認',
+                                  content: '${device.name}と対戦しますか？',
+                                ),
+                              );
+
+                              if (result == true && context.mounted) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => UnityBattleScreen(
+                                      userId1: user.uid,
+                                      userId2: device.userId,
+                                      steps1: ref
+                                              .read(stepsViewModelProvider)
+                                              .dailyRecord
+                                              ?.steps ??
+                                          0,
+                                      steps2: device.steps,
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        );
+                      }
                       return FutureBuilder(
                         future: ref
                             .read(userRepositoryProvider.notifier)
