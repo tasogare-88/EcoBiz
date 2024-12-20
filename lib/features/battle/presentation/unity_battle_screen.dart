@@ -22,36 +22,52 @@ class UnityBattleScreen extends ConsumerWidget {
   });
 
   void onUnityCreated(UnityWidgetController controller, WidgetRef ref) async {
-    final user1 =
-        await ref.read(userRepositoryProvider.notifier).getUser(userId1);
-    final user2 =
-        await ref.read(userRepositoryProvider.notifier).getUser(userId2);
+    try {
+      debugPrint('Unity初期化開始');
 
-    // バトル結果を取得
-    final battleResult =
-        await ref.read(battleViewModelProvider.notifier).startBattle(
-              userId1: userId1,
-              userId2: userId2,
-              steps1: steps1,
-              steps2: steps2,
-            );
+      // シーン読み込み
+      controller.postMessage('UnityMessageManager', 'LoadScene', 'Battle');
 
-    // Unity側に送信するデータ
-    final battleData = {
-      'myName': user1?.name ?? 'Unknown',
-      'opponentName': user2?.name ?? 'Unknown',
-      'mySteps': steps1,
-      'opponentSteps': steps2,
-      'isWinner': battleResult.winnerId == userId1,
-      'isDraw': battleResult.stepsDifference == 0,
-      'assetChange': battleResult.amountChanged,
-    };
+      await Future.delayed(const Duration(seconds: 2));
 
-    controller.postMessage(
-      'BattleCanvas',
-      'SetBattleData',
-      jsonEncode(battleData),
-    );
+      // バトルデータを準備
+      final user1 =
+          await ref.read(userRepositoryProvider.notifier).getUser(userId1);
+      final user2 =
+          await ref.read(userRepositoryProvider.notifier).getUser(userId2);
+      final battleResult =
+          await ref.read(battleViewModelProvider.notifier).startBattle(
+                userId1: userId1,
+                userId2: userId2,
+                steps1: steps1,
+                steps2: steps2,
+              );
+
+      final battleData = {
+        'userName': user1?.name ?? 'Unknown',
+        'opponentName': user2?.name ?? 'Unknown',
+        'mySteps': steps1,
+        'opponentSteps': steps2,
+        'isWinner': battleResult.winnerId == userId1,
+        'isDraw': battleResult.stepsDifference == 0,
+        'assetChange': battleResult.amountChanged,
+      };
+      controller.postMessage(
+          'BattleManager', 'SetBattleData', jsonEncode(battleData));
+
+      await Future.delayed(const Duration(seconds: 1));
+      controller.postMessage('BattleManager', 'StartBattle', '');
+    } catch (e) {
+      debugPrint('Unity初期化エラー: $e');
+    }
+  }
+
+  void onUnitySceneLoaded(SceneLoaded? scene) {
+    debugPrint('Unityシーン読み込み完了: ${scene?.name}');
+  }
+
+  void onUnityMessage(dynamic message) {
+    debugPrint('Unityからのメッセージ: $message');
   }
 
   @override
@@ -59,6 +75,15 @@ class UnityBattleScreen extends ConsumerWidget {
     return Scaffold(
       body: UnityWidget(
         onUnityCreated: (controller) => onUnityCreated(controller, ref),
+        onUnitySceneLoaded: onUnitySceneLoaded,
+        onUnityMessage: onUnityMessage,
+        fullscreen: true,
+        useAndroidViewSurface: true,
+        borderRadius: BorderRadius.zero,
+        enablePlaceholder: true,
+        placeholder: const Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
     );
   }

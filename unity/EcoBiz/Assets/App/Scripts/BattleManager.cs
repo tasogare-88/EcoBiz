@@ -52,25 +52,13 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// バトルデータをセットする
     /// </summary>
-    /// <param name="jsonBattleData"></param> <summary>
-    /// 
-    /// </summary>
-    /// <param name="jsonBattleData"></param>
-    public void SetBattleData(string jsonBattleData)
+    /// <param name="jsonData"></param>
+    public void SetBattleData(string jsonData)
     {
-        var battleData = JsonUtility.FromJson<BattleData>(jsonBattleData);
-        _battleData = new BattleData();
-        _battleData.userName = battleData.userName;
-        _battleData.opponentName = battleData.opponentName;
-        _battleData.mySteps = battleData.mySteps;
-        _battleData.opponentSteps = battleData.opponentSteps;
-        _battleData.isWinner = battleData.isWinner;
-        _battleData.assetChange = battleData.assetChange;
-        
-        StartBattle();
+        _battleData = JsonUtility.FromJson<BattleData>(jsonData);
     }
 
-    private void Start() 
+    private void Start()
     {
         _myStepGraph.value = 0;
         _opponentStepGraph.value = 0;
@@ -116,7 +104,7 @@ public class BattleManager : MonoBehaviour
         await UniTask.Delay(1500);
         // リザルト表示
         ShowResult(result);
-        
+
     }
 
     public async UniTask<int> StepGraphDraw(bool isWinner, bool isDraw, int myStep, int opponentStep)
@@ -164,13 +152,13 @@ public class BattleManager : MonoBehaviour
         _myStepGraph.DOValue(fewerStepValue, 3.0f);
         await _opponentStepGraph.DOValue(fewerStepValue, 3.0f).AsyncWaitForCompletion();
         await UniTask.Delay(1500);
-        
+
         await higherStepGraph.DOValue(higherStepValue, 0.5f).AsyncWaitForCompletion();
         // ステップ差分の矢印を表示
         DrawStepDifferenceDashLine(stepDifferenceLine, stepDifferenceArrow, fewerStepValue);
 
-        return isWinner ? 1 : 0;   
-        
+        return isWinner ? 1 : 0;
+
     }
 
     public async void DrawStepDifferenceDashLine(LineRenderer stepDifferenceLine, RectTransform stepDifferenceArrow, float fewerStepValue)
@@ -189,7 +177,7 @@ public class BattleManager : MonoBehaviour
             _stepDifferenceText.text = $"{Mathf.Abs(_battleData.mySteps - _battleData.opponentSteps)}歩";
             _stepDifferenceBubble.gameObject.SetActive(true);
         }
-        
+
     }
 
     private async UniTask DrawMatch()
@@ -198,7 +186,7 @@ public class BattleManager : MonoBehaviour
 
         _myStepGraph.DOValue(stepValue - 0.5f, 3.0f);
         await _opponentStepGraph.DOValue(stepValue - 0.5f, 3.0f).AsyncWaitForCompletion();
-        
+
         await UniTask.Delay(1500);
         _myStepGraph.DOValue(stepValue, 0.5f);
         await _opponentStepGraph.DOValue(stepValue, 0.5f).AsyncWaitForCompletion();
