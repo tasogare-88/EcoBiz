@@ -2,14 +2,25 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../domain/battle_device.dart';
+import 'base_ble_repository.dart';
 
 part 'ble_repository.g.dart';
 
-@riverpod
-class BleRepository extends _$BleRepository {
+@Riverpod(keepAlive: true)
+class BleRepository extends _$BleRepository implements BaseBleRepository {
+  final List<BattleDevice> _devices = [];
+
   @override
-  List<BattleDevice> build() {
-    return [];
+  List<BattleDevice> build() => _devices;
+
+  @override
+  List<BattleDevice> get devices => _devices;
+
+  @override
+  void updateDevices(List<BattleDevice> devices) {
+    _devices.clear();
+    _devices.addAll(devices);
+    state = List.from(_devices);
   }
 
   Future<bool> isBluetoothAvailable() async {
@@ -22,18 +33,22 @@ class BleRepository extends _$BleRepository {
   }
 
   Future<void> startScan() async {
-    await FlutterBluePlus.startScan(
-      timeout: const Duration(seconds: 4),
-      androidUsesFineLocation: true,
-    );
+    try {
+      await FlutterBluePlus.startScan(
+        timeout: const Duration(seconds: 4),
+        androidUsesFineLocation: true,
+      );
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> stopScan() async {
-    await FlutterBluePlus.stopScan();
-  }
-
-  void updateDevices(List<BattleDevice> devices) {
-    state = devices;
+    try {
+      await FlutterBluePlus.stopScan();
+    } catch (e) {
+      rethrow;
+    }
   }
 
   void startListening() {

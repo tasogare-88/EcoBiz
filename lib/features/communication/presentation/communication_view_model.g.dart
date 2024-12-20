@@ -7,7 +7,7 @@ part of 'communication_view_model.dart';
 // **************************************************************************
 
 String _$communicationViewModelHash() =>
-    r'87579e8413067ebbcc54c79efbf373cb69cc425c';
+    r'99196420707015037eae84f273ae918794d60d6a';
 
 /// See also [CommunicationViewModel].
 @ProviderFor(CommunicationViewModel)
