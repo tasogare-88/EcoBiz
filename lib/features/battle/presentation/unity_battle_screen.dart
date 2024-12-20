@@ -22,13 +22,13 @@ class UnityBattleScreen extends ConsumerWidget {
   });
 
   void onUnityCreated(UnityWidgetController controller, WidgetRef ref) async {
+    debugPrint('Unity初期化開始');
     try {
-      debugPrint('Unity初期化開始');
-
+      debugPrint('LoadScene呼び出し前');
       // シーン読み込み
-      controller.postMessage('UnityMessageManager', 'LoadScene', 'Battle');
+      await controller.postMessage('BattleManager', 'LoadScene', 'Battle');
 
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 1));
 
       // バトルデータを準備
       final user1 =
@@ -42,7 +42,7 @@ class UnityBattleScreen extends ConsumerWidget {
                 steps1: steps1,
                 steps2: steps2,
               );
-
+      
       final battleData = {
         'userName': user1?.name ?? 'Unknown',
         'opponentName': user2?.name ?? 'Unknown',
@@ -52,11 +52,11 @@ class UnityBattleScreen extends ConsumerWidget {
         'isDraw': battleResult.stepsDifference == 0,
         'assetChange': battleResult.amountChanged,
       };
-      controller.postMessage(
+      await controller.postMessage(
           'BattleManager', 'SetBattleData', jsonEncode(battleData));
 
       await Future.delayed(const Duration(seconds: 1));
-      controller.postMessage('BattleManager', 'StartBattle', '');
+      //await controller.postMessage('BattleManager', 'StartBattleData', '');
     } catch (e) {
       debugPrint('Unity初期化エラー: $e');
     }
@@ -72,18 +72,23 @@ class UnityBattleScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    debugPrint('UnityBattleScreen の build メソッドが呼び出されました');
     return Scaffold(
       body: UnityWidget(
-        onUnityCreated: (controller) => onUnityCreated(controller, ref),
+        onUnityCreated: (controller) {
+          debugPrint('onUnityCreatedコールバックが呼び出されました');
+          debugPrint("再確認 : userId1: $userId1, userId2: $userId2, steps1: $steps1, steps2: $steps2");
+          onUnityCreated(controller, ref);
+        },
         onUnitySceneLoaded: onUnitySceneLoaded,
         onUnityMessage: onUnityMessage,
         fullscreen: true,
         useAndroidViewSurface: true,
         borderRadius: BorderRadius.zero,
-        enablePlaceholder: true,
-        placeholder: const Center(
-          child: CircularProgressIndicator(),
-        ),
+        // enablePlaceholder: true,
+        // placeholder: const Center(
+        //   child: CircularProgressIndicator(),
+        // ),
       ),
     );
   }

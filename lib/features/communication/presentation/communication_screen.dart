@@ -59,6 +59,7 @@ class CommunicationScreen extends ConsumerWidget {
                             ),
                             title: Text(device.name),
                             onTap: () async {
+                              debugPrint('対戦開始準備');
                               final result = await showDialog<bool>(
                                 context: context,
                                 builder: (context) => ConfirmationDialog(
@@ -67,22 +68,35 @@ class CommunicationScreen extends ConsumerWidget {
                                 ),
                               );
 
-                              if (result == true && context.mounted) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => UnityBattleScreen(
-                                      userId1: user.uid,
-                                      userId2: device.userId,
-                                      steps1: ref
-                                              .read(stepsViewModelProvider)
-                                              .dailyRecord
-                                              ?.steps ??
-                                          0,
-                                      steps2: device.steps,
-                                    ),
-                                  ),
-                                );
+                              if (result == true) {
+                                debugPrint('Context mounted 状態: ${context.mounted}'); // context.mounted を確認
+                                if (context.mounted) {
+                                  debugPrint('Navigator.push を呼び出します');
+                                  try {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          debugPrint('UnityBattleScreen を構築中');
+                                          return UnityBattleScreen(
+                                            userId1: user.uid,
+                                            userId2: device.userId,
+                                            steps1: ref.read(stepsViewModelProvider).dailyRecord?.steps ?? 4000,
+                                            steps2: device.steps,
+                                          );
+                                        },
+                                      ),
+                                    ).then((value) {
+                                      debugPrint('Navigator.push 完了: $value');
+                                    });
+                                  } catch (e, stackTrace) {
+                                    debugPrint('Navigator.push 中にエラー発生: $e\n$stackTrace');
+                                  }
+                                } else {
+                                  debugPrint('Context がマウントされていないため Navigator.push をスキップ');
+                                }
+                              } else {
+                                debugPrint('ダイアログの結果が true ではないため Navigator.push をスキップ');
                               }
                             },
                           ),
@@ -121,6 +135,7 @@ class CommunicationScreen extends ConsumerWidget {
                               ),
                               title: Text(opponent.name),
                               onTap: () async {
+                                debugPrint('対戦開始確認');
                                 final result = await showDialog<bool>(
                                   context: context,
                                   builder: (context) => ConfirmationDialog(
@@ -130,6 +145,7 @@ class CommunicationScreen extends ConsumerWidget {
                                 );
 
                                 if (result == true && context.mounted) {
+                                  debugPrint('対戦開始');
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(

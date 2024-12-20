@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
+using UnityEngine.SceneManagement;
 
 public class BattleManager : MonoBehaviour
 {
@@ -53,9 +54,16 @@ public class BattleManager : MonoBehaviour
     /// バトルデータをセットする
     /// </summary>
     /// <param name="jsonData"></param>
+    /// 
+    
+    public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
     public void SetBattleData(string jsonData)
     {
         _battleData = JsonUtility.FromJson<BattleData>(jsonData);
+        StartBattle();
     }
 
     private void Start()
@@ -66,6 +74,7 @@ public class BattleManager : MonoBehaviour
         _stepDifferenceArrow_Opponent.gameObject.SetActive(false);
         _battleUI.SetActive(false);
         _resultUI.SetActive(false);
+        IsDebug = false;
         if(IsDebug)
         {
             SetBattleData("{\"userName\":\"userA\",\"opponentName\":\"userB\",\"mySteps\":100,\"opponentSteps\":150,\"isWinner\":false,\"isDraw\":false,\"assetChange\":400}");

@@ -6111,7 +6111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32ab53e026696cc4582a23ea2746217c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDebug: 0
+  isDebug: 1
   _placeArea_1: {fileID: 945954173615003686}
   _placeArea_2: {fileID: 5420885948236774929}
   _placeArea_3: {fileID: 6325857211683509904}
