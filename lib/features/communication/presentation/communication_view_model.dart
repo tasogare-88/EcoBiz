@@ -13,7 +13,7 @@ part 'communication_view_model.g.dart';
 class CommunicationViewModel extends _$CommunicationViewModel {
   @override
   CommunicationState build() {
-    if (const bool.fromEnvironment('DEBUG_MODE', defaultValue: true)) {
+    if (const bool.fromEnvironment('DEBUG_MODE', defaultValue: false)) {
       final mockRepo = MockBleRepository();
       return CommunicationState(
         devices: mockRepo.mockDevices,
@@ -54,9 +54,10 @@ class CommunicationViewModel extends _$CommunicationViewModel {
     if (state.isScanning) return;
 
     state = state.copyWith(isScanning: true);
-    final bleRepo = const bool.fromEnvironment('DEBUG_MODE', defaultValue: true)
-        ? MockBleRepository()
-        : (ref.read(bleRepositoryProvider) as BleInterface);
+    final bleRepo =
+        const bool.fromEnvironment('DEBUG_MODE', defaultValue: false)
+            ? MockBleRepository()
+            : (ref.read(bleRepositoryProvider) as BleInterface);
 
     try {
       if (const bool.fromEnvironment('DEBUG_MODE', defaultValue: true)) {

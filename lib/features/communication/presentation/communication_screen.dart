@@ -22,9 +22,10 @@ class CommunicationScreen extends ConsumerWidget {
     );
 
     // デバッグモード時はモックデータを直接使用
-    final devices = const bool.fromEnvironment('DEBUG_MODE', defaultValue: true)
-        ? MockBleRepository().mockDevices
-        : state.devices;
+    final devices =
+        const bool.fromEnvironment('DEBUG_MODE', defaultValue: false)
+            ? MockBleRepository().mockDevices
+            : state.devices;
 
     return Scaffold(
       appBar: AppBar(
