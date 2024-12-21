@@ -121,3 +121,8 @@ flutter:
 
   assets:
     - assets/images/logo.svg
+    - assets/images/image1.png
+    - assets/images/image2.jpg
+    - assets/images/image3.jpg
+    - assets/images/image4.png
+    - assets/images/image5.png

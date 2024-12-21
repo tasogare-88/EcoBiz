@@ -8,6 +8,14 @@ import '../../../features/steps/presentation/steps_screen.dart';
 import '../../../shared/widgets/menu_item.dart';
 import 'home_view_model.dart';
 
+final List<String> carouselImages = [
+  'assets/images/image1.png',
+  'assets/images/image2.jpg',
+  'assets/images/image3.jpg',
+  'assets/images/image4.png',
+  'assets/images/image5.png',
+];
+
 class HomeScreen extends StatefulHookConsumerWidget {
   const HomeScreen({super.key});
 
@@ -202,7 +210,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               final nextPage = (currentPage.value + 1) % 5;
               pageController.animateToPage(
                 nextPage,
-                duration: Duration(milliseconds: 500), // 5秒で次のカルーセルに移動
+                duration: Duration(milliseconds: 500),
                 curve: Curves.easeInOut,
               );
             }
@@ -261,8 +269,9 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                               horizontal: 8,
                               vertical: 16,
                             ),
-                            child: Center(
-                              child: Text('カルーセル ${index + 1}'),
+                            child: Image.asset(
+                              carouselImages[index],
+                              fit: BoxFit.cover,
                             ),
                           );
                         },
