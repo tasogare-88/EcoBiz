@@ -29,6 +29,7 @@ class _CompanyScreenState extends ConsumerState<CompanyScreen> {
         );
 
     if (userId == null) {
+      debugPrint('ユーザーIDが取得できませんでした');
       setState(() => hasCompany = false);
       return;
     }
@@ -36,6 +37,7 @@ class _CompanyScreenState extends ConsumerState<CompanyScreen> {
     final result = await ref
         .read(companyViewModelProvider.notifier)
         .hasCompanyData(userId);
+    debugPrint('会社データが存在するか: $result');
     setState(() => hasCompany = result);
   }
 
@@ -52,13 +54,15 @@ class _CompanyScreenState extends ConsumerState<CompanyScreen> {
           ? Consumer(
               builder: (context, ref, _) {
                 final company = ref.watch(companyViewModelProvider).company;
-                if (company == null) return const CircularProgressIndicator();
+                if (company == null) {
+                  //return const CircularProgressIndicator();
+                }
 
                 return UnityCompanyPlaceScreen(
-                  userId: company.id,
-                  companyName: company.name,
-                  genre: company.genre.name,
-                  locationIndex: company.locationIndex,
+                  userId: company?.id ?? 'test',
+                  companyName: company?.name ?? 'ecobiz',
+                  genre: company?.genre?.name ?? 'it',
+                  locationIndex: company?.locationIndex ?? 4,
                 );
               },
             )

@@ -26,7 +26,11 @@ class UnityBattleScreen extends ConsumerWidget {
     try {
       debugPrint('LoadScene呼び出し前');
       // シーン読み込み
-      await controller.postMessage('BattleManager', 'LoadScene', 'Battle');
+      try {
+        await controller.postMessage('BattleManager', 'LoadScene', 'Battle');
+      } catch (e) {
+        await controller.postMessage('CompanyManager', 'LoadScene', 'Battle');
+      }
 
       await Future.delayed(const Duration(seconds: 1));
 

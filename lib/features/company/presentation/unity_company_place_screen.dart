@@ -22,6 +22,16 @@ class UnityCompanyPlaceScreen extends ConsumerWidget {
   });
 
   void onUnityCreated(UnityWidgetController controller, WidgetRef ref) async {
+    debugPrint('Unity初期化開始');
+    try {
+      await controller.postMessage('BattleManager', 'LoadScene', 'SelectCompanyPlace');
+    }
+    catch (e) {
+      await controller.postMessage('CompanyManager', 'LoadScene', 'SelectCompanyPlace');
+    }
+    
+
+    await Future.delayed(const Duration(seconds: 1));
     final user =
         await ref.read(userRepositoryProvider.notifier).getUser(userId);
 
@@ -51,6 +61,7 @@ class UnityCompanyPlaceScreen extends ConsumerWidget {
             locationIndex: selectedLocationIndex,
           );
     }
+    
   }
 
   @override
